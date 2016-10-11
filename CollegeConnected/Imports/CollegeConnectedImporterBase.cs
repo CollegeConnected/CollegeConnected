@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using CollegeConnected.Models;
-using OfficeOpenXml;
-
-namespace CollegeConnected.Imports
+﻿namespace CollegeConnected.Imports
 {
-    public class StudentImporter
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using CollegeConnected.Models;
+    using OfficeOpenXml;
+    public class CollegeConnectedImporterBase
     {
-        public const string Lock = "IMPORT.LOCK";
 
         private const string RejectFileHeaderErrorMessage = "Error Message";
 
-        public StudentImporter()
+        public CollegeConnectedImporterBase()
         {
             ProgressStatus = new ProgressStatus();
-            RejectEntries = new List<ImportModels.RejectEntry>();
+            RejectEntries = new List<RejectEntry>();
         }
 
         public static ProgressStatus ProgressStatus { get; set; }
@@ -30,16 +28,14 @@ namespace CollegeConnected.Imports
 
         public object options { get; protected set; }
 
-        public List<ImportModels.RejectEntry> RejectEntries { get; set; }
+        public List<RejectEntry> RejectEntries { get; set; }
 
         public string RejectFilePath
         {
             get
             {
-                if (!String.IsNullOrEmpty(UploadPath))
-                {
+                if (!string.IsNullOrEmpty(UploadPath))
                     return UploadPath.Replace(".", "-reject.");
-                }
                 return string.Empty;
             }
         }
@@ -66,8 +62,7 @@ namespace CollegeConnected.Imports
 
         public static void AddProgressItem(ImportProgressTypeEnum progress, params object[] errorParams)
         {
-            //lock (CafrImportBase.Lock)
-            //{
+
             if (progress == ImportProgressTypeEnum.Converted)
             {
                 ProgressStatus.ConvertedRecords++;
@@ -75,11 +70,11 @@ namespace CollegeConnected.Imports
             else if (progress == ImportProgressTypeEnum.ConvertError)
             {
                 ProgressStatus.ConvertErrors++;
-                if (errorParams != null && errorParams.Length == 3)
+                if ((errorParams != null) && (errorParams.Length == 3))
                 {
-                    Exception rejectionException = (Exception)errorParams[0];
-                    ExcelWorksheet worksheet = errorParams[1] as ExcelWorksheet;
-                    int rowIndex = (int)errorParams[2];
+                    var rejectionException = (Exception) errorParams[0];
+                    var worksheet = errorParams[1] as ExcelWorksheet;
+                    var rowIndex = (int) errorParams[2];
                     MvcApplication.CurrentImport.AddRejectEntry(rejectionException, worksheet, rowIndex);
                 }
             }
@@ -90,39 +85,34 @@ namespace CollegeConnected.Imports
             else if (progress == ImportProgressTypeEnum.ImportError)
             {
                 ProgressStatus.ImportErrors++;
-                if (errorParams != null && errorParams.Length == 1)
+                if ((errorParams != null) && (errorParams.Length == 1))
                 {
-                    Exception rejectionException = (Exception)errorParams[0];
+                    var rejectionException = (Exception) errorParams[0];
                     MvcApplication.CurrentImport.AddRejectEntry(rejectionException);
                 }
             }
-            //}
+
         }
 
         public static void CompleteStep(ImportProgressTypeEnum progressType)
         {
-            //lock (CafrImportBase.Lock)
-            //{
-            ProgressStatus.Status = (byte)progressType;
-            //}
+
+            ProgressStatus.Status = (byte) progressType;
+
         }
 
         public static ProgressStatus GetStatus()
         {
-            ProgressStatus returnStatus;
-            //lock (CafrImportBase.Lock)
-            //{
-            returnStatus = ProgressStatus;
-            //}
+            var returnStatus = ProgressStatus;
+
             return returnStatus;
         }
 
         public static void SetExpectedConvertedRecrods(int ConvertedRecordCount)
         {
-            //lock (CafrImportBase.Lock)
-            //{
+
             ProgressStatus.ExpectedToConvert = ConvertedRecordCount;
-            //}
+
         }
 
         public virtual bool AddColumnConfiguration(object columnConfiguration)
@@ -132,26 +122,22 @@ namespace CollegeConnected.Imports
 
         public void AddRejectEntry(string message)
         {
-            RejectEntries.Add(new ImportModels.RejectEntry { CellValues = new List<string>(), ErrorMessage = message });
+            RejectEntries.Add(new RejectEntry {CellValues = new List<string>(), ErrorMessage = message});
         }
 
         public void AddRejectEntry(string errorMessage, ExcelWorksheet worksheet, int rowIndex)
         {
-            List<string> cellValues = new List<string>();
+            var cellValues = new List<string>();
             if (worksheet != null)
-            {
-                for (int ii = 1; ii <= worksheet.Dimension.End.Column; ii++)
-                {
+                for (var ii = 1; ii <= worksheet.Dimension.End.Column; ii++)
                     cellValues.Add(worksheet.Cells[rowIndex, ii].RichText.Text);
-                }
-            }
-            RejectEntries.Add(new ImportModels.RejectEntry { CellValues = cellValues, ErrorMessage = errorMessage });
+            RejectEntries.Add(new RejectEntry {CellValues = cellValues, ErrorMessage = errorMessage});
         }
 
         public void AddRejectEntry(Exception rejectionException, ExcelWorksheet worksheet, int rowIndex)
         {
             AddRejectEntry(
-                String.Format(
+                string.Format(
                     "Error on row {0}: {1}, Details: {2}",
                     rowIndex,
                     rejectionException,
@@ -162,16 +148,16 @@ namespace CollegeConnected.Imports
 
         public void AddRejectEntry(Exception rejectionException)
         {
-            List<string> cellValues = new List<string>();
+            var cellValues = new List<string>();
             RejectEntries.Add(
-                new ImportModels.RejectEntry
+                new RejectEntry
                 {
                     CellValues = cellValues,
                     ErrorMessage =
-                            String.Format(
-                                "Import error: {0}, Details: {1}",
-                                rejectionException,
-                                rejectionException.InnerException)
+                        string.Format(
+                            "Import error: {0}, Details: {1}",
+                            rejectionException,
+                            rejectionException.InnerException)
                 });
         }
 
@@ -200,21 +186,19 @@ namespace CollegeConnected.Imports
         public void WriteRejectFile()
         {
             if (File.Exists(RejectFilePath))
-            {
                 File.Delete(RejectFilePath);
-            }
 
-            using (ExcelPackage pkg = new ExcelPackage(new FileInfo(RejectFilePath)))
+            using (var pkg = new ExcelPackage(new FileInfo(RejectFilePath)))
             {
-                ExcelWorksheet worksheet = pkg.Workbook.Worksheets.Add("CAFR Unlimited Reject");
+                var worksheet = pkg.Workbook.Worksheets.Add("College Connected Reject");
                 AddHeadersToRejectFile(worksheet);
-                int row = 2;
-                foreach (ImportModels.RejectEntry rejectEntry in RejectEntries)
+                var row = 2;
+                foreach (var rejectEntry in RejectEntries)
                 {
-                    int col = 1;
+                    var col = 1;
                     worksheet.Cells[row, col].Value = rejectEntry.ErrorMessage;
                     col++;
-                    foreach (string cellValue in rejectEntry.CellValues)
+                    foreach (var cellValue in rejectEntry.CellValues)
                     {
                         worksheet.Cells[row, col].Value = cellValue;
                         col++;
@@ -228,40 +212,31 @@ namespace CollegeConnected.Imports
 
         protected static void AddProgressItem(ImportProgressTypeEnum progress, int count)
         {
-            //lock (CafrImportBase.Lock)
-            //{
+
             if (progress == ImportProgressTypeEnum.Converted)
-            {
                 ProgressStatus.ConvertedRecords += count;
-            }
             else if (progress == ImportProgressTypeEnum.ConvertError)
-            {
                 ProgressStatus.ConvertErrors += count;
-            }
             else if (progress == ImportProgressTypeEnum.Imported)
-            {
                 ProgressStatus.ImportedRecords += count;
-            }
             else if (progress == ImportProgressTypeEnum.ImportError)
-            {
                 ProgressStatus.ImportErrors += count;
-            }
-            //}
+
         }
 
         protected virtual string[] GetColumnHeaders()
         {
-            return new string[] { };
+            return new string[] {};
         }
 
         private void AddHeadersToRejectFile(ExcelWorksheet worksheet)
         {
-            int row = 1;
-            int col = 1;
+            var row = 1;
+            var col = 1;
             worksheet.Cells[row, col].Value = RejectFileHeaderErrorMessage;
             col++;
-            string[] headers = GetColumnHeaders();
-            foreach (string header in headers)
+            var headers = GetColumnHeaders();
+            foreach (var header in headers)
             {
                 worksheet.Cells[row, col].Value = header;
                 col++;
@@ -285,5 +260,4 @@ namespace CollegeConnected.Imports
 
         public byte Status;
     }
-}
 }

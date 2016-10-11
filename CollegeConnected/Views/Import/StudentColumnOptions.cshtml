@@ -1,0 +1,85 @@
+﻿ @model CollegeConnected.Models.StudentImportColumnConfigurationModel
+
+<h2>Import Column Mapping</h2>
+@using (Html.BeginForm())
+{
+<table style="border-spacing: 0px">
+    <tr>
+        @for (int columnIndex = 0; columnIndex < Model.Configuration.Count; columnIndex++)
+        {
+        <th class="ImportColumn columnInfo_@columnIndex" style="width:300px">
+            @Html.CheckBoxFor(m => m.Configuration[columnIndex].Include, new { @class = "includeCheckBox", @data_id = columnIndex })
+            @Html.LabelFor(m => m.Configuration[columnIndex].Include)<br />
+            @Model.Configuration[columnIndex].Name<br />
+            @Html.HiddenFor(m => m.Configuration[columnIndex].Name)
+            @Html.DropDownListFor(m => m.Configuration[columnIndex].Type, Model.SelectionCollection, new { @class = "mappingType", @style = "width:150px", @data_id=columnIndex })<br />
+        </th>
+        }
+    </tr>
+    <tr>
+        @for (int columnIndex = 0; columnIndex < Model.Configuration.Count; columnIndex++)
+        {
+        if (Model.Configuration[columnIndex].sampleRowData.Count > 0)
+        {
+        <td class="ImportColumn columnInfo_@columnIndex" style="text-align:center">
+            @Html.HiddenFor(m => m.Configuration[columnIndex].sampleRowData[0])
+            @Model.Configuration[columnIndex].sampleRowData[0]
+        </td>
+        }
+        }
+    </tr>
+    <tr>
+        @for (int columnIndex = 0; columnIndex < Model.Configuration.Count; columnIndex++)
+        {
+        if (Model.Configuration[columnIndex].sampleRowData.Count > 1)
+        {
+        <td class="ImportColumn columnInfo_@columnIndex" style="text-align:center">
+            @Html.HiddenFor(m => m.Configuration[columnIndex].sampleRowData[1])
+            @Model.Configuration[columnIndex].sampleRowData[1]
+        </td>
+        }
+        }
+    </tr>
+    <tr>
+        @for (int columnIndex = 0; columnIndex < Model.Configuration.Count; columnIndex++)
+        {
+        if (Model.Configuration[columnIndex].sampleRowData.Count > 2)
+        {
+        <td class="ImportColumn columnInfo_@columnIndex" style="text-align:center">
+            @Html.HiddenFor(m => m.Configuration[columnIndex].sampleRowData[2])
+            @Model.Configuration[columnIndex].sampleRowData[2]
+        </td>
+        }
+        }
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    @Html.HiddenFor(m => m.SelectionCollection)
+<input type="submit" value="Submit" />
+}
+<script type="text/javascript">
+    var columnConfiguration = $.parseJSON('@Html.Raw(Json.Encode(Model.Configuration))');
+    $(document).ready(function () {
+        $("input[type=submit]").button({ icons: { primary: "ui-icon-disk" } });
+        $(".mappingType").each(function (index, value) {
+            $(value).change();
+            if ($(value).val() != "Account Number" || $(value).val() != "Account Title") {
+                var id = $(this).data("id");
+                $("#periodDropDown_" + id).val(columnConfiguration[index].Period);
+            }
+        });
+        $(".includeCheckBox").change();
+    });
+    $(".includeCheckBox").change(function () {
+        var id = $(this).data("id");
+
+        if ($(this).prop("checked")) {
+            $(".columnInfo_" + id).removeClass("selectedImportColumn");
+            $(".columnInfo_" + id).addClass("ImportColumn");
+        } else {
+            $(".columnInfo_" + id).addClass("selectedImportColumn");
+            $(".columnInfo_" + id).removeClass("ImportColumn");
+        }
+    });
+ 
+</script>

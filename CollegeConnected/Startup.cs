@@ -1,7 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using CollegeConnected;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(CollegeConnected.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
+
 namespace CollegeConnected
 {
     public partial class Startup

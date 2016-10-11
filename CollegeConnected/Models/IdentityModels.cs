@@ -18,16 +18,19 @@ namespace CollegeConnected.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class CollegeConnectedDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public CollegeConnectedDbContext()
+            : base("DefaultConnection", false)
         {
         }
 
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
+        public static CollegeConnectedDbContext Create()
+           {
+            return new CollegeConnectedDbContext();
         }
+        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<ImportResult> ImportResults { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
     }
 }

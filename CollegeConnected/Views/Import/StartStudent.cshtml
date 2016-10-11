@@ -1,0 +1,24 @@
+﻿@model CollegeConnected.Models.StudentImportOptionsModel
+
+<h2>Student Import</h2>
+
+<h3>Please select your import options and click "Column Options"</h3>
+
+@using (Html.BeginForm("StartStudent", "Import", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <fieldset style="width: 480px">
+        <legend>Import Options</legend>
+        <p>
+            @Html.LabelFor(m => m.File)
+        </p>
+        <p style="margin-left: 15px">
+            @Html.TextBoxFor(m => m.File, new {@type = "file"})
+        </p>
+        <p>
+            @Html.ValidationSummary()
+        </p>
+        <p>
+            <input style="float: right" type="submit" value="Column Options">
+        </p>
+    </fieldset>
+}
