@@ -11,4 +11,4 @@ namespace CollegeConnected.Models
         public DbSet<Student> Students { get; set; }
         public DbSet<Event> Events { get; set; }
     }
-}
+} 
