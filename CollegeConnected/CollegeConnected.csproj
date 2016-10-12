@@ -203,17 +203,21 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EventCreatorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Imports\StudentImporter.cs" />
+    <Compile Include="Imports\CollegeConnectedImporterBase.cs" />
+    <Compile Include="Imports\ImportManager.cs" />
+    <Compile Include="Imports\StudentImport.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CollegeConnectedDbContext.cs" />
+    <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventCreator.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ImportModels.cs" />
+    <Compile Include="Models\ImportResult.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -283,6 +287,11 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\EventCreator\CreateEventForm.cshtml" />
     <Content Include="Views\EventCreator\SuccessfulEventCreation.cshtml" />
+    <Content Include="Views\Import\Progress.cshtml" />
+    <Content Include="Views\Import\StartStudent.cshtml" />
+    <Content Include="Views\Import\StudentColumnOptions.cshtml" />
+    <Content Include="Views\Import\UploadError.cshtml" />
+    <Content Include="Views\Import\ViewImportFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
