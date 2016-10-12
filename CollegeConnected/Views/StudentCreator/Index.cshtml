@@ -1,0 +1,32 @@
+﻿@model CollegeConnected.Models.StudentCreator
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CreateStudent</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary() //Shows error messages if text box is left blank
+            <p>Student N Number: @Html.TextBoxFor(x => x.StudentNumber)</p>
+            <p>First Name: @Html.TextBoxFor(x => x.FirstName)</p>
+            <p>Last Name: @Html.TextBoxFor(x => x.LastName)</p>
+            <p>Address: @Html.TextBoxFor(x => x.Address1)</p>
+            <p>Zip Code: @Html.TextBoxFor(x => x.ZipCode)</p>
+            <p>State: @Html.TextBoxFor(x => x.State)</p>
+            <p>Phone Number: @Html.TextBoxFor(x => x.PhoneNumber)</p>
+            <p>E-mail: @Html.TextBoxFor(x => x.Email)</p>
+            <p>Graduation Year: @Html.TextBoxFor(x => x.GraduationYear)</p>
+            <p>Date of Birth: @Html.TextBoxFor(x => x.BirthDate)</p>
+            <input type="submit" value="Complete" />
+        }
+    </div>
+</body>
+</html>
