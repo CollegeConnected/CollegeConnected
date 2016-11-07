@@ -1,17 +1,14 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using CollegeConnected.Imports;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Mime;
-    using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Security;
-    using CollegeConnected.Imports;
-    using CollegeConnected.Models;
     public class ImportController : Controller
     {
         public ActionResult StudentColumnOptions()
@@ -26,7 +23,7 @@ namespace CollegeConnected.Controllers
                 {
                     return RedirectToAction(
                         "UploadError",
-                        new { uploadError = ex.Message, returnAction = "StartStudent" });
+                        new {uploadError = ex.Message, returnAction = "StartStudent"});
                 }
 
                 return View(MvcApplication.CurrentImport.columnConfiguration);
@@ -45,7 +42,7 @@ namespace CollegeConnected.Controllers
                     ModelState.AddModelError(string.Empty, MvcApplication.CurrentImport.ErrorMessage);
 
                     id.SelectionCollection =
-                        ((StudentImportColumnConfigurationModel)MvcApplication.CurrentImport.columnConfiguration)
+                        ((StudentImportColumnConfigurationModel) MvcApplication.CurrentImport.columnConfiguration)
                             .SelectionCollection;
 
                     return View(id);
@@ -61,13 +58,13 @@ namespace CollegeConnected.Controllers
 
         public void DownloadReject(int id)
         {
-            var cd = new ContentDisposition { FileName = "rejectfile.xlsx", Inline = false };
+            var cd = new ContentDisposition {FileName = "rejectfile.xlsx", Inline = false};
             Response.Clear();
             Response.AppendHeader("Content-Disposition", cd.ToString());
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             using (var db = new CollegeConnectedDbContext())
             {
-                byte[] rejectBytes = db.ImportResults.Where(m => m.Id == id).Single().RejectFile;
+                var rejectBytes = db.ImportResults.Where(m => m.Id == id).Single().RejectFile;
                 Response.BinaryWrite(rejectBytes);
             }
 
@@ -82,10 +79,6 @@ namespace CollegeConnected.Controllers
             return Json(result);
         }
 
-        public ActionResult ImportStudentRequirements()
-        {
-            return View();
-        }
 
         public ActionResult Progress()
         {
@@ -96,7 +89,7 @@ namespace CollegeConnected.Controllers
         {
             return View();
         }
-        
+
         public ActionResult StartStudent()
         {
             if (ImportManager.IsImportReady())
@@ -117,9 +110,7 @@ namespace CollegeConnected.Controllers
                 if (ModelState.IsValid)
                 {
                     if (ImportManager.InitializeImport(id))
-                    {
                         return RedirectToAction(ImportManager.CurrentView());
-                    }
 
                     ModelState.AddModelError("import", MvcApplication.CurrentImport.ErrorMessage);
                 }
@@ -128,31 +119,6 @@ namespace CollegeConnected.Controllers
             }
 
             return RedirectToAction(ImportManager.CurrentView());
-        }
-
-
-
-        
-        public ActionResult StartOtherFile()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult StartOtherFile(string pleaseChangeThis)
-        {
-            return View();
-        }
-        
-        public ActionResult StartWordFile()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult StartWordFile(string pleaseChangeThis)
-        {
-            return View();
         }
 
         public ActionResult UploadError(string uploadError, string returnAction)
@@ -167,15 +133,13 @@ namespace CollegeConnected.Controllers
         {
             return View();
         }
-        
+
         private List<SelectListItem> GetPositions()
         {
             var positionList = new List<SelectListItem>();
-            positionList.Add(new SelectListItem { Text = "NONE", Value = string.Empty });
-            for (int iPos = 5; iPos < 25; iPos++)
-            {
-                positionList.Add(new SelectListItem { Text = iPos.ToString(), Value = iPos.ToString() });
-            }
+            positionList.Add(new SelectListItem {Text = "NONE", Value = string.Empty});
+            for (var iPos = 5; iPos < 25; iPos++)
+                positionList.Add(new SelectListItem {Text = iPos.ToString(), Value = iPos.ToString()});
 
             return positionList;
         }

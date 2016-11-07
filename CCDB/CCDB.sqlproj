@@ -61,4 +61,10 @@
   <ItemGroup>
     <None Include="CCDB.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Student.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="CCDB.refactorlog" />
+  </ItemGroup>
 </Project>

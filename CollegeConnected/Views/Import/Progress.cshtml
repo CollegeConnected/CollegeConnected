@@ -7,14 +7,14 @@
 </div>
 <div id="importedErrorItemsLabel">
 </div>
-<br />
-<br />
+<br/>
+<br/>
 <div id="downloadRejectFileButton" class="errorText">
     Download Reject File
 </div>
-<br />
-<br />
-<br />
+<br/>
+<br/>
+<br/>
 
 <div id="progressbar" class="progressbar">
     <div id="progress-label" class="progress-label ">Loading...</div>
@@ -32,17 +32,20 @@
     var importTotal = 0;
     var fileId;
 
-    $("#downloadRejectFileButton").click(function () {
-        if (fileId) {
-            window.location = "DownloadReject?id=" + fileId;
-        }
-    });
-    $(document).ready(function () {
-        $("#progressbar").progressbar({ change: updateProgressBarText });
-        $("#downloadRejectFileButton").button({ text: "Download Reject File", icons: { primary: "ui-icon-disk" } });
-        $("#downloadRejectFileButton").hide();
-        getStatus();
-    });
+    $("#downloadRejectFileButton")
+        .click(function() {
+            if (fileId) {
+                window.location = "DownloadReject?id=" + fileId;
+            }
+        });
+    $(document)
+        .ready(function() {
+            $("#progressbar").progressbar({ change: updateProgressBarText });
+            $("#downloadRejectFileButton").button({ text: "Download Reject File", icons: { primary: "ui-icon-disk" } });
+            $("#downloadRejectFileButton").hide();
+            getStatus();
+        });
+
     function getStatus() {
         $.ajax({
             url: "GetProgress",
@@ -53,6 +56,7 @@
             error: recieve_error
         });
     }
+
     function recieved_data(returnData) {
         if (returnData == null || returnData.Status == 0)
             window.location.href = '@Url.Action("ViewImportFiles", "Import")';
@@ -68,52 +72,50 @@
         if (fileId) {
             $("#downloadRejectFileButton").show();
         }
-        if (returnData.Status >= parseInt('@((int)ImportProgressTypeEnum.ImportCompleted)')) {
+        if (returnData.Status >= parseInt('@((int) ImportProgressTypeEnum.ImportCompleted)')) {
             currentMode = 3;
-        } else if (returnData.Status >= parseInt('@((int)ImportProgressTypeEnum.UploadingResults)')) {
+        } else if (returnData.Status >= parseInt('@((int) ImportProgressTypeEnum.UploadingResults)')) {
             currentMode = 2;
-        }
-        else if (returnData.Status >= parseInt('@((int)ImportProgressTypeEnum.ConversionCompleted)')) {
+        } else if (returnData.Status >= parseInt('@((int) ImportProgressTypeEnum.ConversionCompleted)')) {
             currentMode = 1;
-        }
-        else {
+        } else {
             currentMode = 0;
         }
 
-    if (currentMode == 0) {
-        //Converting Data
-        var progress = ((convertCount + convertErrorCount) / convertTotal) * 100;
-        $("#importStatusLabel").text("Import Status: Importing Data");
-    } else if (currentMode == 1) {
-        //Importing Data
-        var progress = ((importCount + importErrorCount) / importTotal) * 100;
-        $("#importStatusLabel").text("Import Status: Importing Data");
-    } else if (currentMode == 2) {
-        //Uploading Data
-        var progress = 100;
-        $("#importStatusLabel").text("Import Status: Uploading Import File");
-    } else if (currentMode == 3) {
-        //Import Complete
-        var progress = 100;
-        $("#importStatusLabel").text("Import Status: Complete");
-        updateProgressBarText();
-    }
+        if (currentMode == 0) {
+            //Converting Data
+            var progress = ((convertCount + convertErrorCount) / convertTotal) * 100;
+            $("#importStatusLabel").text("Import Status: Importing Data");
+        } else if (currentMode == 1) {
+            //Importing Data
+            var progress = ((importCount + importErrorCount) / importTotal) * 100;
+            $("#importStatusLabel").text("Import Status: Importing Data");
+        } else if (currentMode == 2) {
+            //Uploading Data
+            var progress = 100;
+            $("#importStatusLabel").text("Import Status: Uploading Import File");
+        } else if (currentMode == 3) {
+            //Import Complete
+            var progress = 100;
+            $("#importStatusLabel").text("Import Status: Complete");
+            updateProgressBarText();
+        }
 
-    if (currentMode == -1) {
-        //Error State
-        progress = 0;
-    } else if (currentMode != 3) {
-        setTimeout(getStatus, 1000);
-    }
-    if (currentMode == 3) {
-        $("#progressbar").progressbar({ value: progress });
-    } else {
-        $("#progressbar").progressbar({ value: false });
-    }
+        if (currentMode == -1) {
+            //Error State
+            progress = 0;
+        } else if (currentMode != 3) {
+            setTimeout(getStatus, 1000);
+        }
+        if (currentMode == 3) {
+            $("#progressbar").progressbar({ value: progress });
+        } else {
+            $("#progressbar").progressbar({ value: false });
+        }
 
-    var totalErrorCount = importErrorCount + convertErrorCount;
+        var totalErrorCount = importErrorCount + convertErrorCount;
 
-    $("#progressbar > div").removeClass("ui-widget-header");
+        $("#progressbar > div").removeClass("ui-widget-header");
         if (totalErrorCount > 0) {
             $("#progressbar > div").addClass("progress-failure");
             $("#importedItemsLabel").addClass("errorText");
@@ -124,70 +126,72 @@
             $("#importedErrorItemsLabel").addClass("successText");
         }
 
-    $("#importedItemsLabel").text("Items Imported: " + importCount);
-    $("#importedErrorItemsLabel").text("Errors during Import: " + totalErrorCount);
-}
-function updateProgressBarText() {
-    var progressbar = $("#progressbar");
-    var progressLabel = $("#progress-label");
-
-    if ($("#importStatusLabel:contains(Convert)").length) {
-        progressLabel.text("Converting in progress...");
-    } else if ($("#importStatusLabel:contains(Importing)").length) {
-        progressLabel.text("Importing in progress...");
-    } else if ($("#importStatusLabel:contains(Uploading)").length) {
-        progressLabel.text("Uploading Import File...");
-    } else if ($("#importStatusLabel:contains(Complete)").length) {
-        progressLabel.text("Import Complete");
-    }
-}
-function recieve_error(jqXHR, textStatus, errorThrown) {
-    alert(textStatus);
-    alert(errorThrown);
-}
-function sortRows() {
-    //For Original Script
-    //var parentTable = $(this).closest("table");
-
-    var parentTable = $("#importResults");
-    var thIndex = $(this).index();
-    var tdList = parentTable.find("td").filter(function () {
-        return $(this).index() == thIndex && !$(this).hasClass("sortableColumn");
-    })
-
-    if (thIndex == 0) {
-        tdList.sort(function (a, b) {
-            return parseInt($.text([a])) > parseInt($.text([b])) ?
-                inverse ? -1 : 1
-                : inverse ? 1 : -1;
-
-        });
-    } else {
-        tdList.sort(function (a, b) {
-            return $.text([a]) > $.text([b]) ?
-                inverse ? -1 : 1
-                : inverse ? 1 : -1;
-
-        });
+        $("#importedItemsLabel").text("Items Imported: " + importCount);
+        $("#importedErrorItemsLabel").text("Errors during Import: " + totalErrorCount);
     }
 
-    //Needed for original since it had a header row
-    //var headerRow = parentTable.find("tr").first();
+    function updateProgressBarText() {
+        var progressbar = $("#progressbar");
+        var progressLabel = $("#progress-label");
 
-    parentTable.empty();
+        if ($("#importStatusLabel:contains(Convert)").length) {
+            progressLabel.text("Converting in progress...");
+        } else if ($("#importStatusLabel:contains(Importing)").length) {
+            progressLabel.text("Importing in progress...");
+        } else if ($("#importStatusLabel:contains(Uploading)").length) {
+            progressLabel.text("Uploading Import File...");
+        } else if ($("#importStatusLabel:contains(Complete)").length) {
+            progressLabel.text("Import Complete");
+        }
+    }
 
-    //Needed for original since it had a header row
-    //parentTable.append(headerRow);
+    function recieve_error(jqXHR, textStatus, errorThrown) {
+        alert(textStatus);
+        alert(errorThrown);
+    }
 
-    $(tdList).each(function (index, value) {
-        parentTable.append(value.parentNode);
-    });
+    function sortRows() {
+        //For Original Script
+        //var parentTable = $(this).closest("table");
 
-    inverse = !inverse;
+        var parentTable = $("#importResults");
+        var thIndex = $(this).index();
+        var tdList = parentTable.find("td")
+            .filter(function() {
+                return $(this).index() == thIndex && !$(this).hasClass("sortableColumn");
+            });
+        if (thIndex == 0) {
+            tdList.sort(function(a, b) {
+                return parseInt($.text([a])) > parseInt($.text([b]))
+                    ? inverse ? -1 : 1
+                    : inverse ? 1 : -1;
 
-    //Needed for original for header row rebinding
-    //$(".sortableColumn").on("click", sortRows);
-}
+            });
+        } else {
+            tdList.sort(function(a, b) {
+                return $.text([a]) > $.text([b])
+                    ? inverse ? -1 : 1
+                    : inverse ? 1 : -1;
+
+            });
+        }
+
+        //Needed for original since it had a header row
+        //var headerRow = parentTable.find("tr").first();
+
+        parentTable.empty();
+
+        //Needed for original since it had a header row
+        //parentTable.append(headerRow);
+
+        $(tdList)
+            .each(function(index, value) {
+                parentTable.append(value.parentNode);
+            });
+
+        inverse = !inverse;
+
+        //Needed for original for header row rebinding
+        //$(".sortableColumn").on("click", sortRows);
+    }
 </script>
-
-

@@ -1,13 +1,13 @@
-﻿namespace CollegeConnected.Imports
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CollegeConnected.Models;
+using OfficeOpenXml;
+
+namespace CollegeConnected.Imports
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using CollegeConnected.Models;
-    using OfficeOpenXml;
     public class CollegeConnectedImporterBase
     {
-
         private const string RejectFileHeaderErrorMessage = "Error Message";
 
         public CollegeConnectedImporterBase()
@@ -62,7 +62,6 @@
 
         public static void AddProgressItem(ImportProgressTypeEnum progress, params object[] errorParams)
         {
-
             if (progress == ImportProgressTypeEnum.Converted)
             {
                 ProgressStatus.ConvertedRecords++;
@@ -91,14 +90,11 @@
                     MvcApplication.CurrentImport.AddRejectEntry(rejectionException);
                 }
             }
-
         }
 
         public static void CompleteStep(ImportProgressTypeEnum progressType)
         {
-
             ProgressStatus.Status = (byte) progressType;
-
         }
 
         public static ProgressStatus GetStatus()
@@ -110,9 +106,7 @@
 
         public static void SetExpectedConvertedRecrods(int ConvertedRecordCount)
         {
-
             ProgressStatus.ExpectedToConvert = ConvertedRecordCount;
-
         }
 
         public virtual bool AddColumnConfiguration(object columnConfiguration)
@@ -212,7 +206,6 @@
 
         protected static void AddProgressItem(ImportProgressTypeEnum progress, int count)
         {
-
             if (progress == ImportProgressTypeEnum.Converted)
                 ProgressStatus.ConvertedRecords += count;
             else if (progress == ImportProgressTypeEnum.ConvertError)
@@ -221,7 +214,6 @@
                 ProgressStatus.ImportedRecords += count;
             else if (progress == ImportProgressTypeEnum.ImportError)
                 ProgressStatus.ImportErrors += count;
-
         }
 
         protected virtual string[] GetColumnHeaders()

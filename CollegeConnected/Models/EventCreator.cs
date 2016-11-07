@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CollegeConnected.Models
 {
@@ -10,14 +6,17 @@ namespace CollegeConnected.Models
     {
         [Required(ErrorMessage = "Please enter an event name")]
         public string EventName { get; set; }
+
         [Required(ErrorMessage = "Please enter an event location")]
         public string EventLocation { get; set; }
+
         [Required(ErrorMessage = "Please enter an event date")]
         public string EventDate { get; set; }
+
         [Required(ErrorMessage = "Please enter an event start time")]
         public string EventStartTime { get; set; }
+
         [Required(ErrorMessage = "Please enter an event end time")]
         public string EventEndTime { get; set; }
-
     }
 }

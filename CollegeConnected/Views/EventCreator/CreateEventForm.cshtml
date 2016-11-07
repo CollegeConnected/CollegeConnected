@@ -8,22 +8,22 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width"/>
     <title>CreateEventForm</title>
 </head>
 <body>
-    <div>      
-        @using (Html.BeginForm())
-        {
-            @Html.ValidationSummary() //Shows error messages if text box is left blank
-            //TextBoxFor generates HTML for an input element, sets type parameter to text, sets id and name attributes to EventName
-            <p>Event Name: @Html.TextBoxFor(x => x.EventName)</p>
-            <p>Event Location: @Html.TextBoxFor(x => x.EventLocation)</p>
-            <p>Date of Event: @Html.TextBoxFor(x => x.EventDate)</p>
-            <p>Start Time of Event: @Html.TextBoxFor(x => x.EventStartTime)</p>
-            <p>End Time of Event: @Html.TextBoxFor(x => x.EventEndTime)</p>
-            <input type="submit" value="Create Event"/>
-        }
-    </div>
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary() //Shows error messages if text box is left blank
+        //TextBoxFor generates HTML for an input element, sets type parameter to text, sets id and name attributes to EventName
+        <p>Event Name: @Html.TextBoxFor(x => x.EventName)</p>
+        <p>Event Location: @Html.TextBoxFor(x => x.EventLocation)</p>
+        <p>Date of Event: @Html.TextBoxFor(x => x.EventDate)</p>
+        <p>Start Time of Event: @Html.TextBoxFor(x => x.EventStartTime)</p>
+        <p>End Time of Event: @Html.TextBoxFor(x => x.EventEndTime)</p>
+        <input type="submit" value="Create Event"/>
+    }
+</div>
 </body>
 </html>

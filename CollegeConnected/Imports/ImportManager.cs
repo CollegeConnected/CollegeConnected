@@ -1,17 +1,14 @@
-﻿
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Imports
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
-    using CollegeConnected.Models;
     public static class ImportManager
     {
-
-
         public static void PrepareHeaders()
         {
             // Sets up column configuration and initializes convert count
@@ -37,7 +34,7 @@ namespace CollegeConnected.Imports
         }
 
         public static void KickOffImport()
-        { 
+        {
             MvcApplication.CurrentImport.Status = ImportStatusEnum.Running;
 
             CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.ConvertStart);
@@ -62,25 +59,25 @@ namespace CollegeConnected.Imports
                 {
                     try
                     {
-                        using (CollegeConnectedDbContext db = new CollegeConnectedDbContext())
+                        using (var db = new CollegeConnectedDbContext())
                         {
-                            int importCount = CollegeConnectedImporterBase.ProgressStatus.ImportedRecords;
-                            int convertedCount = CollegeConnectedImporterBase.ProgressStatus.ConvertedRecords;
+                            var importCount = CollegeConnectedImporterBase.ProgressStatus.ImportedRecords;
+                            var convertedCount = CollegeConnectedImporterBase.ProgressStatus.ConvertedRecords;
                             byte[] importFileBytes, rejectFileBytes;
 
-                                importFileBytes = GetImportFileBytes(false);
-                                if (MvcApplication.CurrentImport.RejectEntries.Count() > 0)
-                                {
-                                    WriteRejectFile();
-                                    rejectFileBytes = GetImportFileBytes(true);
-                                }
-                                else
-                                {
-                                    rejectFileBytes = new byte[0];
-                                }
-                         
+                            importFileBytes = GetImportFileBytes(false);
+                            if (MvcApplication.CurrentImport.RejectEntries.Count() > 0)
+                            {
+                                WriteRejectFile();
+                                rejectFileBytes = GetImportFileBytes(true);
+                            }
+                            else
+                            {
+                                rejectFileBytes = new byte[0];
+                            }
 
-                            ImportResult result = new ImportResult
+
+                            var result = new ImportResult
                             {
                                 Type =
                                     MvcApplication.CurrentImport.GetType()

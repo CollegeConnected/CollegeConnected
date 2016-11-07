@@ -16,6 +16,7 @@ namespace CollegeConnected
 
         protected void Application_Start()
         {
+            CollegeConnectedApplication = this;
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
