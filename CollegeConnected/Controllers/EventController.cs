@@ -3,7 +3,7 @@ using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
-    public class EventCreatorController : Controller
+    public class EventController : Controller
     {
         [HttpGet]
         public ViewResult CreateEventForm()
