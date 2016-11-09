@@ -63,6 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Student.sql" />
+    <Build Include="ImportProgress.sql" />
+    <Build Include="ImportResults.sql" />
+    <Build Include="Events.sql" />
+    <Build Include="EventAttendance.sql" />
+    <Build Include="Users.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="CCDB.refactorlog" />

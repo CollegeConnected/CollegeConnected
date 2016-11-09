@@ -22,5 +22,12 @@ namespace CollegeConnected.Controllers
 
             return View();
         }
+
+        public ActionResult Admin()
+        {
+            ViewBag.Message = "Your Admin Home Page.";
+
+            return View();
+        }
     }
 }
