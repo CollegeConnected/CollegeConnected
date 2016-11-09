@@ -25,7 +25,7 @@ namespace CollegeConnected.Models
         {
         }
 
-        //public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<ImportResult> ImportResults { get; set; }
         public virtual DbSet<Student> Students { get; set; }
 
