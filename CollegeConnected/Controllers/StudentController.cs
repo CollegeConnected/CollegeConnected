@@ -5,19 +5,26 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Security;
 using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
-    public class StudentsController : Controller
+    public class StudentController : Controller
+
+    { 
+        public ActionResult Register()
     {
+        return View();
+    }
+
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
         // GET: Students
         public ActionResult Index()
         {
             var studentList = (from student in db.Students
-                select student).ToList();
+                               select student).ToList();
             return View(studentList);
         }
 
@@ -25,7 +32,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Details()
         {
             var studentList = (from student in db.Students
-                select student).ToList();
+                               select student).ToList();
             return View(studentList);
         }
 
@@ -125,7 +132,7 @@ namespace CollegeConnected.Controllers
             sw.WriteLine("\"Student Number\",\"First Name\",\"Middle Name\",\"Last Name\",\"Address1\"," +
                          "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
                                            "\"Birthday\"");
-                Response.ClearContent();
+            Response.ClearContent();
             Response.AddHeader("content-disposition", "attachment;filename=ExportedStudents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
 
@@ -145,3 +152,13 @@ namespace CollegeConnected.Controllers
 
     }
 }
+    
+
+
+
+
+           
+
+        
+
+    
