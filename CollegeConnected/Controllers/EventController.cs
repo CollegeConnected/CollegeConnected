@@ -5,6 +5,12 @@ namespace CollegeConnected.Controllers
 {
     public class EventController : Controller
     {
+
+        public ActionResult EventHome()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ViewResult CreateEventForm()
         {
