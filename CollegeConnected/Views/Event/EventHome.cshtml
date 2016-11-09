@@ -1,0 +1,31 @@
+﻿@model CollegeConnected.Models.StudentCreator
+
+<div class="jumbotron">
+    <h2>College Connected</h2>
+    <table>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+            <tr>
+                <td><h4>Enter your N number:</h4></td>
+            </tr>
+            <tr>
+                <td><p>@Html.TextBoxFor(x => x.StudentNumber)</p></td>
+            </tr>
+            <tr>
+                <td><h4>OR</h4></td>
+            </tr>
+            <tr>
+                <td><h4>Enter your first and last name:</h4></td>
+            </tr>
+            <tr>
+                <td><p>@Html.TextBoxFor(x => x.FirstName)</p></td>
+                <td>  </td>
+                <td><p>@Html.TextBoxFor(x => x.LastName)</p></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        }
+    </table>
+</div>

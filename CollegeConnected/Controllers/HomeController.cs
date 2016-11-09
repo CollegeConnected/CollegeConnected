@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using CollegeConnected.Models;
+using System.Web.Mvc;
 
 namespace CollegeConnected.Controllers
 {
@@ -27,6 +28,14 @@ namespace CollegeConnected.Controllers
         {
             ViewBag.Message = "Your Admin Home Page.";
 
+            return View();
+        }
+
+        [HttpPost]
+        public ViewResult Index(StudentCreator studentCreator)
+        {
+            if (ModelState.IsValid)
+                return View("Success", studentCreator);
             return View();
         }
     }
