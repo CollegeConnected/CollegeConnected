@@ -321,6 +321,7 @@
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Event\EventHome.cshtml" />
     <Content Include="Views\Students\Register.cshtml" />
+    <Content Include="Views\Students\EditPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

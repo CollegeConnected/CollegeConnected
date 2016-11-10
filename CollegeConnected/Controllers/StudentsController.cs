@@ -12,11 +12,18 @@ namespace CollegeConnected.Controllers
 {
     public class StudentsController : Controller
 
-    { 
+        { 
         public ActionResult Register()
-    {
+        {
         return View();
-    }
+        }
+
+        
+        public ActionResult EditPage()
+        {
+            return View();
+        }
+    
 
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
