@@ -71,3 +71,23 @@
 @RenderSection("scripts", false)
 </body>
 </html>
+
+
+<div style="width:auto; background-color:aqua">
+    @if (Request.IsAuthenticated)
+    {
+        <strong>@Html.Encode(User.Identity.Name)</strong>
+            @Html.ActionLink("Log Out", "Logout", "User")
+    }
+    else
+    {
+        @Html.ActionLink("Register", "Register", "Students")
+        <span> | </span>
+           
+    }
+</div>
+
+
+
+
+
