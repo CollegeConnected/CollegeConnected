@@ -1,36 +1,43 @@
-﻿@model CollegeConnected.Models.StudentCreator
+﻿@model CollegeConnected.Models.HomePage
 @{
     ViewBag.Title = "Home Page";
 }
-
-<div class="jumbotron">
-    <h2>College Connected</h2>
-    <table>
-    @using (Html.BeginForm())
-    {
-        @Html.ValidationSummary()
-        <tr>
-            <td><h4>Enter your N number:</h4></td>
-        </tr>
-        <tr>
-            <td><p>@Html.TextBoxFor(x => x.StudentNumber)</p></td>
-        </tr>
-        <tr>
-            <td><h4>OR</h4></td>
-        </tr>
-        <tr>
-            <td><h4>Enter your first and last name:</h4></td>
-        </tr>
-        <tr>
-            <td><p>@Html.TextBoxFor(x => x.FirstName)</p></td><td>  </td><td><p>@Html.TextBoxFor(x => x.LastName)</p></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Submit" /></td>
-        </tr>
-    }
-    </table>
-</div>
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Home</title>
+    </head>
+    <body>
+        <div class="jumbotron">
+            <h2>College Connected</h2>
+            <table align="center">
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary()
+                <tr>
+                    <td><h4>Enter your N number:</h4></td>
+                </tr>
+                <tr>
+                    <td><p>@Html.TextBoxFor(x => x.StudentNumber)</p></td>
+                </tr>
+                <tr>
+                    <td><h4>OR</h4></td>
+                </tr>
+                <tr>
+                    <td><h4>Enter your first and last name:</h4></td>
+                </tr>
+                <tr>
+                    <td><p>@Html.TextBoxFor(x => x.FirstName)</p></td><td>  </td><td><p>@Html.TextBoxFor(x => x.LastName)</p></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Submit" /></td>
+                </tr>
+            }
+            </table>
+        </div>
+    </body>
+</html>
 <!--<div class="row">
     <div class="col-md-4">
 

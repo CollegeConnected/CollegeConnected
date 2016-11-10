@@ -218,6 +218,7 @@
     <Compile Include="Imports\ImportManager.cs" />
     <Compile Include="Imports\StudentImport.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\HomePageModels.cs" />
     <Compile Include="Models\StudentCreator.cs" />
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\EventCreator.cs" />
