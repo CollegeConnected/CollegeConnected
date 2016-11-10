@@ -31,12 +31,7 @@ namespace CollegeConnected.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ViewResult Index(StudentCreator studentCreator)
-        {
-            if (ModelState.IsValid)
-                return View("Success", studentCreator);
-            return View();
-        }
+        
+        
     }
 }
