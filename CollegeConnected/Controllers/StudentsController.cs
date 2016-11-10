@@ -10,7 +10,7 @@ using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
-    public class StudentController : Controller
+    public class StudentsController : Controller
 
     { 
         public ActionResult Register()

@@ -209,7 +209,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -320,7 +320,7 @@
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Event\EventHome.cshtml" />
-    <Content Include="Views\Student\Register.cshtml" />
+    <Content Include="Views\Students\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
