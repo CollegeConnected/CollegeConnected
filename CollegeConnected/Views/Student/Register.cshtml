@@ -1,0 +1,68 @@
+﻿@model CollegeConnected.Models.Student
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Register</h2>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "Registeration Failed, fields.");
+    <div>
+        <fieldset>
+            <legend>Register Form</legend>
+            <div class="editor-label">@Html.LabelFor(u => u.StudentNumber)</div>
+            <div class="editor-field"> @Html.TextBoxFor(u => u.StudentNumber)
+            @Html.ValidationMessageFor(u => u.StudentNumber)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.FirstName)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.FirstName)
+            @Html.ValidationMessageFor(u => u.FirstName)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.MiddleName)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.MiddleName)
+            @Html.ValidationMessageFor(u => u.MiddleName)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.LastName)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.LastName)
+            @Html.ValidationMessageFor(u => u.LastName)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.Address1)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.Address1)
+            @Html.ValidationMessageFor(u => u.Address1)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.Address2)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.Address2)
+            @Html.ValidationMessageFor(u => u.Address2)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.ZipCode)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.ZipCode)
+            @Html.ValidationMessageFor(u => u.ZipCode)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.City)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.City)
+            @Html.ValidationMessageFor(u => u.City)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.State)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.State)
+                @Html.ValidationMessageFor(u => u.State)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.PhoneNumber)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.PhoneNumber)
+                @Html.ValidationMessageFor(u => u.PhoneNumber)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.Email)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.Email)
+                @Html.ValidationMessageFor(u => u.Email)
+   </div>
+            <div class="editor-label">@Html.LabelFor(u => u.GraduationYear)</div>
+            <div class="editor-field">@Html.TextBoxFor(u => u.GraduationYear)
+            @Html.ValidationMessageFor(u => u.GraduationYear)
+        </div>
+
+
+<input type="submit" value="Register" />
+</fieldset>
+</div>
+}
