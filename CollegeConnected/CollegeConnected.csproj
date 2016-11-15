@@ -209,7 +209,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\StudentCreatorController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -219,7 +218,6 @@
     <Compile Include="Imports\StudentImport.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HomePageModels.cs" />
-    <Compile Include="Models\StudentCreator.cs" />
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\EventCreator.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -314,7 +312,6 @@
     <Content Include="Views\Import\StudentColumnOptions.cshtml" />
     <Content Include="Views\Import\UploadError.cshtml" />
     <Content Include="Views\Import\ViewImportFiles.cshtml" />
-    <Content Include="Views\StudentCreator\Index.cshtml" />
     <Content Include="Views\Students\Create.cshtml" />
     <Content Include="Views\Students\Delete.cshtml" />
     <Content Include="Views\Students\Details.cshtml" />
@@ -324,6 +321,7 @@
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Event\EventHome.cshtml" />
+    <Content Include="Views\Students\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
