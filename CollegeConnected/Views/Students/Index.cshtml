@@ -1,101 +1,26 @@
-﻿@model IEnumerable<CollegeConnected.Models.Student>
+﻿@using GridMvc.Html
+@model IEnumerable<CollegeConnected.Models.Student>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-<p>    @Html.ActionLink("Export To CSV", "ExportToCsv")</p>
+<h2>Students</h2>
+<p>    @Html.ActionLink("Export To CSV", "ExportToCsv", "Students", new { @class = "btn btn-primary btn-sm" })</p>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.StudentNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ZipCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.State)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GraduationYear)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UpdateTimeStamp)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraduationYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateTimeStamp)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.StudentId}) |
-                @Html.ActionLink("Details", "Details", new {id = item.StudentId}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.StudentId})
-            </td>
-        </tr>
-    }
-
-</table>
+@Html.Grid(Model).Columns(columns =>   
+                  {
+                      columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(o => Html.ActionLink("Edit", "Edit","Students", new { @class = "btn btn-primary btn-sm" }));
+                      columns.Add(model => model.StudentNumber).Titled("Student Number").Filterable(true).Sortable(true).SetWidth(200);
+                      columns.Add(model => model.FirstName).Titled("First Name").Filterable(true).Sortable(true).SetWidth(150);
+                      columns.Add(model => model.LastName).Titled("Last Name").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.PhoneNumber).Titled("Phone").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.Email).Titled("Email").Filterable(true).Sortable(true).SetWidth(200);
+                      columns.Add(model => model.Address1).Titled("Address1").Filterable(true).Sortable(true).SetWidth(300);
+                      columns.Add(model => model.Address2).Titled("Address2").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.City).Titled("City").Filterable(true).Sortable(true).SetWidth(150);
+                      columns.Add(model => model.State).Titled("State").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.ZipCode).Titled("Zip Code").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.BirthDate).Titled("Birthdate").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.GraduationYear).Titled("Graduation Year").Filterable(true).Sortable(true).SetWidth(100);
+                    }).WithPaging(15)

@@ -84,4 +84,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Password" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0b27c1d3-4ef8-4d8a-9662-0c2ec7b01c8d" ChangeDateTime="11/13/2016 20:04:31">
+    <Property Name="ElementName" Value="[dbo].[fK_Events_Column]" />
+    <Property Name="ElementType" Value="SqlUniqueConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Events]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_EVENTS_USER]" />
+  </Operation>
 </Operations>
