@@ -19,5 +19,10 @@ namespace CollegeConnected.Models
         public string GraduationYear { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime UpdateTimeStamp { get; set; }
+
+        public string BirthdayForDisplay
+        {
+            get { return this.BirthDate.ToShortDateString(); }
+        }
     }
 }

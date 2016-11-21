@@ -9,6 +9,13 @@ namespace CollegeConnected.Imports
 {
     public static class ImportManager
     {
+        public static Guid ImportUser
+        {
+            get
+            {
+                return MvcApplication.CurrentImport.ImportUser;
+            }
+        }
         public static void PrepareHeaders()
         {
             // Sets up column configuration and initializes convert count
@@ -35,6 +42,7 @@ namespace CollegeConnected.Imports
 
         public static void KickOffImport()
         {
+            //MvcApplication.CurrentImport.ImportUser = UserId;
             MvcApplication.CurrentImport.Status = ImportStatusEnum.Running;
 
             CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.ConvertStart);
@@ -47,7 +55,7 @@ namespace CollegeConnected.Imports
 
                     CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.ConversionCompleted);
 
-                    MvcApplication.CurrentImport.ImportData(convertedData);
+                   MvcApplication.CurrentImport.ImportData(convertedData);
 
                     CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.UploadingResults);
                 }
@@ -79,10 +87,7 @@ namespace CollegeConnected.Imports
 
                             var result = new ImportResult
                             {
-                                Type =
-                                    MvcApplication.CurrentImport.GetType()
-                                        .ToString()
-                                        .Replace("CollegeConnected.Imports.", ""),
+                                Type = "StudentImport",
                                 ImportFile = importFileBytes,
                                 RejectFile = rejectFileBytes,
                                 ImportCount = (short) importCount,

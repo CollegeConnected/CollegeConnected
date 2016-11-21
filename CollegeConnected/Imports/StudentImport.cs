@@ -46,28 +46,28 @@ namespace CollegeConnected.Imports
         {
             if (!(columnConfiguration is StudentImportColumnConfigurationModel))
                 return false;
-            var StudentOptions = columnConfiguration as StudentImportColumnConfigurationModel;
-            var StudentNumberDefined = false;
+            var studentOptions = columnConfiguration as StudentImportColumnConfigurationModel;
+            var studentNumberDefined = false;
 
-            foreach (var column in StudentOptions.Configuration)
+            foreach (var column in studentOptions.Configuration)
             {
                 if (column.Include == false)
                     continue;
 
                 if (column.Type == "Student Number")
                 {
-                    if (StudentNumberDefined)
+                    if (studentNumberDefined)
                     {
                         MvcApplication.CurrentImport.ErrorMessage = "Cannot have multiple Student Numbers defined";
 
                         return false;
                     }
-                    StudentNumberDefined = true;
+                    studentNumberDefined = true;
                 }
             }
 
 
-            ColumnConfiguration.Configuration = StudentOptions.Configuration;
+            ColumnConfiguration.Configuration = studentOptions.Configuration;
             return true;
         }
 
@@ -370,20 +370,22 @@ namespace CollegeConnected.Imports
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
 
-                            var convertedStudent = new Student();
-                            convertedStudent.StudentNumber = studentNumber;
-                            convertedStudent.FirstName = firstName;
-                            convertedStudent.LastName = lastName;
-                            convertedStudent.MiddleName = middleName;
-                            convertedStudent.Address1 = address1;
-                            convertedStudent.Address2 = address2;
-                            convertedStudent.ZipCode = zipCode;
-                            convertedStudent.City = city;
-                            convertedStudent.State = state;
-                            convertedStudent.PhoneNumber = phoneNunber;
-                            convertedStudent.Email = email;
-                            convertedStudent.GraduationYear = gradYear;
-                            convertedStudent.BirthDate = birthday;
+                            var convertedStudent = new Student
+                            {
+                                StudentNumber = studentNumber,
+                                FirstName = firstName,
+                                LastName = lastName,
+                                MiddleName = middleName,
+                                Address1 = address1,
+                                Address2 = address2,
+                                ZipCode = zipCode,
+                                City = city,
+                                State = state,
+                                PhoneNumber = phoneNunber,
+                                Email = email,
+                                GraduationYear = gradYear,
+                                BirthDate = birthday
+                            };
 
 
                             convertedStudents.Add(convertedStudent);

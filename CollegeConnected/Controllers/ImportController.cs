@@ -85,11 +85,6 @@ namespace CollegeConnected.Controllers
             return View();
         }
 
-        public ActionResult Results()
-        {
-            return View();
-        }
-
         public ActionResult StartStudent()
         {
             if (ImportManager.IsImportReady())
@@ -132,16 +127,6 @@ namespace CollegeConnected.Controllers
         public ActionResult ViewImportFiles()
         {
             return View();
-        }
-
-        private List<SelectListItem> GetPositions()
-        {
-            var positionList = new List<SelectListItem>();
-            positionList.Add(new SelectListItem {Text = "NONE", Value = string.Empty});
-            for (var iPos = 5; iPos < 25; iPos++)
-                positionList.Add(new SelectListItem {Text = iPos.ToString(), Value = iPos.ToString()});
-
-            return positionList;
         }
     }
 }

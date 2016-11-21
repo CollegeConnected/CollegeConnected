@@ -59,19 +59,6 @@
 }
 <script type="text/javascript">
     var columnConfiguration = $.parseJSON('@Html.Raw(Json.Encode(Model.Configuration))');
-    $(document)
-        .ready(function() {
-            $("input[type=submit]").button({ icons: { primary: "ui-icon-disk" } });
-            $(".mappingType")
-                .each(function(index, value) {
-                    $(value).change();
-                    if ($(value).val() != "Account Number" || $(value).val() != "Account Title") {
-                        var id = $(this).data("id");
-                        $("#periodDropDown_" + id).val(columnConfiguration[index].Period);
-                    }
-                });
-            $(".includeCheckBox").change();
-        });
     $(".includeCheckBox")
         .change(function() {
             var id = $(this).data("id");

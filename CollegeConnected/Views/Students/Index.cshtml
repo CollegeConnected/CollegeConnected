@@ -6,7 +6,7 @@
 }
 
 <h2>Students</h2>
-<p>    @Html.ActionLink("Export To CSV", "ExportToCsv", "Students", new { @class = "btn btn-primary btn-sm" })</p>
+<p>    @Html.ActionLink("Export Student Data", "ExportToCsv", "Students", new { @class = "btn btn-primary btn-sm" })</p>
 
 @Html.Grid(Model).Columns(columns =>   
                   {
@@ -21,6 +21,6 @@
                       columns.Add(model => model.City).Titled("City").Filterable(true).Sortable(true).SetWidth(150);
                       columns.Add(model => model.State).Titled("State").Filterable(true).Sortable(true).SetWidth(110);
                       columns.Add(model => model.ZipCode).Titled("Zip Code").Filterable(true).Sortable(true).SetWidth(110);
-                      columns.Add(model => model.BirthDate).Titled("Birthdate").Filterable(true).Sortable(true).SetWidth(110);
+                      columns.Add(model => model.BirthdayForDisplay).Titled("Birthdate").Filterable(true).Sortable(true).SetWidth(110);
                       columns.Add(model => model.GraduationYear).Titled("Graduation Year").Filterable(true).Sortable(true).SetWidth(100);
                     }).WithPaging(15)
