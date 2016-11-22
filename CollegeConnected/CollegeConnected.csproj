@@ -241,6 +241,7 @@
     <Content Include="Content\gridmvc.datepicker.css" />
     <Content Include="Content\gridmvc.datepicker.min.css" />
     <Content Include="Content\jquery-1.9.1.js" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\StyleSheet1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
