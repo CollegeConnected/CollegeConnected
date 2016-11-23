@@ -1,49 +1,20 @@
-﻿@model CollegeConnected.Models.HomePage
+﻿@using GridMvc.Html
+@model IEnumerable<CollegeConnected.Models.Event>
+<script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")" type="text/javascript"></script>
 
 @{
-    ViewBag.Title = "Event Home";
+    ViewBag.Title = "Index";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Event Home</title>
-</head>
-<body>
-    <div class="jumbotron">
-        <h2>College Connected</h2>
-        <table align="center">
-            @using (Html.BeginForm())
-            {
-                @Html.ValidationSummary()
-                <tr>
-                    <td><h4>Enter your N number:</h4></td>
-                </tr>
-                <tr>
-                    <td><p>@Html.TextBoxFor(x => x.StudentNumber)</p></td>
-                </tr>
-                <tr>
-                    <td><h4>OR</h4></td>
-                </tr>
-                <tr>
-                    <td><h4>Enter your first and last name:</h4></td>
-                </tr>
-                <tr>
-                    <td><p>@Html.TextBoxFor(x => x.FirstName)</p></td>
-                    <td>  </td>
-                    <td><p>@Html.TextBoxFor(x => x.LastName)</p></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input type="submit" value="Create Event" /></td>
-                </tr>
-            }
-        </table>
-        <table>
-            <tr>
-                <td>Event:</td>
-            </tr>
-        </table>
-    </div>
-    </body>
-</html>
+<h2>Students</h2>
+<p>    @Html.ActionLink("Create New Event", "CreateEvent", "Events", new { @class = "btn btn-primary btn-sm" })</p>
+
+@Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(model => model.EventDate).Titled("Date").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.EventLocation).Titled("Location").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.EventStatus).Titled("Status").Filterable(true).Sortable(true).SetWidth(200);
+}
+
+)

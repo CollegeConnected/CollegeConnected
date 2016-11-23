@@ -18,7 +18,7 @@ namespace CollegeConnected.Controllers
         }
 
         [HttpPost]
-        public ViewResult CreateEventForm(EventCreator eventCreator)
+        public ViewResult CreateEventForm(Event eventCreator)
         {
             if (ModelState.IsValid)
                 return View("Your event has been created.", eventCreator);
