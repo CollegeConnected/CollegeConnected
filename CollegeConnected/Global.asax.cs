@@ -3,15 +3,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
 using CollegeConnected.Imports;
-using System.Web.Providers;
 
 namespace CollegeConnected
 {
     public class MvcApplication : HttpApplication
     {
-        public static CollegeConnectedImporterBase CurrentImport = null;
+        public static CollegeConnectedImporterBase CurrentImport;
         public static Task ImportTask = null;
 
         public static MvcApplication CollegeConnectedApplication { get; set; }
@@ -26,6 +24,5 @@ namespace CollegeConnected
 
             CurrentImport = new CollegeConnectedImporterBase();
         }
-
     }
 }

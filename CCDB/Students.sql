@@ -12,7 +12,7 @@
     [PhoneNumber] VARCHAR(50) NULL, 
     [Email] VARCHAR(50) NULL, 
     [GraduationYear] VARCHAR(50) NULL, 
-    [BirthDate] DATE NULL, 
+    [BirthDate] DATETIME NULL, 
     [UpdateTimeStamp] DATETIME NULL, 
     [City] VARCHAR(50) NULL
 )

@@ -2,11 +2,12 @@
     padding-bottom: 20px;
     padding-top: 50px;
 }
+
 footer {
     display: table;
-    text-align: center;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -27,55 +28,49 @@ footer {
 input,
 select,
 textarea { max-width: 280px; }
+
 button {
     background-color: #d3dce0;
     border: 1px solid #787878;
     cursor: pointer;
     font-size: 1.2em;
     font-weight: 600;
-    padding: 7px;
     margin-right: 8px;
+    padding: 7px;
     width: auto;
 }
-.indeterminate-progress-label 
-{
-    float: left;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 4px;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #000;
+
+.indeterminate-progress-label {
     color: #fff;
+    float: left;
+    font-weight: bold;
+    height: 100%;
+    position: absolute;
+    text-shadow: 1px 1px 0 #000;
+    top: 4px;
+    width: 100%;
 }
 
-.progress-label 
-{
-    position: absolute;
-    left: 50%;
-    top: 4px;
+.progress-label {
     font-weight: bold;
+    left: 50%;
+    position: absolute;
     text-shadow: 1px 1px 0 #fff;
+    top: 4px;
 }
-.progressbar 
-{
+
+.progressbar {
     position: relative;
     text-align: center;
 }
-.errorText
-{
+
+.errorText {
     color: red;
-    font-size: 14pt;
-    
+    font-size: 14pt;    
 }
 
-.successText {
-    color: green;
-}
-.progress-success {
-    background-color: #CF9;
-}
+.successText { color: green; }
 
-.progress-failure {
-    background-color: #F03;
-}
+.progress-success { background-color: #CF9; }
+
+.progress-failure { background-color: #F03; }

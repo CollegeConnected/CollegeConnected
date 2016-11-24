@@ -1,0 +1,36 @@
+﻿@using GridMvc.Html
+@model IEnumerable<CollegeConnected.Models.Event>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Events</h2>
+<p> @Html.ActionLink("Create New Event", "Create", "Events", new {@class = "btn btn-primary btn-sm"})</p>
+
+
+<h3>Open Events</h3>
+@Html.Grid(Model.Where(x => x.EventStatus == "In Progress")).Columns(columns =>
+{
+    columns.Add(model => model.EventName).Titled("Name").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.EventLocation).Titled("Location").Filterable(true).Sortable(true).SetWidth(150);
+    columns.Add(model => model.DisplayEventDateAsDate).Titled("Date").Filterable(true).Sortable(true).SetWidth(110);
+    columns.Add(model => model.DisplayEventStartTimeAsTime).Titled("Start Time").Filterable(true).Sortable(true).SetWidth(110);
+    columns.Add(model => model.DisplayEventEndTimeAsTime).Titled("End Time").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.CreatedBy).Titled("Created By").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Attend", "Details", "Events", new {id = model.EventID}, new {@class = "btn btn-primary btn-sm"}));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Events", new {id = model.EventID}, new {@class = "btn btn-primary btn-sm"}));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Complete", "CompleteEvent", "Events", new {id = model.EventID}, new {@class = "btn btn-primary btn-sm"}));
+}).WithPaging(15).Filterable(true).WithMultipleFilters()
+
+<h3>Completed Events</h3>
+@Html.Grid(Model.Where(x => x.EventStatus == "Completed")).Columns(columns =>
+{
+    columns.Add(model => model.EventName).Titled("Name").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.EventLocation).Titled("Location").Filterable(true).Sortable(true).SetWidth(150);
+    columns.Add(model => model.DisplayEventDateAsDate).Titled("Date").Filterable(true).Sortable(true).SetWidth(110);
+    columns.Add(model => model.DisplayEventStartTimeAsTime).Titled("Start Time").Filterable(true).Sortable(true).SetWidth(110);
+    columns.Add(model => model.DisplayEventEndTimeAsTime).Titled("End Time").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add(model => model.CreatedBy).Titled("Created By").Filterable(true).Sortable(true).SetWidth(200);
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Events", new {id = model.EventID}, new {@class = "btn btn-primary btn-sm"}));
+}).WithPaging(15).Filterable(true).WithMultipleFilters()

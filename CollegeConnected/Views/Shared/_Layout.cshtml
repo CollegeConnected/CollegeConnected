@@ -7,15 +7,24 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"> </script>
-    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" type="text/css"/>
     <script src="@Url.Content("~/Scripts/gridmvc.min.js")" type="text/javascript"> </script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/jquery-1.9.1.js")"></script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/jquery-ui-1.10.3.custom.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/StandardAlert.js")"></script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/Security.js")"></script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/jquery.ui.ufd.js")"></script>
-    <script type="text/javascript" src="@Url.Content(" ~/Content/jQueryPlugins.js")"></script
-><link href="@Url.Content(" ~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content(" ~/Content/Site.css")"rel="stylesheet" type="text/css"/>
+    <script src="@Url.Content(" ~/Scripts/jquery-1.5.1.min.js")"type="text/javascript"></script>
+    <script src="@Url.Content(" ~/Scripts/modernizr-1.7.min.js")"type="text/javascript"></script>
+    <link href="@Url.Content(" ~/Content/themes/base/jquery.ui.core.css")"
+          rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content(" ~/Content/themes/base/jquery.ui.datepicker.css")"
+          rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content(" ~/Content/themes/base/jquery.ui.theme.css")"
+          rel="stylesheet" type="text/css"/>
+
+    <script src="@Url.Content(" ~/Scripts/jquery.ui.core.min.js")"
+            type="text/javascript"></script>
+    <script src="@Url.Content(" ~/Scripts/jquery.ui.datepicker.min.js")"
+            type="text/javascript"></script>
+    <script src="@Url.Content(" ~/Scripts/DatePickerReady.js")"
+            type="text/javascript"></script>
 
 
     <script type="text/javascript">
@@ -62,9 +71,17 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Dashboard", "Admin", "Home")</li>
-                <li>@Html.ActionLink("Events", "EventHome", "Event")</li>
+                <li>@Html.ActionLink("Events", "Index", "Events")</li>
                 <li>@Html.ActionLink("Students", "Index", "Students")</li>
                 <li>@Html.ActionLink("Import", "StartStudent", "Import")</li>
+                <li>
+                    <a href="#">Reports</a>
+                    <ul>
+                        <li>
+                            <a href="~/Reports/Report.aspx?r=Event Attendance&title=Event Attendance" target="_blank">Event Attendance</a>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
             @Html.Partial("_LoginPartial")
@@ -84,23 +101,3 @@
 @RenderSection("scripts", false)
 </body>
 </html>
-
-
-<div style="width:auto; background-color:aqua">
-    @if (Request.IsAuthenticated)
-    {
-        <strong>@Html.Encode(User.Identity.Name)</strong>
-            @Html.ActionLink("Log Out", "Logout", "User")
-    }
-    else
-    {
-        @Html.ActionLink("Register", "Register", "Students")
-        <span> | </span>
-        @Html.ActionLink("Edit Page", "EditPage", "Students")  
-    }
-</div>
-
-
-
-
-

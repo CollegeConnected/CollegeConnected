@@ -33,4 +33,10 @@
 
         Error
     }
+
+    public enum EventStatusEnum
+    {
+        InProgress,
+        Complete
+    }
 }

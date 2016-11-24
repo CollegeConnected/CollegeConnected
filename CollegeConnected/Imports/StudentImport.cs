@@ -554,7 +554,7 @@ namespace CollegeConnected.Imports
                             importedStudent.Email = convertedStudent.Email;
                             importedStudent.GraduationYear = convertedStudent.GraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
-                            importedStudent.UpdateTimeStamp = DateTime.Now;
+                            importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                             newStudents.Add(importedStudent);
                         }
                         else
@@ -573,7 +573,7 @@ namespace CollegeConnected.Imports
                             importedStudent.Email = convertedStudent.Email;
                             importedStudent.GraduationYear = convertedStudent.GraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
-                            importedStudent.UpdateTimeStamp = DateTime.Now;
+                            importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                         }
                     }
                     catch (Exception ex)

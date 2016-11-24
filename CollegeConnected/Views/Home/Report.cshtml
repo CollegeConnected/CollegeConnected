@@ -1,0 +1,11 @@
+﻿@using Microsoft.Reporting.WebForms
+@using ReportViewerForMvc
+@{
+    ViewBag.Title = "Report";
+}
+
+<h2>Report</h2>
+@if (ViewBag.ReportViewer != null)
+{
+    @Html.ReportViewer(ViewBag.ReportViewer as ReportViewer)
+}

@@ -11,11 +11,9 @@ namespace CollegeConnected.Imports
     {
         public static Guid ImportUser
         {
-            get
-            {
-                return MvcApplication.CurrentImport.ImportUser;
-            }
+            get { return MvcApplication.CurrentImport.ImportUser; }
         }
+
         public static void PrepareHeaders()
         {
             // Sets up column configuration and initializes convert count
@@ -55,7 +53,7 @@ namespace CollegeConnected.Imports
 
                     CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.ConversionCompleted);
 
-                   MvcApplication.CurrentImport.ImportData(convertedData);
+                    MvcApplication.CurrentImport.ImportData(convertedData);
 
                     CollegeConnectedImporterBase.CompleteStep(ImportProgressTypeEnum.UploadingResults);
                 }

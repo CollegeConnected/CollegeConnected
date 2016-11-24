@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CollegeConnected.Models;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
 namespace CollegeConnected.Controllers
@@ -12,67 +14,43 @@ namespace CollegeConnected.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        public CollegeConnectedDbContext db = new CollegeConnectedDbContext();
+        private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
-        
 
-/*
         //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View(); ;
+            return View();
+            ;
         }
 
-        //
-        // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(User user, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            string email = user.Username;
-            string password = user.Password;
+            var user = model;
+            var email = user.Email;
+            var password = user.Password;
 
-            if (!ModelState.IsValid)
-                return View(user);
+            if (user == null)
+                ModelState.AddModelError("User", "User not found.");
+            var bytes = Encoding.UTF8.GetBytes(password);
 
-            if(db.Users.FindAsync(email) == null)
+            var sha = new SHA256Managed();
+            var hashBytes = sha.ComputeHash(bytes);
+
+            var hash = Convert.ToBase64String(hashBytes);
+
+            if (password == model.Password)
             {
-                return null;
             }
-            
-            var result = await (user.Email, user.Password, false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, model.RememberMe});
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
-            }
+
+            var identity = new ClaimsIdentity();
+
+            AuthenticationManager.SignIn();
+            return RedirectToAction("Index");
         }
-
-    
-
-        //
-        // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        {
-            if ((userId == null) || (code == null))
-                return View("Error");
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
 
 
         //
@@ -84,8 +62,6 @@ namespace CollegeConnected.Controllers
         }
 
 
-
-
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -95,8 +71,6 @@ namespace CollegeConnected.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
-
-
 
         #region Helpers
 
@@ -147,7 +121,7 @@ namespace CollegeConnected.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        */
-        //#endregion
+
+        #endregion
     }
 }

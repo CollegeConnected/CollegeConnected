@@ -22,7 +22,7 @@ namespace CollegeConnected.Models
 
         public string BirthdayForDisplay
         {
-            get { return this.BirthDate.ToShortDateString(); }
+            get { return BirthDate.ToShortDateString(); }
         }
     }
 }

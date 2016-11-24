@@ -3,35 +3,26 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Web.Mvc;
-using System.Web.Security;
 using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
     public class StudentsController : Controller
 
-        { 
-        public ActionResult Register()
-        {
-        return View();
-        }
+    {
+        private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
-        
-        public ActionResult EditPage()
+        public ActionResult Register()
         {
             return View();
         }
-    
-
-        private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
         // GET: Students
         public ActionResult Index()
         {
             var studentList = (from student in db.Students
-                               select student).ToList();
+                select student).ToList();
             return View(studentList);
         }
 
@@ -39,7 +30,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Details()
         {
             var studentList = (from student in db.Students
-                               select student).ToList();
+                select student).ToList();
             return View(studentList);
         }
 
@@ -95,6 +86,7 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
+                student.UpdateTimeStamp = DateTime.Now;
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -134,11 +126,11 @@ namespace CollegeConnected.Controllers
 
         public void ExportToCsv()
         {
-            StringWriter sw = new StringWriter();
+            var sw = new StringWriter();
 
             sw.WriteLine("\"Student Number\",\"First Name\",\"Middle Name\",\"Last Name\",\"Address1\"," +
                          "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
-                                           "\"Birthday\"");
+                         "\"Birthday\"");
             Response.ClearContent();
             Response.AddHeader("content-disposition", "attachment;filename=ExportedStudents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
@@ -146,26 +138,13 @@ namespace CollegeConnected.Controllers
             var students = db.Students.ToList();
 
             foreach (var student in students)
-            {
                 sw.WriteLine(
                     $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
                     $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
                     $"\"{student.GraduationYear}\",\"{student.BirthDate}\"");
-            }
 
             Response.Write(sw.ToString());
             Response.End();
         }
-
     }
 }
-    
-
-
-
-
-           
-
-        
-
-    
