@@ -26,102 +26,61 @@ namespace CollegeConnected.Controllers
             return View();
             ;
         }
-
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            var user = model;
-            var email = user.Email;
-            var password = user.Password;
-
+            ViewBag.ReturnUrl = returnUrl;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = db.Users.Find(model.Email);
             if (user == null)
-                ModelState.AddModelError("User", "User not found.");
-            var bytes = Encoding.UTF8.GetBytes(password);
+            {
+                ModelState.AddModelError("", "Username or Password incorrect");
+                return View();
+            }
+            var email = user.UserID;
+            var bytes = Encoding.UTF8.GetBytes(model.Password);
 
             var sha = new SHA256Managed();
             var hashBytes = sha.ComputeHash(bytes);
 
             var hash = Convert.ToBase64String(hashBytes);
 
-            if (password == model.Password)
+            if (hash == user.Password)
             {
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Name,
+                        ClaimTypes.Email, user.UserID)
+                };
+
+
+                var id = new ClaimsIdentity(claims, "ApplicationCookie");
+
+                AuthenticationManager.SignIn(id);
+                return RedirectToAction("Admin", "Home");
             }
-
-            var identity = new ClaimsIdentity();
-
-            AuthenticationManager.SignIn();
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Username or Password incorrect");
+            return View();
         }
 
-
-        //
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult Logout()
         {
-            return code == null ? View("Error") : View();
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+
+            authManager.SignOut("ApplicationCookie");
+            return RedirectToAction("Login");
         }
 
-
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
-        }
-
-        #region Helpers
-
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
         {
             get { return HttpContext.GetOwinContext().Authentication; }
         }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error);
-        }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
-            return RedirectToAction("Index", "Home");
-        }
-
-        internal class ChallengeResult : HttpUnauthorizedResult
-        {
-            public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
-            }
-
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
-                LoginProvider = provider;
-                RedirectUri = redirectUri;
-                UserId = userId;
-            }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
-
-            public override void ExecuteResult(ControllerContext context)
-            {
-                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
-                if (UserId != null)
-                    properties.Dictionary[XsrfKey] = UserId;
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-            }
-        }
-
-        #endregion
     }
 }

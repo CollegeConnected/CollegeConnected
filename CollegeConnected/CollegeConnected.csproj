@@ -225,9 +225,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -245,7 +243,6 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\HomePageModels.cs" />
     <Compile Include="Models\Enumerations.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ImportModels.cs" />
     <Compile Include="Models\ImportResult.cs" />
     <Compile Include="Models\ReportInfo.cs" />
@@ -369,12 +366,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\Import\Progress.cshtml" />
@@ -399,6 +390,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Report.cshtml" />
     <Content Include="Views\Shared\Date.cshtml" />
+    <Content Include="Views\Shared\_LayoutUnauth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
