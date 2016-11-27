@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using CollegeConnected.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -52,16 +53,7 @@ namespace CollegeConnected.Controllers
 
             if (hash == user.Password)
             {
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Name,
-                        ClaimTypes.Email, user.UserID)
-                };
-
-
-                var id = new ClaimsIdentity(claims, "ApplicationCookie");
-
-                AuthenticationManager.SignIn(id);
+                FormsAuthentication.SetAuthCookie(user.UserID, false);
                 return RedirectToAction("Admin", "Home");
             }
             ModelState.AddModelError("", "Username or Password incorrect");
@@ -70,10 +62,9 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Logout()
         {
-            var ctx = Request.GetOwinContext();
-            var authManager = ctx.Authentication;
-
-            authManager.SignOut("ApplicationCookie");
+            Session.Abandon();
+            Response.Cookies.Clear();
+            FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 

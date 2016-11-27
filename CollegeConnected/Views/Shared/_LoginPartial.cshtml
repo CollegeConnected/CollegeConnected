@@ -1,5 +1,5 @@
 ﻿@model CollegeConnected.Models.User
-@if (Request.IsAuthenticated)
+            @if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
 {
     using (Html.BeginForm("Logout", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
     {
@@ -7,7 +7,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Hello " + Model.Name + "!", "Logout", "Account", null, new {title = "Manage"})
+                @Html.ActionLink("Hello " + Html.LabelFor(model => model.Name) + "!", "Logout", "Account")
             </li>
             <li>
                 <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
@@ -18,6 +18,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Admin Log in", "Login", "Account", null, new {id = "loginLink"})</li>
+        <li>@Html.ActionLink("Administrator Login", "Login", "Account", null, new {id = "loginLink"})</li>
     </ul>
 }

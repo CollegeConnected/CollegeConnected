@@ -1,0 +1,25 @@
+﻿<nav>
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Dashboard", "Admin", "Home")</li>
+            <li>@Html.ActionLink("Events", "Index", "Events")</li>
+            <li>@Html.ActionLink("Students", "Index", "Students")</li>
+            <li>@Html.ActionLink("Import", "StartStudent", "Import")</li>
+
+            <li>
+                <a href="#">Reports</a>
+                <ul>
+                    <li>
+                        <a href="~/Reports/Report.aspx?r=Event Attendance&title=Event Attendance" target="_blank">Event Attendance</a>
+                        <a href="~/Reports/Report.aspx?r=Event Attendance&title=Event Attendance" target="_blank">Event Attendance</a>
+                        <a href="~/Reports/Report.aspx?r=Event Attendance&title=Event Attendance" target="_blank">Event Attendance</a>
+                        <a href="~/Reports/Report.aspx?r=Event Attendance&title=Event Attendance" target="_blank">Event Attendance</a>
+                    </li>
+                </ul>
+                <li>
+                </li>
+                <li>
+                </li>
+            </li>
+            <li>@Html.ActionLink("Log Off", "Logout", "Account")</li>
+        </ul>
+</nav>
