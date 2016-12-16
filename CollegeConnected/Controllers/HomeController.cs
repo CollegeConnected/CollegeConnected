@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using CollegeConnected.Models;
+using System.Net;
+using System.Data.Entity;
 
 namespace CollegeConnected.Controllers
 {
@@ -28,9 +30,74 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            string searchString = "";
+            var studentList = (from student in db.Students
+                               where student.StudentNumber == searchString
+                               select student
+                   ).ToList();
+            return View(studentList);
         }
 
+        [HttpPost]
+        public ActionResult Index(string studentNumber, string studentLastName)
+        {
+            if (string.IsNullOrEmpty(studentLastName))
+            {
+                var studentList = (from student in db.Students
+                                   where student.StudentNumber == studentNumber
+                                   select student
+                                   ).ToList();
+                return View(studentList);
+            }
+            else if (string.IsNullOrEmpty(studentNumber))
+            {
+                var studentList = (from student in db.Students
+                                   where student.LastName == studentLastName
+                                   select student
+                                   ).ToList();
+                return View(studentList);
+            }
+            else
+            {
+                var studentList = (from student in db.Students
+                                   where student.StudentNumber == studentNumber
+                                   select student
+                                   ).ToList();
+                return View(studentList);
+            }
+        }
+
+        // GET: Students/Edit/5
+        public ActionResult Confirm(Guid? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var student = db.Students.Find(id);
+            if (student == null)
+                return HttpNotFound();
+            return View(student);
+        }
+
+        // POST: Students/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Confirm(
+            [Bind(
+                 Include =
+                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
+             )] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                student.UpdateTimeStamp = DateTime.Now;
+                db.Entry(student).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
         /*  public ActionResult Report()
         {
             ReportViewer rptViewer = new ReportViewer();

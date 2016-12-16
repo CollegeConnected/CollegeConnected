@@ -268,7 +268,6 @@
     <Content Include="Content\gridmvc.datepicker.min.css" />
     <Content Include="Content\jquery-1.9.1.js" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\StyleSheet1.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -391,6 +390,8 @@
     <Content Include="Views\Home\Report.cshtml" />
     <Content Include="Views\Shared\Date.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Views\Home\SearchResults.cshtml" />
+    <Content Include="Views\Home\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

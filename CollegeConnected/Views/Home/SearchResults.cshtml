@@ -2,13 +2,11 @@
 @model IEnumerable<CollegeConnected.Models.Student>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "SearchResults";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Students</h2>
-<p> @Html.ActionLink("Export Student Data", "ExportToCsv", "Students", new {@class = "btn btn-primary btn-sm"})</p>
-
+<h2>Results</h2>
 @Html.Grid(Model).Columns(columns =>
 {
     columns.Add(model => model.StudentNumber).Titled("Student Number").Sortable(true).SetWidth(200).Filterable(true);
@@ -23,6 +21,5 @@
     columns.Add(model => model.ZipCode).Titled("Zip Code").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.BirthdayForDisplay).Titled("Birthdate").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.GraduationYear).Titled("Graduation Year").Filterable(true).Sortable(true).SetWidth(100);
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("This is Me", "Cofirm", "Home", new { id = model.StudentId }, new { @class = "btn btn-primary btn-sm" }));
 }).WithPaging(15)
