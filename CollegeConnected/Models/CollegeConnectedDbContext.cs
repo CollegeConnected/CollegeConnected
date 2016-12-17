@@ -14,6 +14,7 @@ namespace CollegeConnected.Models
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<EventAttendance> EventAttendants { get; set; }
 
         public static CollegeConnectedDbContext Create()
         {
