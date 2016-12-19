@@ -11,7 +11,7 @@ namespace CollegeConnected.Controllers
     {
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
-        // GET: Events
+        // GET: Events http://stackoverflow.com/questions/18237945/how-to-edit-save-viewmodels-data-back-to-database
         public ActionResult Index()
         {
             return View(db.Events.ToList());
@@ -40,13 +40,13 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime")] Event @event)
+            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime")] Event @event, User user)
         {
             if (ModelState.IsValid)
             {
                 @event.EventID = Guid.NewGuid();
                 @event.EventStatus = "In Progress";
-                @event.CreatedBy = Guid.NewGuid();
+                @event.CreatedBy = "Administrator ";
                 db.Events.Add(@event);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -122,7 +122,7 @@ namespace CollegeConnected.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult SignIn()
+        public ActionResult SignIn(Guid id)
         {
             string searchString = "";
             var studentList = (from student in db.Students
@@ -131,40 +131,8 @@ namespace CollegeConnected.Controllers
                    ).ToList();
             return View(studentList);
         }
-        // GET: Students/Edit/5
-        public ActionResult Confirm(Guid? id)
-        {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(id);
-            if (student == null)
-                return HttpNotFound();
-            return View(student);
-        }
-
-        // POST: Students/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Confirm(
-            [Bind(
-                 Include =
-                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
-             )] Student student)
-        {
-            if (ModelState.IsValid)
-            {
-                student.UpdateTimeStamp = DateTime.Now;
-                db.Entry(student).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(student);
-        }
-
-        [HttpPost]
-        public ActionResult SignIn(string studentNumber, string studentLastName)
+        public ActionResult SignIn(string studentNumber, string studentLastName, Guid id)
         {
             if (string.IsNullOrEmpty(studentLastName))
             {
@@ -191,15 +159,57 @@ namespace CollegeConnected.Controllers
                 return View(studentList);
             }
         }
+        // GET: Students/Edit/5
+        public ActionResult Confirm(Guid? id, Guid? eventId)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var student = db.Students.Find(id);
+            if (student == null)
+                return HttpNotFound();
+            return View(student);
+        }
+
+        // POST: Students/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Confirm(
+            [Bind(
+                 Include =
+                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
+             )] Student student,
+            [Bind(
+                 Include =
+                     "EventId"
+             )] Event e)
+        {
+            Guid eventId = GetEventId();
+            if (ModelState.IsValid)
+            {
+                student.UpdateTimeStamp = DateTime.Now;
+                db.Entry(student).State = EntityState.Modified;
+                db.SaveChanges();
+                AttendEvent(student.StudentId, e.EventID);
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
+
+        private Guid GetEventId()
+        {
+            throw new NotImplementedException();
+        }
+
+
 
         public void AttendEvent(Guid studentId, Guid eventId)
         {
-            if (studentId == null)
-                new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(studentId);
-            var eventAttendant = new EventAttendance(studentId, eventId);
+            var eventAttendant = new EventAttendance(new Guid(), studentId, eventId);
             db.EventAttendants.Add(eventAttendant);
-           
+            db.SaveChanges();
+
         }
     }
 }

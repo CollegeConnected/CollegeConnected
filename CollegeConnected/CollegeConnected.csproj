@@ -242,7 +242,6 @@
     <Compile Include="Models\CollegeConnectedDbContext.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventAttendance.cs" />
-    <Compile Include="Models\HomePageModels.cs" />
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\ImportModels.cs" />
     <Compile Include="Models\ImportResult.cs" />
@@ -395,6 +394,7 @@
     <Content Include="Views\Home\SearchResults.cshtml" />
     <Content Include="Views\Home\Confirm.cshtml" />
     <Content Include="Views\Events\SignIn.cshtml" />
+    <Content Include="Views\Events\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

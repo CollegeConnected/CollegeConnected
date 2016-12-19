@@ -7,8 +7,9 @@ namespace CollegeConnected.Models
 {
     public class EventAttendance
     {
-        public EventAttendance(Guid studentId, Guid eventId)
+        public EventAttendance(Guid id, Guid studentId, Guid eventId)
         {
+            Id = id;
             StudentId = studentId;
             EventId = eventId;
         }

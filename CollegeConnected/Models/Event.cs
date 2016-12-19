@@ -15,7 +15,7 @@ namespace CollegeConnected.Models
         public DateTime EventStartTime { get; set; }
         public DateTime EventEndTime { get; set; }
         public string EventStatus { get; set; }
-        public Guid CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         public string DisplayEventDateAsDate
         {
