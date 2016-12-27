@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[EventAttendance]
+﻿CREATE TABLE [dbo].[EventAttendances]
 (
 [Id] UNIQUEIDENTIFIER NOT NULL,
 	[EventId] UNIQUEIDENTIFIER NOT NULL , 
