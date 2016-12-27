@@ -243,6 +243,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventAttendance.cs" />
     <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\ImportModels.cs" />
     <Compile Include="Models\ImportResult.cs" />
     <Compile Include="Models\ReportInfo.cs" />

@@ -40,7 +40,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime")] Event @event, User user)
+            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -162,12 +162,14 @@ namespace CollegeConnected.Controllers
         // GET: Students/Edit/5
         public ActionResult Confirm(Guid? id, Guid? eventId)
         {
+            Student student = db.Students.Single(x => x.StudentId == id);
+            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var eventViewModel = new EventViewModel(student, ccEvent);
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(id);
-            if (student == null)
+            if (eventViewModel == null)
                 return HttpNotFound();
-            return View(student);
+             return View(eventViewModel);
         }
 
         // POST: Students/Edit/5
@@ -185,7 +187,6 @@ namespace CollegeConnected.Controllers
                      "EventId"
              )] Event e)
         {
-            Guid eventId = GetEventId();
             if (ModelState.IsValid)
             {
                 student.UpdateTimeStamp = DateTime.Now;
@@ -197,16 +198,10 @@ namespace CollegeConnected.Controllers
             return View(student);
         }
 
-        private Guid GetEventId()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
         public void AttendEvent(Guid studentId, Guid eventId)
         {
-            var eventAttendant = new EventAttendance(new Guid(), studentId, eventId);
+
+            var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
             db.EventAttendants.Add(eventAttendant);
             db.SaveChanges();
 
