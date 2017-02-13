@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -189,13 +190,14 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
+                var id = e.EventID;
                 student.UpdateTimeStamp = DateTime.Now;
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
                 AttendEvent(student.StudentId, e.EventID);
-                return RedirectToAction("Index");
+                return RedirectToAction("SignIn", id);
             }
-            return View(student);
+            return View();
         }
 
         public void AttendEvent(Guid studentId, Guid eventId)

@@ -263,7 +263,7 @@ namespace CollegeConnected.Imports
 
         private string GetEmail(ExcelWorksheet worksheet, int rowIndex)
         {
-            var phoneNumber = string.Empty;
+            var email = string.Empty;
             var columnCount = ColumnConfiguration.Configuration.Count();
             var excelColumnIndex = 0;
             for (var ii = 0; ii < columnCount; ii++)
@@ -272,12 +272,12 @@ namespace CollegeConnected.Imports
                 if ((ColumnConfiguration.Configuration[ii].Type == "Email")
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
-                    phoneNumber = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    email = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
 
-            return phoneNumber;
+            return email;
         }
 
         private string GetGradYear(ExcelWorksheet worksheet, int rowIndex)
@@ -316,6 +316,24 @@ namespace CollegeConnected.Imports
             }
 
             return birthday;
+        }
+        private string GetConstituentType(ExcelWorksheet worksheet, int rowIndex)
+        {
+            var type = string.Empty;
+            var columnCount = ColumnConfiguration.Configuration.Count();
+            var excelColumnIndex = 0;
+            for (var ii = 0; ii < columnCount; ii++)
+            {
+                excelColumnIndex = ii + 1;
+                if ((ColumnConfiguration.Configuration[ii].Type == "Constituent Type")
+                    && ColumnConfiguration.Configuration[ii].Include)
+                {
+                    type = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    break;
+                }
+            }
+
+            return type;
         }
 
 
@@ -369,6 +387,7 @@ namespace CollegeConnected.Imports
                                 rowIndex);
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
+                            var constituentType = GetConstituentType(package.Workbook.Worksheets[1], rowIndex);
 
                             var convertedStudent = new Student
                             {
@@ -384,7 +403,9 @@ namespace CollegeConnected.Imports
                                 PhoneNumber = phoneNunber,
                                 Email = email,
                                 GraduationYear = gradYear,
-                                BirthDate = birthday
+                                BirthDate = birthday,
+                                ConstituentType = constituentType,
+                                AllowCommunication = false
                             };
 
 
@@ -452,6 +473,7 @@ namespace CollegeConnected.Imports
             itemList.Add(new SelectListItem {Text = "Email", Value = "Email"});
             itemList.Add(new SelectListItem {Text = "Graduation Year", Value = "Graduation Year"});
             itemList.Add(new SelectListItem {Text = "Birthday", Value = "Birthday"});
+            itemList.Add(new SelectListItem { Text = "Constituent Type", Value = "Constituent Type" });
 
             ColumnConfiguration.SelectionCollection = itemList;
             return true;
@@ -554,6 +576,8 @@ namespace CollegeConnected.Imports
                             importedStudent.Email = convertedStudent.Email;
                             importedStudent.GraduationYear = convertedStudent.GraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
+                            importedStudent.ConstituentType = convertedStudent.ConstituentType;
+                            importedStudent.AllowCommunication = convertedStudent.AllowCommunication;
                             importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                             newStudents.Add(importedStudent);
                         }
@@ -573,6 +597,8 @@ namespace CollegeConnected.Imports
                             importedStudent.Email = convertedStudent.Email;
                             importedStudent.GraduationYear = convertedStudent.GraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
+                            importedStudent.ConstituentType = convertedStudent.ConstituentType;
+                            importedStudent.AllowCommunication = convertedStudent.AllowCommunication;
                             importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                         }
                     }

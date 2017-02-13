@@ -9,15 +9,14 @@ namespace CollegeConnected.Models
         public string EventName { get; set; }
         public string EventLocation { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime EventDate { get; set; }
-
-        public DateTime EventStartTime { get; set; }
-        public DateTime EventEndTime { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime EventStartDateTime { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime EventEndDateTime { get; set; }
         public string EventStatus { get; set; }
         public string CreatedBy { get; set; }
 
-        public string DisplayEventDateAsDate
+     /*   public string DisplayEventDateAsDate
         {
             get { return EventDate.ToShortDateString(); }
         }
@@ -30,6 +29,6 @@ namespace CollegeConnected.Models
         public string DisplayEventEndTimeAsTime
         {
             get { return EventEndTime.ToShortTimeString(); }
-        }
+        }*/
     }
 }

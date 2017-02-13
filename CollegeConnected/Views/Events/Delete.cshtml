@@ -28,28 +28,21 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EventDate)
+            @Html.DisplayNameFor(model => model.EventStartDateTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EventDate)
+            @Html.DisplayFor(model => model.EventStartDateTime)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EventStartTime)
+            @Html.DisplayNameFor(model => model.EventEndDateTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EventStartTime)
+            @Html.DisplayFor(model => model.EventEndDateTime)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EventEndTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EventEndTime)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.EventStatus)
@@ -67,7 +60,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-primary btn-sm"/> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to Events", "Index")
         </div>
     }
 </div>

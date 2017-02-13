@@ -10,10 +10,6 @@
 {
     @Html.AntiForgeryToken()
 
-    <script type="text/javascript">
-
-    
-    </script>
     <div class="form-horizontal">
         <hr/>
         @Html.ValidationSummary(true, "", new {@class = "text-danger"})
@@ -36,26 +32,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventDate, "Date", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EventStartDateTime, "Date", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DisplayEventDateAsDate, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.EventDate, "", new {@class = "text-danger"})
+                @Html.EditorFor(model => model.EventStartDateTime, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.EventStartDateTime, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventStartTime, "Start Time", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EventEndDateTime, "Start Time", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DisplayEventStartTimeAsTime, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.EventStartTime, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EventEndTime, "End Time", new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DisplayEventEndTimeAsTime, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.EventEndTime, "", new {@class = "text-danger"})
+                @Html.EditorFor(model => model.EventEndDateTime, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.EventEndDateTime, "", new {@class = "text-danger"})
             </div>
         </div>
 
@@ -68,5 +56,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Events", "Index")
 </div>

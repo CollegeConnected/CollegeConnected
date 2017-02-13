@@ -6,23 +6,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Students</h2>
-<p> @Html.ActionLink("Export Student Data", "ExportToCsv", "Students", new {@class = "btn btn-primary btn-sm"})</p>
+<h2>Constituents</h2>
+<p> @Html.ActionLink("Export Constituent Data", "ExportToCsv", "Students", new {@class = "btn btn-primary btn-sm"})</p>
 
 @Html.Grid(Model).Columns(columns =>
 {
-    columns.Add(model => model.StudentNumber).Titled("Student Number").Sortable(true).SetWidth(200).Filterable(true);
+    columns.Add(model => model.ConstituentType).Titled("Constituent Type").Sortable(true).SetWidth(200).Filterable(true);
     columns.Add(model => model.FirstName).Titled("First Name").Filterable(true).Sortable(true).SetWidth(150);
     columns.Add(model => model.LastName).Titled("Last Name").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.PhoneNumber).Titled("Phone").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.Email).Titled("Email").Filterable(true).Sortable(true).SetWidth(200);
-    columns.Add(model => model.Address1).Titled("Address1").Filterable(true).Sortable(true).SetWidth(300);
-    columns.Add(model => model.Address2).Titled("Address2").Filterable(true).Sortable(true).SetWidth(110);
-    columns.Add(model => model.City).Titled("City").Filterable(true).Sortable(true).SetWidth(150);
     columns.Add(model => model.State).Titled("State").Filterable(true).Sortable(true).SetWidth(110);
-    columns.Add(model => model.ZipCode).Titled("Zip Code").Filterable(true).Sortable(true).SetWidth(110);
-    columns.Add(model => model.BirthdayForDisplay).Titled("Birthdate").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.GraduationYear).Titled("Graduation Year").Filterable(true).Sortable(true).SetWidth(100);
+                      columns.Add(model => model.AllowCommunication).Titled("Allow Communication").Filterable(true).Sortable(true).SetWidth(30);
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
 }).WithPaging(15)

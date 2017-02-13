@@ -4,27 +4,22 @@
     ViewBag.Title = "Confirm";
 }
 
-<h2>Edit</h2>
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h3>Verify your information to sign in</h3>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Student</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Student.StudentId)
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Event.EventID)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Event.EventName, "Event", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Event.EventName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Event.EventName, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Student.StudentNumber, "N Number", new { @class = "control-label col-md-2" })
@@ -122,21 +117,41 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Student.BirthDate, "Birthday", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Student.BirthDate, "Date of Birth", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Student.BirthDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Student.BirthDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Student.BirthDate, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Student.BirthDate, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Student.ConstituentType, "Constituent Type", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Student.ConstituentType, new SelectList(
+                new List<object>
+                    {
+                    new {value = 0, text = ""},
+                    new {value = 1, text = "Alumni"},
+                    new {value = 2, text = "Spouse"},
+                    new {value = 3, text = "Patron"}
+                    },
+                    "value", "text", Model.Student.ConstituentType), new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.Student.ConstituentType, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Student.AllowCommunication, "Authorize Communication", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Student.AllowCommunication, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Student.AllowCommunication, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary btn-sm" />
+                <input type="submit" value="Sign In" class="btn btn-primary btn-sm" />
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
