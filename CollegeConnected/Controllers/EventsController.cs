@@ -41,7 +41,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime")] Event @event)
+            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -73,8 +73,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "EventID,EventName,EventLocation,EventDate,EventStartTime,EventEndTime,EventStatus")] Event
-                @event)
+            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -181,7 +180,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student,
             [Bind(
                  Include =
@@ -190,12 +189,11 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id = e.EventID;
                 student.UpdateTimeStamp = DateTime.Now;
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
                 AttendEvent(student.StudentId, e.EventID);
-                return RedirectToAction("SignIn", id);
+                return RedirectToAction("SignIn", e.EventID);
             }
             return View();
         }

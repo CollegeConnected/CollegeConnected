@@ -4,7 +4,7 @@
     ViewBag.Title = "Confirm";
 }
 
-<h2>Verify you information is correct and click Save</h2>
+<h2>Verify your information is correct and click Save</h2>
 
 @using (Html.BeginForm())
 {
@@ -116,9 +116,9 @@
                 new List<object>
                     {
                     new {value = 0, text = ""},
-                    new {value = 1, text = "Alumni"},
-                    new {value = 2, text = "Spouse"},
-                    new {value = 3, text = "Patron"}
+                    new {value = "Alumni", text = "Alumni"},
+                    new {value = "Spouse", text = "Spouse"},
+                    new {value = "Patron", text = "Patron"}
                     },
                     "value", "text", Model.ConstituentType), new {htmlAttributes = new {@class = "form-control"}})
                     @Html.ValidationMessageFor(model => model.ConstituentType, "", new {@class = "text-danger"})

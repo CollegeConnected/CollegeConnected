@@ -32,7 +32,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventStartDateTime, "Date", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 @Html.EditorFor(model => model.EventStartDateTime, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventStartDateTime, "", new {@class = "text-danger"})
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventEndDateTime, "Start Time", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 @Html.EditorFor(model => model.EventEndDateTime, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventEndDateTime, "", new {@class = "text-danger"})

@@ -48,7 +48,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Create(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)
@@ -81,7 +81,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Edit(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp"
+                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)
