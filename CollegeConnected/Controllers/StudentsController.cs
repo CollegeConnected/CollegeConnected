@@ -132,7 +132,7 @@ namespace CollegeConnected.Controllers
                          "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
                          "\"Birthday\"");
             Response.ClearContent();
-            Response.AddHeader("content-disposition", "attachment;filename=ExportedStudents_" + DateTime.Now + ".csv");
+            Response.AddHeader("content-disposition", "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
 
             var students = db.Students.ToList();

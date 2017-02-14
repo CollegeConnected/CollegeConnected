@@ -122,6 +122,14 @@ namespace CollegeConnected.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult ReactivateEvent(Guid id)
+        {
+            var @event = db.Events.Find(id);
+            @event.EventStatus = "In Progress";
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public ActionResult SignIn(Guid id)
         {
             string searchString = "";
@@ -193,7 +201,7 @@ namespace CollegeConnected.Controllers
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
                 AttendEvent(student.StudentId, e.EventID);
-                return RedirectToAction("SignIn", e.EventID);
+                return RedirectToAction("SignIn", new { id = e.EventID });
             }
             return View();
         }
