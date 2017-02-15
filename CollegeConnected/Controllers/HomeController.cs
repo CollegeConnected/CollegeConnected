@@ -86,7 +86,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)

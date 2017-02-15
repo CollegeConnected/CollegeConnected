@@ -11,10 +11,12 @@
     [State] VARCHAR(50) NULL, 
     [PhoneNumber] VARCHAR(50) NULL, 
     [Email] VARCHAR(50) NULL, 
-    [GraduationYear] VARCHAR(50) NULL, 
+    [FirstGraduationYear] VARCHAR(50) NULL, 
     [BirthDate] DATETIME NULL, 
     [UpdateTimeStamp] DATETIME NULL, 
     [City] VARCHAR(50) NULL, 
     [ConstituentType] VARCHAR(50) NULL, 
-    [AllowCommunication] BIT NULL
+    [AllowCommunication] BIT NULL, 
+    [SecondGraduationYear] VARCHAR(50) NULL, 
+    [ThirdGraduationYear] VARCHAR(50) NULL
 )

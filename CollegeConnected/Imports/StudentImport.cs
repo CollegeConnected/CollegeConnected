@@ -280,7 +280,7 @@ namespace CollegeConnected.Imports
             return email;
         }
 
-        private string GetGradYear(ExcelWorksheet worksheet, int rowIndex)
+        private string GetFirstGradYear(ExcelWorksheet worksheet, int rowIndex)
         {
             var gradYear = string.Empty;
             var columnCount = ColumnConfiguration.Configuration.Count();
@@ -288,7 +288,43 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Graduation Year")
+                if ((ColumnConfiguration.Configuration[ii].Type == "First Graduation Year")
+                    && ColumnConfiguration.Configuration[ii].Include)
+                {
+                    gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    break;
+                }
+            }
+
+            return gradYear;
+        }
+        private string GetSecondGradYear(ExcelWorksheet worksheet, int rowIndex)
+        {
+            var gradYear = string.Empty;
+            var columnCount = ColumnConfiguration.Configuration.Count();
+            var excelColumnIndex = 0;
+            for (var ii = 0; ii < columnCount; ii++)
+            {
+                excelColumnIndex = ii + 1;
+                if ((ColumnConfiguration.Configuration[ii].Type == "Second Graduation Year")
+                    && ColumnConfiguration.Configuration[ii].Include)
+                {
+                    gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    break;
+                }
+            }
+
+            return gradYear;
+        }
+        private string GetThirdGradYear(ExcelWorksheet worksheet, int rowIndex)
+        {
+            var gradYear = string.Empty;
+            var columnCount = ColumnConfiguration.Configuration.Count();
+            var excelColumnIndex = 0;
+            for (var ii = 0; ii < columnCount; ii++)
+            {
+                excelColumnIndex = ii + 1;
+                if ((ColumnConfiguration.Configuration[ii].Type == "Third Graduation Year")
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -383,7 +419,11 @@ namespace CollegeConnected.Imports
                                 rowIndex);
                             var email = GetEmail(package.Workbook.Worksheets[1],
                                 rowIndex);
-                            var gradYear = GetGradYear(package.Workbook.Worksheets[1],
+                            var firstGradYear = GetFirstGradYear(package.Workbook.Worksheets[1],
+                                rowIndex);
+                            var secondGradYear = GetSecondGradYear(package.Workbook.Worksheets[1],
+                                 rowIndex);
+                            var thirdGradYear = GetThirdGradYear(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
@@ -402,7 +442,9 @@ namespace CollegeConnected.Imports
                                 State = state,
                                 PhoneNumber = phoneNunber,
                                 Email = email,
-                                GraduationYear = gradYear,
+                                FirstGraduationYear = firstGradYear,
+                                SecondGraduationYear = secondGradYear,
+                                ThirdGraduationYear = thirdGradYear,
                                 BirthDate = birthday,
                                 ConstituentType = constituentType,
                                 AllowCommunication = false
@@ -471,7 +513,9 @@ namespace CollegeConnected.Imports
             itemList.Add(new SelectListItem {Text = "State", Value = "State"});
             itemList.Add(new SelectListItem {Text = "Phone Number", Value = "Phone Number"});
             itemList.Add(new SelectListItem {Text = "Email", Value = "Email"});
-            itemList.Add(new SelectListItem {Text = "Graduation Year", Value = "Graduation Year"});
+            itemList.Add(new SelectListItem {Text = "First Graduation Year", Value = "First Graduation Year"});
+            itemList.Add(new SelectListItem { Text = "Second Graduation Year", Value = "Second Graduation Year" });
+            itemList.Add(new SelectListItem { Text = "Third Graduation Year", Value = "Third Graduation Year" });
             itemList.Add(new SelectListItem {Text = "Birthday", Value = "Birthday"});
             itemList.Add(new SelectListItem { Text = "Constituent Type", Value = "Constituent Type" });
 
@@ -574,7 +618,9 @@ namespace CollegeConnected.Imports
                             importedStudent.State = convertedStudent.State;
                             importedStudent.PhoneNumber = convertedStudent.PhoneNumber;
                             importedStudent.Email = convertedStudent.Email;
-                            importedStudent.GraduationYear = convertedStudent.GraduationYear;
+                            importedStudent.FirstGraduationYear = convertedStudent.FirstGraduationYear;
+                            importedStudent.SecondGraduationYear = convertedStudent.SecondGraduationYear;
+                            importedStudent.ThirdGraduationYear = convertedStudent.ThirdGraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
                             importedStudent.ConstituentType = convertedStudent.ConstituentType;
                             importedStudent.AllowCommunication = convertedStudent.AllowCommunication;
@@ -595,7 +641,9 @@ namespace CollegeConnected.Imports
                             importedStudent.State = convertedStudent.State;
                             importedStudent.PhoneNumber = convertedStudent.PhoneNumber;
                             importedStudent.Email = convertedStudent.Email;
-                            importedStudent.GraduationYear = convertedStudent.GraduationYear;
+                            importedStudent.FirstGraduationYear = convertedStudent.FirstGraduationYear;
+                            importedStudent.SecondGraduationYear = convertedStudent.SecondGraduationYear;
+                            importedStudent.ThirdGraduationYear = convertedStudent.ThirdGraduationYear;
                             importedStudent.BirthDate = convertedStudent.BirthDate;
                             importedStudent.ConstituentType = convertedStudent.ConstituentType;
                             importedStudent.AllowCommunication = convertedStudent.AllowCommunication;

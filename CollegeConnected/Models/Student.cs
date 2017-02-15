@@ -16,7 +16,9 @@ namespace CollegeConnected.Models
         public string State { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string GraduationYear { get; set; }
+        public string FirstGraduationYear { get; set; }
+        public string SecondGraduationYear { get; set; }
+        public string ThirdGraduationYear { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime UpdateTimeStamp { get; set; }
         public string ConstituentType { get; set; }

@@ -32,5 +32,5 @@
     columns.Add(model => model.CreatedBy).Titled("Created By").Filterable(true).Sortable(true).SetWidth(170);
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Events", new { id = model.EventID }, new { @class = "btn btn-primary btn-sm" }));
     columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Reactivate", "ReactivateEvent", "Events", new { id = model.EventID }, new { @class = "btn btn-primary btn-sm" }));
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Export", "Edit", "Events", new { id = model.EventID }, new { @class = "btn btn-primary btn-sm" }));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Export", "ExportEvent", "Events", new { id = model.EventID }, new { @class = "btn btn-primary btn-sm" }));
 }).WithPaging(15).Filterable(true).WithMultipleFilters()

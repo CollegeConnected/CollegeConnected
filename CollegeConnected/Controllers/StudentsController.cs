@@ -48,7 +48,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Create(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)
@@ -81,7 +81,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Edit(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,GraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)
@@ -141,7 +141,7 @@ namespace CollegeConnected.Controllers
                 sw.WriteLine(
                     $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
                     $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
-                    $"\"{student.GraduationYear}\",\"{student.BirthDate}\"");
+                    $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\"");
 
             Response.Write(sw.ToString());
             Response.End();
