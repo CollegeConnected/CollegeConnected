@@ -18,5 +18,7 @@
     [ConstituentType] VARCHAR(50) NULL, 
     [AllowCommunication] BIT NULL, 
     [SecondGraduationYear] VARCHAR(50) NULL, 
-    [ThirdGraduationYear] VARCHAR(50) NULL
+    [ThirdGraduationYear] VARCHAR(50) NULL, 
+    [HasAttendedEvent] BIT NOT NULL, 
+    [EventsAttended] INT NOT NULL
 )

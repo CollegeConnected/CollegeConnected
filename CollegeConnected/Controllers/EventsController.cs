@@ -188,7 +188,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student,
             [Bind(
                  Include =
@@ -197,6 +197,11 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(!student.HasAttendedEvent)
+                {
+                    student.HasAttendedEvent = true;
+                }
+                student.EventsAttended++;
                 student.UpdateTimeStamp = DateTime.Now;
                 db.Entry(student).State = EntityState.Modified;
                 db.SaveChanges();
@@ -208,8 +213,11 @@ namespace CollegeConnected.Controllers
 
         public void AttendEvent(Guid studentId, Guid eventId)
         {
-
+            var hasAttendedEvent = (from s in db.Students
+                                    where s.StudentId == studentId
+                                    select s.HasAttendedEvent);
             var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
+            
             db.EventAttendants.Add(eventAttendant);
             db.SaveChanges();
 

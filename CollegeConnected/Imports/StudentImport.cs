@@ -624,6 +624,8 @@ namespace CollegeConnected.Imports
                             importedStudent.BirthDate = convertedStudent.BirthDate;
                             importedStudent.ConstituentType = convertedStudent.ConstituentType;
                             importedStudent.AllowCommunication = convertedStudent.AllowCommunication;
+                            importedStudent.HasAttendedEvent = false;
+                            importedStudent.EventsAttended = 0;
                             importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                             newStudents.Add(importedStudent);
                         }
@@ -647,6 +649,8 @@ namespace CollegeConnected.Imports
                             importedStudent.BirthDate = convertedStudent.BirthDate;
                             importedStudent.ConstituentType = convertedStudent.ConstituentType;
                             importedStudent.AllowCommunication = convertedStudent.AllowCommunication;
+                            importedStudent.HasAttendedEvent = false;
+                            importedStudent.EventsAttended = 0;
                             importedStudent.UpdateTimeStamp = new DateTime(1900, 1, 1);
                         }
                     }
