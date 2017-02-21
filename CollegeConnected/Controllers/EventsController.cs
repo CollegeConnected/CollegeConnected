@@ -197,30 +197,44 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(!student.HasAttendedEvent)
+
+                int a = AttendEvent(student.StudentId, e.EventID);
+                if (a == -1)
                 {
-                    student.HasAttendedEvent = true;
+                    ModelState.AddModelError("Error", "You have already signed into this event");
+                   // ViewBag.Error = "You have already signed into this event";
                 }
-                student.EventsAttended++;
-                student.UpdateTimeStamp = DateTime.Now;
-                db.Entry(student).State = EntityState.Modified;
-                db.SaveChanges();
-                AttendEvent(student.StudentId, e.EventID);
-                return RedirectToAction("SignIn", new { id = e.EventID });
+                else
+                {
+                    if (!student.HasAttendedEvent)
+                    {
+                        student.HasAttendedEvent = true;
+                    }
+                    student.EventsAttended++;
+                    student.UpdateTimeStamp = DateTime.Now;
+                    db.Entry(student).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("SignIn", new { id = e.EventID });
+                }
             }
             return View();
         }
 
-        public void AttendEvent(Guid studentId, Guid eventId)
+        public int AttendEvent(Guid studentId, Guid eventId)
         {
-            var hasAttendedEvent = (from s in db.Students
-                                    where s.StudentId == studentId
-                                    select s.HasAttendedEvent);
-            var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
-            
-            db.EventAttendants.Add(eventAttendant);
-            db.SaveChanges();
+            bool rowExists = db.EventAttendants.Any(ev => ev.StudentId.Equals(studentId) && ev.EventId.Equals(eventId));
 
+            if (rowExists)
+            {
+                return -1;
+            }
+            else
+            {
+                var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
+                db.EventAttendants.Add(eventAttendant);
+                db.SaveChanges();
+                return 0;
+            }
         }
     }
 }
