@@ -116,5 +116,28 @@ namespace CollegeConnected.Controllers
             ViewBag.ReportViewer = rptViewer;
             return View();
         }*/
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Verify(Guid? id, DateTime BirthDate, string returnUrl)
+        {
+            var student = db.Students.Find(id);
+            var bday = student.BirthDate;
+
+            if (bday == BirthDate)
+            {
+                return RedirectToAction("Confirm", new { id = student.StudentId });
+            }
+            ModelState.AddModelError("", "Birthday incorrect");
+            return View();
+        }
+        public ActionResult Verify(Guid? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var student = db.Students.Find(id);
+            return View(student);
+            ;
+        }
+
     }
 }

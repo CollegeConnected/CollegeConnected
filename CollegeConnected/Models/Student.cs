@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollegeConnected.Models
 {
@@ -19,6 +20,7 @@ namespace CollegeConnected.Models
         public string FirstGraduationYear { get; set; }
         public string SecondGraduationYear { get; set; }
         public string ThirdGraduationYear { get; set; }
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public DateTime UpdateTimeStamp { get; set; }
         public string ConstituentType { get; set; }

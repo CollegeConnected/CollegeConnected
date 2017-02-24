@@ -51,7 +51,7 @@ namespace CollegeConnected.Controllers
                      "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student)
         {
-            if (ModelState.IsValid)
+            if (student.StudentNumber == null)
             {
                 student.StudentId = Guid.NewGuid();
                 student.HasAttendedEvent = false;
@@ -60,10 +60,28 @@ namespace CollegeConnected.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            else
+            {
+                
+                    bool rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
 
-            return View(student);
-        }
+                    if (ModelState.IsValid && !rowExists)
+                    {
+                        student.StudentId = Guid.NewGuid();
+                        student.HasAttendedEvent = false;
+                        student.EventsAttended = 0;
+                        db.Students.Add(student);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "This student number already exists in the system. Search for the person from the Home page.");
 
+                    }
+                }
+                return View(student);
+            }
         // GET: Students/Edit/5
         public ActionResult Edit(Guid? id)
         {

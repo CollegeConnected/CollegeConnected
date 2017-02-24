@@ -8,6 +8,8 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    @Html.ValidationMessage("Error")
+
 
     <div class="form-horizontal">
         <h4>* -Required</h4>

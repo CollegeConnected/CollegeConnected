@@ -3,7 +3,20 @@
 @{
     ViewBag.Title = "Edit";
 }
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#BirthDate').datepicker({
+            dateFormat: "dd/mm/yy",
+            showStatus: true,
+            showWeeks: true,
+            currentText: 'Now',
+            autoSize: true,
+            gotoCurrent: true,
+            showAnim: 'blind',
+            highlightWeek: true
+        });
+    });
+</script>
 <h2>Edit Constituent</h2>
 
 @using (Html.BeginForm())
@@ -130,7 +143,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BirthDate, "Date of Birth*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BirthDate, new {htmlAttributes = new {@class = "form-control", required = "required" } })
+               @Html.DisplayFor(model => model.BirthDate, "ShortDateTime", new {htmlAttributes = new {@class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.BirthDate, "", new {@class = "text-danger"})
             </div>
         </div>
@@ -170,3 +183,4 @@
 <div>
     @Html.ActionLink("Back to Constituents", "Index")
 </div>
+
