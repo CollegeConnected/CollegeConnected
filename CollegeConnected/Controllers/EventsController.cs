@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CollegeConnected.Models;
+using System.Security.Cryptography;
 
 namespace CollegeConnected.Controllers
 {
@@ -73,7 +74,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
+            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -266,6 +267,37 @@ namespace CollegeConnected.Controllers
             return View(eventViewModel);
       
             
+        }
+        [AllowAnonymous]
+        public ActionResult VerifyCompleteEvent(Guid? eventId)
+        {
+            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var user = db.Users.Find("admin@unf.edu");
+            string password = user.Password;
+            var viewModel = new CompleteEventViewModel(ccEvent, password);
+            return View(viewModel);
+            
+        }
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult VerifyCompleteEvent(Guid eventId, string password)
+        {
+            var user = db.Users.Find("admin@unf.edu");
+            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+
+            var sha = new SHA256Managed();
+            var hashBytes = sha.ComputeHash(bytes);
+
+            var hash = Convert.ToBase64String(hashBytes);
+
+            if (hash == user.Password)
+            {
+                
+                return RedirectToAction("CompleteEvent", "Events", new { id = eventId });
+            }
+            ModelState.AddModelError("", "Password incorrect");
+            return View();
         }
 
     }

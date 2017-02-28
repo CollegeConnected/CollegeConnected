@@ -20,6 +20,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.ValidationMessage("Error")
         @Html.HiddenFor(model => model.Student.StudentId)
+        @Html.HiddenFor(model => model.Student.BirthDate)
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Event.EventID)
         

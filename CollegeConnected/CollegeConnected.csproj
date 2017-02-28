@@ -244,6 +244,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventAttendance.cs" />
     <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\CompleteEventViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\HtmlLists.cs" />
     <Compile Include="Models\ImportModels.cs" />
@@ -487,7 +488,7 @@
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Home\Verify.cshtml" />
     <Content Include="Views\Events\Verify.cshtml" />
-    <Content Include="Views\Events\EndEventLogin.cshtml" />
+    <Content Include="Views\Events\VerifyCompleteEvent.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>

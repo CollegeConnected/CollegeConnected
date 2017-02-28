@@ -1,13 +1,19 @@
-﻿@model CollegeConnected.Models.LoginViewModel
+﻿@model CollegeConnected.Models.CompleteEventViewModel
 @{
     ViewBag.Title = "Adminstrator Login";
+}
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+@{
+    var ccEventID = ViewContext.RouteData.Values["id"];
 }
 
 <h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("EndEvent", "Events", new {ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            @using (Html.BeginForm("VerifyCompleteEvent", "Events", new { eventId = ccEventID }, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
             {
                 @Html.AntiForgeryToken()
                 <h4>Enter your credentials to end the event.</h4>
