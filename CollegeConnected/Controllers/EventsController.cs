@@ -269,9 +269,9 @@ namespace CollegeConnected.Controllers
             
         }
         [AllowAnonymous]
-        public ActionResult VerifyCompleteEvent(Guid? eventId)
+        public ActionResult VerifyCompleteEvent(Guid id)
         {
-            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            Event ccEvent = db.Events.Single(x => x.EventID == id);
             var user = db.Users.Find("admin@unf.edu");
             string password = user.Password;
             var viewModel = new CompleteEventViewModel(ccEvent, password);
@@ -281,7 +281,7 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult VerifyCompleteEvent(Guid eventId, string password)
+        public ActionResult VerifyCompleteEvent(Guid id, string password)
         {
             var user = db.Users.Find("admin@unf.edu");
             var bytes = System.Text.Encoding.UTF8.GetBytes(password);
@@ -294,7 +294,7 @@ namespace CollegeConnected.Controllers
             if (hash == user.Password)
             {
                 
-                return RedirectToAction("CompleteEvent", "Events", new { id = eventId });
+                return RedirectToAction("CompleteEvent", "Events", new { id = id });
             }
             ModelState.AddModelError("", "Password incorrect");
             return View();
