@@ -54,6 +54,7 @@ namespace CollegeConnected.Controllers
             if (student.StudentNumber == null)
             {
                 student.StudentId = Guid.NewGuid();
+                student.UpdateTimeStamp = DateTime.Now;
                 student.HasAttendedEvent = false;
                 student.EventsAttended = 0;
                 db.Students.Add(student);
@@ -68,7 +69,8 @@ namespace CollegeConnected.Controllers
                     if (ModelState.IsValid && !rowExists)
                     {
                         student.StudentId = Guid.NewGuid();
-                        student.HasAttendedEvent = false;
+                    student.UpdateTimeStamp = DateTime.Now;
+                    student.HasAttendedEvent = false;
                         student.EventsAttended = 0;
                         db.Students.Add(student);
                         db.SaveChanges();

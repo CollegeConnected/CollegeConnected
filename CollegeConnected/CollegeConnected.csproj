@@ -486,6 +486,9 @@
     <Content Include="Views\Events\Confirm.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Home\Verify.cshtml" />
+    <Content Include="Views\Events\Verify.cshtml" />
+    <Content Include="Views\Events\EndEventLogin.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

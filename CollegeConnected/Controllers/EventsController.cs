@@ -236,5 +236,37 @@ namespace CollegeConnected.Controllers
                 return 0;
             }
         }
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Verify(Guid studentId, Guid eventId, DateTime BirthDate)
+        {
+            var student = db.Students.Find(studentId);
+            var bday = student.BirthDate;
+            var evID = eventId;
+
+            if (bday == BirthDate)
+            {
+                return RedirectToAction("Confirm", "Events", new { id = studentId, eventId = eventId});
+            }
+            ModelState.AddModelError("", "Birthday incorrect");
+            Student ccStudent = db.Students.Single(x => x.StudentId == studentId);
+            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var eventViewModel = new EventViewModel(student, ccEvent);
+            return View(eventViewModel);
+        }
+        public ActionResult Verify(Guid? id, Guid eventId)
+        {
+            Student student = db.Students.Single(x => x.StudentId == id);
+            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var eventViewModel = new EventViewModel(student, ccEvent);
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (eventViewModel == null)
+                return HttpNotFound();
+            return View(eventViewModel);
+      
+            
+        }
+
     }
 }

@@ -86,7 +86,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,UpdateTimeStamp,ConstituentType,AllowCommunication"
              )] Student student)
         {
             if (ModelState.IsValid)
@@ -137,6 +137,55 @@ namespace CollegeConnected.Controllers
             var student = db.Students.Find(id);
             return View(student);
             ;
+        }
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: Students/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(
+            [Bind(
+                 Include =
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Student student)
+        {
+            if (student.StudentNumber == null)
+            {
+                student.StudentId = Guid.NewGuid();
+                student.UpdateTimeStamp = DateTime.Now;
+                student.HasAttendedEvent = false;
+                student.EventsAttended = 0;
+                db.Students.Add(student);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                bool rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
+
+                if (ModelState.IsValid && !rowExists)
+                {
+                    student.StudentId = Guid.NewGuid();
+                    student.UpdateTimeStamp = DateTime.Now;
+                    student.HasAttendedEvent = false;
+                    student.EventsAttended = 0;
+                    db.Students.Add(student);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "This student number already exists in the system. Search for the person from the Home page.");
+
+                }
+            }
+            return View(student);
         }
 
     }
