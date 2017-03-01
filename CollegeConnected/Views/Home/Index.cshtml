@@ -6,7 +6,6 @@
     }
 
     <div class="jumbotron">
-        <h2>College Connected</h2>
         <table align="center">
             @using (Html.BeginForm())
             {
@@ -38,10 +37,14 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <button type="submit">Search</button>
-                        @Html.ActionLink("Register", "Register", "Home")
+                        @Html.SubmitButton("Search", new { @class = "btn btn-primary btn-sm"})
+                        @Html.ActionLink("Register", "Register", "Home", new { @class = "btn btn-primary btn-sm" })
                     </td>
-                </tr>
+                </tr>            <tr>
+                <td colspan="2">
+                   
+                </td>
+            </tr>
             }
         </table>
     </div>
