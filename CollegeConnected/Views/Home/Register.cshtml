@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Create";
 }
-<h2>Enter the follwing information and click Save</h2>
+<h2>Enter the following information and click Save</h2>
 
 @using (Html.BeginForm())
 {
@@ -144,7 +144,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary btn-sm"/>
+                @Html.SubmitButton("Register", new { @class = "btn btn-primary btn-sm" })
             </div>
         </div>
     </div>

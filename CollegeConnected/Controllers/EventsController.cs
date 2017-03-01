@@ -47,7 +47,7 @@ namespace CollegeConnected.Controllers
 
             return View(@event);
         }
-        
+
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -142,9 +142,9 @@ namespace CollegeConnected.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             if (eventViewModel == null)
                 return HttpNotFound();
-             return View(eventViewModel);
+            return View(eventViewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(
@@ -164,7 +164,7 @@ namespace CollegeConnected.Controllers
                 if (a == -1)
                 {
                     ModelState.AddModelError("Error", "You have already signed into this event");
-                   // ViewBag.Error = "You have already signed into this event";
+                    // ViewBag.Error = "You have already signed into this event";
                 }
                 else
                 {
@@ -208,7 +208,7 @@ namespace CollegeConnected.Controllers
 
             if (bday == BirthDate)
             {
-                return RedirectToAction("Confirm", "Events", new { id = studentId, eventId = eventId});
+                return RedirectToAction("Confirm", "Events", new { id = studentId, eventId = eventId });
             }
             ModelState.AddModelError("", "Birthday incorrect");
             Student ccStudent = db.Students.Single(x => x.StudentId == studentId);
@@ -226,8 +226,8 @@ namespace CollegeConnected.Controllers
             if (eventViewModel == null)
                 return HttpNotFound();
             return View(eventViewModel);
-      
-            
+
+
         }
         [AllowAnonymous]
         public ActionResult VerifyCompleteEvent(Guid id)
@@ -237,7 +237,7 @@ namespace CollegeConnected.Controllers
             string password = user.Password;
             var viewModel = new CompleteEventViewModel(ccEvent, password);
             return View(viewModel);
-            
+
         }
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -254,12 +254,43 @@ namespace CollegeConnected.Controllers
 
             if (hash == user.Password)
             {
-                
+
                 return RedirectToAction("CompleteEvent", "Events", new { id = id });
             }
             ModelState.AddModelError("", "Password incorrect");
             return View();
         }
+        public ActionResult Register(Guid id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(
+            [Bind(
+                 Include =
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Student student,
+            Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                student.StudentId = Guid.NewGuid();
+                student.HasAttendedEvent = true;
+                student.EventsAttended = 1;
+                student.ConstituentType = "Alumni";
+                student.UpdateTimeStamp = DateTime.Now;
+                db.Students.Add(student);
+                db.SaveChanges();
+                AttendEvent(student.StudentId, id);
+                db.SaveChanges();
+                return RedirectToAction("SignIn", new { id = id });
+
+            }
+            return View();
+        }
+
 
     }
 }

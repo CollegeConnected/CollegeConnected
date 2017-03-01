@@ -46,7 +46,7 @@
                 <tr>
                     <td colspan="2">
                         @Html.SubmitButton("Search", new { @class = "btn btn-primary btn-sm" })
-                        @Html.ActionLink("Register", "Register", "Events", new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Register", "Register", "Events", new { id = eventID }, new { @class = "btn btn-primary btn-sm" })
                         @Html.ActionLink("End Event", "VerifyCompleteEvent", new { id = eventID }, new { @class = "btn btn-primary btn-sm" })
                     </td>
                 </tr>
