@@ -163,7 +163,7 @@ namespace CollegeConnected.Controllers
                 int a = AttendEvent(student.StudentId, e.EventID);
                 if (a == -1)
                 {
-                    ModelState.AddModelError("Error", "You have already signed into this event");
+                    ModelState.AddModelError("Error", "You have already signed into this event.");
                     // ViewBag.Error = "You have already signed into this event";
                 }
                 else
@@ -218,6 +218,8 @@ namespace CollegeConnected.Controllers
         }
         public ActionResult Verify(Guid? id, Guid eventId)
         {
+
+            ViewBag.EventID = eventId;
             Student student = db.Students.Single(x => x.StudentId == id);
             Event ccEvent = db.Events.Single(x => x.EventID == eventId);
             var eventViewModel = new EventViewModel(student, ccEvent);

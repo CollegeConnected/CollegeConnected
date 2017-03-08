@@ -1,13 +1,12 @@
 ﻿@model CollegeConnected.Models.CompleteEventViewModel
 @{
-    ViewBag.Title = "Adminstrator Login";
+    ViewBag.Title = "Adminstrator Restricted";
 }
 @{
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 @{
     var ccEventID = ViewContext.RouteData.Values["id"];
-    var test = ccEventID;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -38,6 +37,9 @@
         </section>
     </div>
 
+</div>
+<div>
+    @Html.ActionLink("Back to Events", "SignIn", new { id = ccEventID })
 </div>
 
 @section Scripts {
