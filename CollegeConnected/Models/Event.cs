@@ -15,20 +15,21 @@ namespace CollegeConnected.Models
         public DateTime EventEndDateTime { get; set; }
         public string EventStatus { get; set; }
         public string CreatedBy { get; set; }
+        public int Attendance { get; set; }
 
-     /*   public string DisplayEventDateAsDate
-        {
-            get { return EventDate.ToShortDateString(); }
-        }
+        /*   public string DisplayEventDateAsDate
+           {
+               get { return EventDate.ToShortDateString(); }
+           }
 
-        public string DisplayEventStartTimeAsTime
-        {
-            get { return EventStartTime.ToShortTimeString(); }
-        }
+           public string DisplayEventStartTimeAsTime
+           {
+               get { return EventStartTime.ToShortTimeString(); }
+           }
 
-        public string DisplayEventEndTimeAsTime
-        {
-            get { return EventEndTime.ToShortTimeString(); }
-        }*/
+           public string DisplayEventEndTimeAsTime
+           {
+               get { return EventEndTime.ToShortTimeString(); }
+           }*/
     }
 }

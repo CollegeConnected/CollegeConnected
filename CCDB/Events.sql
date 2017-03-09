@@ -7,5 +7,6 @@
     [EventEndDateTime] DATETIME2 NOT NULL, 
     [CreatedBy] VARCHAR(100) NOT NULL, 
     [EventStatus] VARCHAR(50) NOT NULL, 
+    [Attendance] INT NOT NULL, 
 
 )

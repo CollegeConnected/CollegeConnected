@@ -33,19 +33,20 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
+            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")] Event e)
         {
             if (ModelState.IsValid)
             {
-                @event.EventID = Guid.NewGuid();
-                @event.EventStatus = "In Progress";
-                @event.CreatedBy = "Administrator ";
-                db.Events.Add(@event);
+                e.EventID = Guid.NewGuid();
+                e.Attendance = 0;
+                e.EventStatus = "In Progress";
+                e.CreatedBy = "Administrator ";
+                db.Events.Add(e);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(@event);
+            return View(e);
         }
 
         public ActionResult Edit(Guid? id)
@@ -154,12 +155,12 @@ namespace CollegeConnected.Controllers
              )] Student student,
             [Bind(
                  Include =
-                     "EventId"
+                     "EventID,EventName,Attendance,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime"
              )] Event e)
         {
             if (ModelState.IsValid)
             {
-
+                var ccEvent = db.Events.Find(e.EventID);
                 int a = AttendEvent(student.StudentId, e.EventID);
                 if (a == -1)
                 {
@@ -173,6 +174,7 @@ namespace CollegeConnected.Controllers
                         student.HasAttendedEvent = true;
                     }
                     student.EventsAttended++;
+                    ccEvent.Attendance++;
                     student.UpdateTimeStamp = DateTime.Now;
                     db.Entry(student).State = EntityState.Modified;
                     db.SaveChanges();
@@ -278,14 +280,15 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
+                var ccEvent = db.Events.Find(id);
                 student.StudentId = Guid.NewGuid();
                 student.HasAttendedEvent = true;
                 student.EventsAttended = 1;
                 student.ConstituentType = "Alumni";
                 student.UpdateTimeStamp = DateTime.Now;
                 db.Students.Add(student);
-                db.SaveChanges();
                 AttendEvent(student.StudentId, id);
+                ccEvent.Attendance++;
                 db.SaveChanges();
                 return RedirectToAction("SignIn", new { id = id });
 
