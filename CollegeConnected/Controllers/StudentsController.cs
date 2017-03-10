@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CollegeConnected.Models;
+using System.Web.Security;
 
 namespace CollegeConnected.Controllers
 {
@@ -15,29 +16,45 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Register()
         {
-            return View();
+            if (isAuthenticated())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Students
         public ActionResult Index()
         {
-            var studentList = (from student in db.Students
-                select student).ToList();
-            return View(studentList);
+            if (isAuthenticated())
+            {
+                var studentList = (from student in db.Students
+                                   select student).ToList();
+                return View(studentList);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Students/Details/5
         public ActionResult Details()
         {
-            var studentList = (from student in db.Students
-                select student).ToList();
-            return View(studentList);
+            if (isAuthenticated())
+            {
+                var studentList = (from student in db.Students
+                                   select student).ToList();
+                return View(studentList);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Students/Create
         public ActionResult Create()
         {
-            return View();
+            if (isAuthenticated())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Students/Create
@@ -87,12 +104,16 @@ namespace CollegeConnected.Controllers
         // GET: Students/Edit/5
         public ActionResult Edit(Guid? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(id);
-            if (student == null)
-                return HttpNotFound();
-            return View(student);
+            if (isAuthenticated())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var student = db.Students.Find(id);
+                if (student == null)
+                    return HttpNotFound();
+                return View(student);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Students/Edit/5
@@ -133,10 +154,14 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (isAuthenticated())
+            {
+                var student = db.Students.Find(id);
+                db.Students.Remove(student);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
@@ -167,6 +192,20 @@ namespace CollegeConnected.Controllers
 
             Response.Write(sw.ToString());
             Response.End();
+        }
+        private bool isAuthenticated()
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                if (ticket != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

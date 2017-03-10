@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using CollegeConnected.Imports;
 using CollegeConnected.Models;
+using System.Web.Security;
 
 namespace CollegeConnected.Controllers
 {
@@ -12,23 +13,27 @@ namespace CollegeConnected.Controllers
     {
         public ActionResult StudentColumnOptions()
         {
-            if (ImportManager.IsGettingColumnOptions())
+            if (isAuthenticated())
             {
-                try
+                if (ImportManager.IsGettingColumnOptions())
                 {
-                    ImportManager.PrepareHeaders();
-                }
-                catch (Exception ex)
-                {
-                    return RedirectToAction(
-                        "UploadError",
-                        new {uploadError = ex.Message, returnAction = "StartStudent"});
+                    try
+                    {
+                        ImportManager.PrepareHeaders();
+                    }
+                    catch (Exception ex)
+                    {
+                        return RedirectToAction(
+                            "UploadError",
+                            new { uploadError = ex.Message, returnAction = "StartStudent" });
+                    }
+
+                    return View(MvcApplication.CurrentImport.columnConfiguration);
                 }
 
-                return View(MvcApplication.CurrentImport.columnConfiguration);
+                return RedirectToAction(ImportManager.CurrentView());
             }
-
-            return RedirectToAction(ImportManager.CurrentView());
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -86,33 +91,41 @@ namespace CollegeConnected.Controllers
 
         public ActionResult StartStudent()
         {
-            if (ImportManager.IsImportReady())
+            if (isAuthenticated())
             {
-                MvcApplication.CurrentImport = new StudentImport();
+                if (ImportManager.IsImportReady())
+                {
+                    MvcApplication.CurrentImport = new StudentImport();
 
-                return View();
+                    return View();
+                }
+
+                return RedirectToAction(ImportManager.CurrentView());
             }
-
-            return RedirectToAction(ImportManager.CurrentView());
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public ActionResult StartStudent(StudentImportOptionsModel id)
         {
-            if (ImportManager.IsImportReady())
+            if (isAuthenticated())
             {
-                if (ModelState.IsValid)
+                if (ImportManager.IsImportReady())
                 {
-                    if (ImportManager.InitializeImport(id))
-                        return RedirectToAction(ImportManager.CurrentView());
+                    if (ModelState.IsValid)
+                    {
+                        if (ImportManager.InitializeImport(id))
+                            return RedirectToAction(ImportManager.CurrentView());
 
-                    ModelState.AddModelError("import", MvcApplication.CurrentImport.ErrorMessage);
+                        ModelState.AddModelError("import", MvcApplication.CurrentImport.ErrorMessage);
+                    }
+
+                    return View();
                 }
 
-                return View();
+                return RedirectToAction(ImportManager.CurrentView());
             }
-
-            return RedirectToAction(ImportManager.CurrentView());
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult UploadError(string uploadError, string returnAction)
@@ -126,6 +139,20 @@ namespace CollegeConnected.Controllers
         public ActionResult ViewImportFiles()
         {
             return View();
+        }
+        private bool isAuthenticated()
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                if (ticket != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

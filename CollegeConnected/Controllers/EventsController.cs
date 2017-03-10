@@ -6,6 +6,7 @@ using System.Net;
 using System.Web.Mvc;
 using CollegeConnected.Models;
 using System.Security.Cryptography;
+using System.Web.Security;
 
 namespace CollegeConnected.Controllers
 {
@@ -14,20 +15,33 @@ namespace CollegeConnected.Controllers
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
         public ActionResult Index()
         {
-            return View(db.Events.ToList());
+            if (isAuthenticated())
+            {
+                return View(db.Events.ToList());
+            }
+            return RedirectToAction("Index", "Home");
         }
         public ActionResult Details(Guid? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var @event = db.Events.Find(id);
-            if (@event == null)
-                return HttpNotFound();
-            return View(@event);
+            if (isAuthenticated())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var @event = db.Events.Find(id);
+                if (@event == null)
+                    return HttpNotFound();
+                return View(@event);
+            }
+            return RedirectToAction("Index", "Home");
+
         }
         public ActionResult Create()
         {
-            return View();
+            if (isAuthenticated())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -51,12 +65,16 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Edit(Guid? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var @event = db.Events.Find(id);
-            if (@event == null)
-                return HttpNotFound();
-            return View(@event);
+            if (isAuthenticated())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var @event = db.Events.Find(id);
+                if (@event == null)
+                    return HttpNotFound();
+                return View(@event);
+            }
+            return RedirectToAction("Index", "Home");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,15 +114,19 @@ namespace CollegeConnected.Controllers
 
         public ActionResult SignIn(Guid id)
         {
-            var ccEvent = db.Events.Find(id);
-            string eventTitle = ccEvent.EventName;
-            ViewBag.Title = eventTitle;
-            string searchString = "";
-            var studentList = (from student in db.Students
-                               where student.StudentNumber == searchString
-                               select student
-                   ).ToList();
-            return View(studentList);
+            if (isAuthenticated())
+            {
+                var ccEvent = db.Events.Find(id);
+                string eventTitle = ccEvent.EventName;
+                ViewBag.Title = eventTitle;
+                string searchString = "";
+                var studentList = (from student in db.Students
+                                   where student.StudentNumber == searchString
+                                   select student
+                       ).ToList();
+                return View(studentList);
+            }
+            return RedirectToAction("Index", "Home");
         }
         [HttpPost]
         public ActionResult SignIn(string studentNumber, string studentLastName, Guid id)
@@ -136,14 +158,19 @@ namespace CollegeConnected.Controllers
         }
         public ActionResult Confirm(Guid? id, Guid? eventId)
         {
-            Student student = db.Students.Single(x => x.StudentId == id);
-            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
-            var eventViewModel = new EventViewModel(student, ccEvent);
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            if (eventViewModel == null)
-                return HttpNotFound();
-            return View(eventViewModel);
+            if (isAuthenticated())
+            {
+                Student student = db.Students.Single(x => x.StudentId == id);
+                Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+                var eventViewModel = new EventViewModel(student, ccEvent);
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (eventViewModel == null)
+                    return HttpNotFound();
+                return View(eventViewModel);
+            }
+            return RedirectToAction("Index", "Home");
+
         }
 
         [HttpPost]
@@ -220,28 +247,33 @@ namespace CollegeConnected.Controllers
         }
         public ActionResult Verify(Guid? id, Guid eventId)
         {
-
-            ViewBag.EventID = eventId;
-            Student student = db.Students.Single(x => x.StudentId == id);
-            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
-            var eventViewModel = new EventViewModel(student, ccEvent);
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            if (eventViewModel == null)
-                return HttpNotFound();
-            return View(eventViewModel);
-
+            if (isAuthenticated())
+            {
+                ViewBag.EventID = eventId;
+                Student student = db.Students.Single(x => x.StudentId == id);
+                Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+                var eventViewModel = new EventViewModel(student, ccEvent);
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (eventViewModel == null)
+                    return HttpNotFound();
+                return View(eventViewModel);
+            }
+            return RedirectToAction("Index", "Home");
 
         }
         [AllowAnonymous]
         public ActionResult VerifyCompleteEvent(Guid id)
         {
-            Event ccEvent = db.Events.Single(x => x.EventID == id);
-            var user = db.Users.Find("admin@unf.edu");
-            string password = user.Password;
-            var viewModel = new CompleteEventViewModel(ccEvent, password);
-            return View(viewModel);
-
+            if (isAuthenticated())
+            {
+                Event ccEvent = db.Events.Single(x => x.EventID == id);
+                var user = db.Users.Find("admin@unf.edu");
+                string password = user.Password;
+                var viewModel = new CompleteEventViewModel(ccEvent, password);
+                return View(viewModel);
+            }
+            return RedirectToAction("Index", "Home");
         }
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -266,7 +298,12 @@ namespace CollegeConnected.Controllers
         }
         public ActionResult Register(Guid id)
         {
-            return View();
+            if (isAuthenticated())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+
         }
 
         [HttpPost]
@@ -295,7 +332,20 @@ namespace CollegeConnected.Controllers
             }
             return View();
         }
+    
+        private bool isAuthenticated()
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
-
+                if (ticket != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

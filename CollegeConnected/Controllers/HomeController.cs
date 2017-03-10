@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using CollegeConnected.Models;
 using System.Net;
 using System.Data.Entity;
+using System.Web.Security;
 
 namespace CollegeConnected.Controllers
 {
@@ -13,20 +14,24 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Admin()
         {
-            int count = db.Students.Count();
-            DateTime today = DateTime.Now;
-            DateTime yearAgo = today.AddDays(-365);
-            int sinceCount =
-            (from row in db.Students
-                where row.UpdateTimeStamp >= yearAgo && row.UpdateTimeStamp <= today
-                select row).Count();
-            ViewBag.Count = count;
-            ViewBag.sinceCount = sinceCount;
+            if (isAuthenticated())
+            {
+                int count = db.Students.Count();
+                DateTime today = DateTime.Now;
+                DateTime yearAgo = today.AddDays(-365);
+                int sinceCount =
+                (from row in db.Students
+                 where row.UpdateTimeStamp >= yearAgo && row.UpdateTimeStamp <= today
+                 select row).Count();
+                ViewBag.Count = count;
+                ViewBag.sinceCount = sinceCount;
 
-            ViewBag.Message = "Your Admin Home Page.";
+                ViewBag.Message = "Your Admin Home Page.";
 
-            return View();
-        }
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+        } 
 
         public ActionResult Index()
         {
@@ -70,12 +75,16 @@ namespace CollegeConnected.Controllers
         // GET: Students/Edit/5
         public ActionResult Confirm(Guid? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(id);
-            if (student == null)
-                return HttpNotFound();
-            return View(student);
+            if (isAuthenticated())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var student = db.Students.Find(id);
+                if (student == null)
+                    return HttpNotFound();
+                return View(student);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Students/Edit/5
@@ -132,11 +141,15 @@ namespace CollegeConnected.Controllers
         }
         public ActionResult Verify(Guid? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = db.Students.Find(id);
-            return View(student);
-            ;
+            if (isAuthenticated())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var student = db.Students.Find(id);
+                return View(student);
+            }
+            return RedirectToAction("Index", "Home");
+
         }
         public ActionResult Register()
         {
@@ -188,5 +201,27 @@ namespace CollegeConnected.Controllers
             return View(student);
         }
 
+        public ActionResult PurgeData()
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM EventAttendances");
+            db.Database.ExecuteSqlCommand("DELETE FROM Students");
+            db.Database.ExecuteSqlCommand("DELETE FROM Events");
+            return RedirectToAction("Admin");
+        }
+
+        private bool isAuthenticated()
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                if (ticket != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

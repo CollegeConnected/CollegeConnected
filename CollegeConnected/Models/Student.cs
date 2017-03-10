@@ -24,7 +24,7 @@ namespace CollegeConnected.Models
         public DateTime BirthDate { get; set; }
         public DateTime UpdateTimeStamp { get; set; }
         public string ConstituentType { get; set; }
-        public bool? AllowCommunication { get; set; }
+        public bool AllowCommunication { get; set; }
         public bool HasAttendedEvent { get; set; }
         public int EventsAttended { get; set; }
         public string BirthdayForDisplay
