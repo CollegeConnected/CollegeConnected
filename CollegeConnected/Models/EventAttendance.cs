@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace CollegeConnected.Models
 {
@@ -13,6 +10,7 @@ namespace CollegeConnected.Models
             StudentId = studentId;
             EventId = eventId;
         }
+
         public Guid Id { get; set; }
         public Guid StudentId { get; set; }
         public Guid EventId { get; set; }

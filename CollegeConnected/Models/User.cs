@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CollegeConnected.Models
+﻿namespace CollegeConnected.Models
 {
     public class User
     {

@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using CollegeConnected.Models;
 using System.Web.Security;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
@@ -17,9 +17,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Register()
         {
             if (isAuthenticated())
-            {
                 return View();
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -29,7 +27,7 @@ namespace CollegeConnected.Controllers
             if (isAuthenticated())
             {
                 var studentList = (from student in db.Students
-                                   select student).ToList();
+                    select student).ToList();
                 return View(studentList);
             }
             return RedirectToAction("Index", "Home");
@@ -41,7 +39,7 @@ namespace CollegeConnected.Controllers
             if (isAuthenticated())
             {
                 var studentList = (from student in db.Students
-                                   select student).ToList();
+                    select student).ToList();
                 return View(studentList);
             }
             return RedirectToAction("Index", "Home");
@@ -51,9 +49,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Create()
         {
             if (isAuthenticated())
-            {
                 return View();
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -78,29 +74,23 @@ namespace CollegeConnected.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            else
+            var rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
+
+            if (ModelState.IsValid && !rowExists)
             {
-                
-                    bool rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
-
-                    if (ModelState.IsValid && !rowExists)
-                    {
-                        student.StudentId = Guid.NewGuid();
-                    student.UpdateTimeStamp = DateTime.Now;
-                    student.HasAttendedEvent = false;
-                        student.EventsAttended = 0;
-                        db.Students.Add(student);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Error", "This student number already exists in the system. Search for the person from the Home page.");
-
-                    }
-                }
-                return View(student);
+                student.StudentId = Guid.NewGuid();
+                student.UpdateTimeStamp = DateTime.Now;
+                student.HasAttendedEvent = false;
+                student.EventsAttended = 0;
+                db.Students.Add(student);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
+            ModelState.AddModelError("Error",
+                "This student number already exists in the system. Search for the person from the Home page.");
+            return View(student);
+        }
+
         // GET: Students/Edit/5
         public ActionResult Edit(Guid? id)
         {
@@ -179,7 +169,8 @@ namespace CollegeConnected.Controllers
                          "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
                          "\"Birthday\"");
             Response.ClearContent();
-            Response.AddHeader("content-disposition", "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
+            Response.AddHeader("content-disposition",
+                "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
 
             var students = db.Students.ToList();
@@ -193,6 +184,7 @@ namespace CollegeConnected.Controllers
             Response.Write(sw.ToString());
             Response.End();
         }
+
         private bool isAuthenticated()
         {
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
@@ -201,9 +193,7 @@ namespace CollegeConnected.Controllers
                 var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
                 if (ticket != null)
-                {
                     return true;
-                }
             }
             return false;
         }

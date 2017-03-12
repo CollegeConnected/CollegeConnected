@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Security;
 using CollegeConnected.Imports;
 using CollegeConnected.Models;
-using System.Web.Security;
 
 namespace CollegeConnected.Controllers
 {
@@ -25,7 +25,7 @@ namespace CollegeConnected.Controllers
                     {
                         return RedirectToAction(
                             "UploadError",
-                            new { uploadError = ex.Message, returnAction = "StartStudent" });
+                            new {uploadError = ex.Message, returnAction = "StartStudent"});
                     }
 
                     return View(MvcApplication.CurrentImport.columnConfiguration);
@@ -140,6 +140,7 @@ namespace CollegeConnected.Controllers
         {
             return View();
         }
+
         private bool isAuthenticated()
         {
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
@@ -148,9 +149,7 @@ namespace CollegeConnected.Controllers
                 var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
                 if (ticket != null)
-                {
                     return true;
-                }
             }
             return false;
         }

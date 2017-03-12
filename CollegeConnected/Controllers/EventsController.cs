@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
-using System.Web.Mvc;
-using CollegeConnected.Models;
 using System.Security.Cryptography;
+using System.Text;
+using System.Web.Mvc;
 using System.Web.Security;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
     public class EventsController : Controller
     {
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
+
         public ActionResult Index()
         {
             if (isAuthenticated())
-            {
                 return View(db.Events.ToList());
-            }
             return RedirectToAction("Index", "Home");
         }
+
         public ActionResult Details(Guid? id)
         {
             if (isAuthenticated())
@@ -33,14 +33,12 @@ namespace CollegeConnected.Controllers
                 return View(@event);
             }
             return RedirectToAction("Index", "Home");
-
         }
+
         public ActionResult Create()
         {
             if (isAuthenticated())
-            {
                 return View();
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -76,10 +74,12 @@ namespace CollegeConnected.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime")] Event @event)
+            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime")
+            ] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -89,6 +89,7 @@ namespace CollegeConnected.Controllers
             }
             return View(@event);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -117,51 +118,53 @@ namespace CollegeConnected.Controllers
             if (isAuthenticated())
             {
                 var ccEvent = db.Events.Find(id);
-                string eventTitle = ccEvent.EventName;
+                var eventTitle = ccEvent.EventName;
                 ViewBag.Title = eventTitle;
-                string searchString = "";
+                var searchString = "";
                 var studentList = (from student in db.Students
-                                   where student.StudentNumber == searchString
-                                   select student
-                       ).ToList();
+                    where student.StudentNumber == searchString
+                    select student
+                ).ToList();
                 return View(studentList);
             }
             return RedirectToAction("Index", "Home");
         }
+
         [HttpPost]
         public ActionResult SignIn(string studentNumber, string studentLastName, Guid id)
         {
             if (string.IsNullOrEmpty(studentLastName))
             {
                 var studentList = (from student in db.Students
-                                   where student.StudentNumber == studentNumber
-                                   select student
-                                   ).ToList();
+                    where student.StudentNumber == studentNumber
+                    select student
+                ).ToList();
                 return View(studentList);
             }
-            else if (string.IsNullOrEmpty(studentNumber))
+            if (string.IsNullOrEmpty(studentNumber))
             {
                 var studentList = (from student in db.Students
-                                   where student.LastName == studentLastName
-                                   select student
-                                   ).ToList();
+                    where student.LastName == studentLastName
+                    select student
+                ).ToList();
                 return View(studentList);
             }
             else
             {
                 var studentList = (from student in db.Students
-                                   where student.StudentNumber == studentNumber
-                                   select student
-                                   ).ToList();
+                    where student.StudentNumber == studentNumber
+                    select student
+                ).ToList();
                 return View(studentList);
             }
         }
+
         public ActionResult Confirm(Guid? id, Guid? eventId)
         {
             if (isAuthenticated())
             {
-                Student student = db.Students.Single(x => x.StudentId == id);
-                Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+                var student = db.Students.Single(x => x.StudentId == id);
+                var ccEvent = db.Events.Single(x => x.EventID == eventId);
                 var eventViewModel = new EventViewModel(student, ccEvent);
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -170,7 +173,6 @@ namespace CollegeConnected.Controllers
                 return View(eventViewModel);
             }
             return RedirectToAction("Index", "Home");
-
         }
 
         [HttpPost]
@@ -188,7 +190,7 @@ namespace CollegeConnected.Controllers
             if (ModelState.IsValid)
             {
                 var ccEvent = db.Events.Find(e.EventID);
-                int a = AttendEvent(student.StudentId, e.EventID);
+                var a = AttendEvent(student.StudentId, e.EventID);
                 if (a == -1)
                 {
                     ModelState.AddModelError("Error", "You have already signed into this event.");
@@ -197,15 +199,13 @@ namespace CollegeConnected.Controllers
                 else
                 {
                     if (!student.HasAttendedEvent)
-                    {
                         student.HasAttendedEvent = true;
-                    }
                     student.EventsAttended++;
                     ccEvent.Attendance++;
                     student.UpdateTimeStamp = DateTime.Now;
                     db.Entry(student).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("SignIn", new { id = e.EventID });
+                    return RedirectToAction("SignIn", new {id = e.EventID});
                 }
             }
             return View();
@@ -213,20 +213,18 @@ namespace CollegeConnected.Controllers
 
         public int AttendEvent(Guid studentId, Guid eventId)
         {
-            bool rowExists = db.EventAttendants.Any(ev => ev.StudentId.Equals(studentId) && ev.EventId.Equals(eventId));
+            var rowExists = db.EventAttendants.Any(ev => ev.StudentId.Equals(studentId) && ev.EventId.Equals(eventId));
 
             if (rowExists)
             {
                 return -1;
             }
-            else
-            {
-                var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
-                db.EventAttendants.Add(eventAttendant);
-                db.SaveChanges();
-                return 0;
-            }
+            var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
+            db.EventAttendants.Add(eventAttendant);
+            db.SaveChanges();
+            return 0;
         }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Verify(Guid studentId, Guid eventId, DateTime BirthDate)
@@ -236,22 +234,21 @@ namespace CollegeConnected.Controllers
             var evID = eventId;
 
             if (bday == BirthDate)
-            {
-                return RedirectToAction("Confirm", "Events", new { id = studentId, eventId = eventId });
-            }
+                return RedirectToAction("Confirm", "Events", new {id = studentId, eventId});
             ModelState.AddModelError("", "Birthday incorrect");
-            Student ccStudent = db.Students.Single(x => x.StudentId == studentId);
-            Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var ccStudent = db.Students.Single(x => x.StudentId == studentId);
+            var ccEvent = db.Events.Single(x => x.EventID == eventId);
             var eventViewModel = new EventViewModel(student, ccEvent);
             return View(eventViewModel);
         }
+
         public ActionResult Verify(Guid? id, Guid eventId)
         {
             if (isAuthenticated())
             {
                 ViewBag.EventID = eventId;
-                Student student = db.Students.Single(x => x.StudentId == id);
-                Event ccEvent = db.Events.Single(x => x.EventID == eventId);
+                var student = db.Students.Single(x => x.StudentId == id);
+                var ccEvent = db.Events.Single(x => x.EventID == eventId);
                 var eventViewModel = new EventViewModel(student, ccEvent);
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -260,28 +257,29 @@ namespace CollegeConnected.Controllers
                 return View(eventViewModel);
             }
             return RedirectToAction("Index", "Home");
-
         }
+
         [AllowAnonymous]
         public ActionResult VerifyCompleteEvent(Guid id)
         {
             if (isAuthenticated())
             {
-                Event ccEvent = db.Events.Single(x => x.EventID == id);
+                var ccEvent = db.Events.Single(x => x.EventID == id);
                 var user = db.Users.Find("admin@unf.edu");
-                string password = user.Password;
+                var password = user.Password;
                 var viewModel = new CompleteEventViewModel(ccEvent, password);
                 return View(viewModel);
             }
             return RedirectToAction("Index", "Home");
         }
+
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
         public ActionResult VerifyCompleteEvent(Guid id, string password)
         {
             var user = db.Users.Find("admin@unf.edu");
-            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+            var bytes = Encoding.UTF8.GetBytes(password);
 
             var sha = new SHA256Managed();
             var hashBytes = sha.ComputeHash(bytes);
@@ -289,21 +287,16 @@ namespace CollegeConnected.Controllers
             var hash = Convert.ToBase64String(hashBytes);
 
             if (hash == user.Password)
-            {
-
-                return RedirectToAction("CompleteEvent", "Events", new { id = id });
-            }
+                return RedirectToAction("CompleteEvent", "Events", new {id});
             ModelState.AddModelError("", "Password incorrect");
             return View();
         }
+
         public ActionResult Register(Guid id)
         {
             if (isAuthenticated())
-            {
                 return View();
-            }
             return RedirectToAction("Index", "Home");
-
         }
 
         [HttpPost]
@@ -327,12 +320,11 @@ namespace CollegeConnected.Controllers
                 AttendEvent(student.StudentId, id);
                 ccEvent.Attendance++;
                 db.SaveChanges();
-                return RedirectToAction("SignIn", new { id = id });
-
+                return RedirectToAction("SignIn", new {id});
             }
             return View();
         }
-    
+
         private bool isAuthenticated()
         {
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
@@ -341,9 +333,7 @@ namespace CollegeConnected.Controllers
                 var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
                 if (ticket != null)
-                {
                     return true;
-                }
             }
             return false;
         }

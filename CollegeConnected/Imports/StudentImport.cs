@@ -298,6 +298,7 @@ namespace CollegeConnected.Imports
 
             return gradYear;
         }
+
         private string GetSecondGradYear(ExcelWorksheet worksheet, int rowIndex)
         {
             var gradYear = string.Empty;
@@ -316,6 +317,7 @@ namespace CollegeConnected.Imports
 
             return gradYear;
         }
+
         private string GetThirdGradYear(ExcelWorksheet worksheet, int rowIndex)
         {
             var gradYear = string.Empty;
@@ -353,6 +355,7 @@ namespace CollegeConnected.Imports
 
             return birthday;
         }
+
         private string GetConstituentType(ExcelWorksheet worksheet, int rowIndex)
         {
             var type = string.Empty;
@@ -422,7 +425,7 @@ namespace CollegeConnected.Imports
                             var firstGradYear = GetFirstGradYear(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var secondGradYear = GetSecondGradYear(package.Workbook.Worksheets[1],
-                                 rowIndex);
+                                rowIndex);
                             var thirdGradYear = GetThirdGradYear(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
@@ -514,10 +517,10 @@ namespace CollegeConnected.Imports
             itemList.Add(new SelectListItem {Text = "Phone Number", Value = "Phone Number"});
             itemList.Add(new SelectListItem {Text = "Email", Value = "Email"});
             itemList.Add(new SelectListItem {Text = "First Graduation Year", Value = "First Graduation Year"});
-            itemList.Add(new SelectListItem { Text = "Second Graduation Year", Value = "Second Graduation Year" });
-            itemList.Add(new SelectListItem { Text = "Third Graduation Year", Value = "Third Graduation Year" });
+            itemList.Add(new SelectListItem {Text = "Second Graduation Year", Value = "Second Graduation Year"});
+            itemList.Add(new SelectListItem {Text = "Third Graduation Year", Value = "Third Graduation Year"});
             itemList.Add(new SelectListItem {Text = "Birthday", Value = "Birthday"});
-            itemList.Add(new SelectListItem { Text = "Constituent Type", Value = "Constituent Type" });
+            itemList.Add(new SelectListItem {Text = "Constituent Type", Value = "Constituent Type"});
 
             ColumnConfiguration.SelectionCollection = itemList;
             return true;

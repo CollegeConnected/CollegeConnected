@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using CollegeConnected.Models;
-using System.Net;
 using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 using System.Web.Security;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
@@ -16,13 +16,13 @@ namespace CollegeConnected.Controllers
         {
             if (isAuthenticated())
             {
-                int count = db.Students.Count();
-                DateTime today = DateTime.Now;
-                DateTime yearAgo = today.AddDays(-365);
-                int sinceCount =
+                var count = db.Students.Count();
+                var today = DateTime.Now;
+                var yearAgo = today.AddDays(-365);
+                var sinceCount =
                 (from row in db.Students
-                 where row.UpdateTimeStamp >= yearAgo && row.UpdateTimeStamp <= today
-                 select row).Count();
+                    where (row.UpdateTimeStamp >= yearAgo) && (row.UpdateTimeStamp <= today)
+                    select row).Count();
                 ViewBag.Count = count;
                 ViewBag.sinceCount = sinceCount;
 
@@ -31,15 +31,15 @@ namespace CollegeConnected.Controllers
                 return View();
             }
             return RedirectToAction("Index", "Home");
-        } 
+        }
 
         public ActionResult Index()
         {
-            string searchString = "";
+            var searchString = "";
             var studentList = (from student in db.Students
-                               where student.StudentNumber == searchString
-                               select student
-                   ).ToList();
+                where student.StudentNumber == searchString
+                select student
+            ).ToList();
             return View(studentList);
         }
 
@@ -49,25 +49,25 @@ namespace CollegeConnected.Controllers
             if (string.IsNullOrEmpty(studentLastName))
             {
                 var studentList = (from student in db.Students
-                                   where student.StudentNumber == studentNumber
-                                   select student
-                                   ).ToList();
+                    where student.StudentNumber == studentNumber
+                    select student
+                ).ToList();
                 return View(studentList);
             }
-            else if (string.IsNullOrEmpty(studentNumber))
+            if (string.IsNullOrEmpty(studentNumber))
             {
                 var studentList = (from student in db.Students
-                                   where student.LastName == studentLastName
-                                   select student
-                                   ).ToList();
+                    where student.LastName == studentLastName
+                    select student
+                ).ToList();
                 return View(studentList);
             }
             else
             {
                 var studentList = (from student in db.Students
-                                   where student.StudentNumber == studentNumber
-                                   select student
-                                   ).ToList();
+                    where student.StudentNumber == studentNumber
+                    select student
+                ).ToList();
                 return View(studentList);
             }
         }
@@ -107,6 +107,7 @@ namespace CollegeConnected.Controllers
             }
             return View(student);
         }
+
         /*  public ActionResult Report()
         {
             ReportViewer rptViewer = new ReportViewer();
@@ -125,6 +126,7 @@ namespace CollegeConnected.Controllers
             ViewBag.ReportViewer = rptViewer;
             return View();
         }*/
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Verify(Guid? id, DateTime BirthDate, string returnUrl)
@@ -133,12 +135,11 @@ namespace CollegeConnected.Controllers
             var bday = student.BirthDate;
 
             if (bday == BirthDate)
-            {
-                return RedirectToAction("Confirm", new { id = student.StudentId });
-            }
+                return RedirectToAction("Confirm", new {id = student.StudentId});
             ModelState.AddModelError("", "Birthday incorrect");
             return View();
         }
+
         public ActionResult Verify(Guid? id)
         {
             if (isAuthenticated())
@@ -149,8 +150,8 @@ namespace CollegeConnected.Controllers
                 return View(student);
             }
             return RedirectToAction("Index", "Home");
-
         }
+
         public ActionResult Register()
         {
             return View();
@@ -168,7 +169,6 @@ namespace CollegeConnected.Controllers
              )] Student student)
         {
             if (ModelState.IsValid)
-            {
                 if (student.StudentNumber == null)
                 {
                     student.StudentId = Guid.NewGuid();
@@ -181,8 +181,7 @@ namespace CollegeConnected.Controllers
                 }
                 else
                 {
-
-                    bool rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
+                    var rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
 
                     if (ModelState.IsValid && !rowExists)
                     {
@@ -194,13 +193,9 @@ namespace CollegeConnected.Controllers
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("Error", "This student number already exists in the system. Search for the person from the Home page.");
-
-                    }
+                    ModelState.AddModelError("Error",
+                        "This student number already exists in the system. Search for the person from the Home page.");
                 }
-            }
             return View(student);
         }
 
@@ -220,9 +215,7 @@ namespace CollegeConnected.Controllers
                 var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
                 if (ticket != null)
-                {
                     return true;
-                }
             }
             return false;
         }

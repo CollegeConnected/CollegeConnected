@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
-using CollegeConnected.Models;
 using System.Web.Security;
+using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
@@ -10,9 +10,7 @@ namespace CollegeConnected.Controllers
         public ActionResult Index()
         {
             if (isAuthenticated())
-            {
                 return View();
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -33,6 +31,7 @@ namespace CollegeConnected.Controllers
 
             return View(rptInfo);
         }
+
         private bool isAuthenticated()
         {
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
@@ -41,9 +40,7 @@ namespace CollegeConnected.Controllers
                 var ticket = FormsAuthentication.Decrypt(authCookie.Value);
 
                 if (ticket != null)
-                {
                     return true;
-                }
             }
             return false;
         }

@@ -30,7 +30,7 @@
     <script type="text/javascript" src="/scripts/moment.min.js"></script>
     <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/bootstrap-datetimepicker.js"></script>
-    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" type="text/css"/>
 
     <script type="text/javascript">
         var appInsights = window.appInsights ||
@@ -63,7 +63,7 @@
     </script>
 </head>
 <body>
-    
+
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -75,10 +75,10 @@
             </button>
         </div>
 
-            </div>
+    </div>
 
-        </div>
-        
+</div>
+
 </div>
 <div class="container body-content">
     @RenderBody()
@@ -86,7 +86,7 @@
     <footer>
         @if (Request.Cookies[FormsAuthentication.FormsCookieName] == null)
         {
-        <p>@Html.ActionLink("Adminstrator Login", "Login", "Account")</p>
+            <p>@Html.ActionLink("Adminstrator Login", "Login", "Account")</p>
         }
         <p>&copy; @DateTime.Now.Year - University of North Florida</p>
     </footer>

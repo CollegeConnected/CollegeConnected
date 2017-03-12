@@ -5,7 +5,6 @@
 }
 
 
-
 <h2>Create Event</h2>
 
 @using (Html.BeginForm())
@@ -19,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EventName, "Name*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventName, new {htmlAttributes = new {@class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.EventName, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventName, "", new {@class = "text-danger"})
             </div>
         </div>
@@ -27,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EventLocation, "Location*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventLocation, new {htmlAttributes = new {@class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.EventLocation, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventLocation, "", new {@class = "text-danger"})
             </div>
         </div>
@@ -36,7 +35,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventStartDateTime, new {htmlAttributes = new {@class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.EventStartDateTime, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventStartDateTime, "", new {@class = "text-danger"})
             </div>
         </div>
@@ -44,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventEndDateTime, new {htmlAttributes = new {@class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.EventEndDateTime, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.EventEndDateTime, "", new {@class = "text-danger"})
             </div>
         </div>

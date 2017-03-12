@@ -1,5 +1,5 @@
 ﻿@model CollegeConnected.Models.User
-            @if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+@if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
 {
     using (Html.BeginForm("Logout", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
     {

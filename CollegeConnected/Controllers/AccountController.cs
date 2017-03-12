@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.Models;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
 namespace CollegeConnected.Controllers
@@ -16,6 +13,12 @@ namespace CollegeConnected.Controllers
     public class AccountController : Controller
     {
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
+
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get { return HttpContext.GetOwinContext().Authentication; }
+        }
 
 
         //
@@ -27,6 +30,7 @@ namespace CollegeConnected.Controllers
             return View();
             ;
         }
+
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
@@ -34,9 +38,7 @@ namespace CollegeConnected.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
             var user = db.Users.Find(model.Email);
             if (user == null)
             {
@@ -66,12 +68,6 @@ namespace CollegeConnected.Controllers
             Response.Cookies.Clear();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
-        }
-
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get { return HttpContext.GetOwinContext().Authentication; }
         }
     }
 }
