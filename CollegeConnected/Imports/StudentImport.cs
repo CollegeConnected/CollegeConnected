@@ -200,6 +200,8 @@ namespace CollegeConnected.Imports
                     break;
                 }
             }
+            if(zipCode.Contains("-"))
+            { zipCode = zipCode.Substring(0, 4); }
 
             return zipCode;
         }
@@ -295,7 +297,10 @@ namespace CollegeConnected.Imports
                     break;
                 }
             }
-
+            if(gradYear == null)
+            {
+                gradYear = "9999";
+            }
             return gradYear;
         }
 
