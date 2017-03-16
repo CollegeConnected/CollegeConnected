@@ -113,8 +113,9 @@ namespace CollegeConnected.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult SignIn(Guid id)
+        public ActionResult SignIn(Guid id, string message)
         {
+            ViewBag.Message = message;
             if (isAuthenticated())
             {
                 var ccEvent = db.Events.Find(id);
@@ -216,7 +217,7 @@ namespace CollegeConnected.Controllers
                     student.UpdateTimeStamp = DateTime.Now;
                     db.Entry(student).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("SignIn", new {id = id});
+                    return RedirectToAction("SignIn", new {id = id, message = thankYou});
                 }
             }
             return View();
@@ -333,7 +334,7 @@ namespace CollegeConnected.Controllers
                 AttendEvent(student.StudentId, id);
                 ccEvent.Attendance++;
                 db.SaveChanges();
-                return RedirectToAction("SignIn", new {id});
+                return RedirectToAction("SignIn", new { id = id, message = thankYou });
             }
             return View();
         }
