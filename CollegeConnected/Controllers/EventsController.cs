@@ -133,12 +133,19 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         public ActionResult SignIn(string studentNumber, string studentLastName, Guid id)
         {
+            var ccEvent = db.Events.Find(id);
+            var eventTitle = ccEvent.EventName;
+            ViewBag.Title = eventTitle;
             if (string.IsNullOrEmpty(studentLastName))
             {
                 var studentList = (from student in db.Students
                     where student.StudentNumber == studentNumber
                     select student
                 ).ToList();
+                if (studentList.Count() == 0)
+                {
+                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
+                }
                 return View(studentList);
             }
             if (string.IsNullOrEmpty(studentNumber))
@@ -147,6 +154,10 @@ namespace CollegeConnected.Controllers
                     where student.LastName == studentLastName
                     select student
                 ).ToList();
+                if (studentList.Count() == 0)
+                {
+                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
+                }
                 return View(studentList);
             }
             else
@@ -170,6 +181,7 @@ namespace CollegeConnected.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 if (eventViewModel == null)
                     return HttpNotFound();
+                
                 return View(eventViewModel);
             }
             return RedirectToAction("Index", "Home");
@@ -182,15 +194,14 @@ namespace CollegeConnected.Controllers
                  Include =
                      "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student,
-            [Bind(
-                 Include =
-                     "EventID,EventName,Attendance,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime"
-             )] Event e)
+            Guid id)
         {
+            string thankYou = "Thank you for signing in.";
+
+            var ccEvent = db.Events.Find(id);
             if (ModelState.IsValid)
             {
-                var ccEvent = db.Events.Find(e.EventID);
-                var a = AttendEvent(student.StudentId, e.EventID);
+                var a = AttendEvent(student.StudentId, id);
                 if (a == -1)
                 {
                     ModelState.AddModelError("Error", "You have already signed into this event.");
@@ -205,7 +216,7 @@ namespace CollegeConnected.Controllers
                     student.UpdateTimeStamp = DateTime.Now;
                     db.Entry(student).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("SignIn", new {id = e.EventID});
+                    return RedirectToAction("SignIn", new {id = id});
                 }
             }
             return View();
@@ -308,6 +319,8 @@ namespace CollegeConnected.Controllers
              )] Student student,
             Guid id)
         {
+            string thankYou = "Thank you for registering and signing in!";
+
             if (ModelState.IsValid)
             {
                 var ccEvent = db.Events.Find(id);

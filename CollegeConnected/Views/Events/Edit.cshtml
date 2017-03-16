@@ -36,18 +36,26 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventStartDateTime, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.EventStartDateTime, "", new {@class = "text-danger"})
+                @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time*", new { @class = "control-label col-md-2" })
+                <div class="input-group date datetimepicker">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    @Html.TextBoxFor(model => model.EventStartDateTime, new { @class = "form-control" })
+                </div>
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time*", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EventEndDateTime, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.EventEndDateTime, "", new {@class = "text-danger"})
+                @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time*", new { @class = "control-label col-md-2" })
+                <div class="input-group date datetimepicker">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    @Html.TextBoxFor(model => model.EventEndDateTime, new { @class = "form-control" })
+                </div>
             </div>
         </div>
 

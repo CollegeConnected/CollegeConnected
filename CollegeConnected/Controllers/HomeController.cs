@@ -52,6 +52,10 @@ namespace CollegeConnected.Controllers
                     where student.StudentNumber == studentNumber
                     select student
                 ).ToList();
+                if (studentList.Count() == 0)
+                {
+                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
+                }
                 return View(studentList);
             }
             if (string.IsNullOrEmpty(studentNumber))
@@ -60,6 +64,10 @@ namespace CollegeConnected.Controllers
                     where student.LastName == studentLastName
                     select student
                 ).ToList();
+                if(studentList.Count() == 0)
+                {
+                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
+                }
                 return View(studentList);
             }
             else
@@ -142,14 +150,10 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Verify(Guid? id)
         {
-            if (isAuthenticated())
-            {
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 var student = db.Students.Find(id);
                 return View(student);
-            }
-            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Register()

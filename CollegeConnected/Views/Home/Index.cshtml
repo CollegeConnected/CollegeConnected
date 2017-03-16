@@ -9,7 +9,6 @@
     <table align="center">
         @using (Html.BeginForm())
         {
-            @Html.ValidationSummary()
             <tr>
                 <td>
                     <h4>Enter your N number:</h4>
@@ -43,7 +42,8 @@
             </tr>
             <tr>
                 <td colspan="2">
-
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("Error")
                 </td>
             </tr>
         }
