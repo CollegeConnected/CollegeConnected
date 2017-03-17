@@ -67,7 +67,7 @@ namespace CollegeConnected.Controllers
             Session.Abandon();
             Response.Cookies.Clear();
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
