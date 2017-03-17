@@ -364,15 +364,15 @@ namespace CollegeConnected.Controllers
                 "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
 
-            var studentIds =
+            var attendees =
                 (from ev in db.EventAttendants
                  where (ev.EventId == id)
                  select ev).ToList();
 
 
-            foreach (var studentId in studentIds)
+            foreach (var attendee in attendees)
             {
-                Guid sId = studentId;
+                Guid sId = attendee.StudentId;
                 var student = db.Students.Find(sId);
                 sw.WriteLine(
                 $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +

@@ -18,11 +18,5 @@ namespace CollegeConnected.Models
         public Guid Id { get; set; }
         public Guid StudentId { get; set; }
         public Guid EventId { get; set; }
-
-        public static implicit operator Guid(EventAttendance v)
-        {
-            Guid id = v.StudentId;
-            return id;
-        }
     }
 }
