@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.Models;
+using System.IO;
 
 namespace CollegeConnected.Controllers
 {
@@ -78,7 +79,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime")
+            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")
             ] Event @event)
         {
             if (ModelState.IsValid)
@@ -244,7 +245,7 @@ namespace CollegeConnected.Controllers
             var student = db.Students.Find(studentId);
             var bday = student.BirthDate;
             var evID = eventId;
-
+            ViewBag.EventID = eventId;
             if (bday == BirthDate)
                 return RedirectToAction("Confirm", "Events", new {id = studentId, eventId});
             ModelState.AddModelError("", "Birthday incorrect");
@@ -350,6 +351,37 @@ namespace CollegeConnected.Controllers
                     return true;
             }
             return false;
+        }
+        public void ExportEvent(Guid id)
+        {
+            var sw = new StringWriter();
+
+            sw.WriteLine("\"Student Number\",\"First Name\",\"Middle Name\",\"Last Name\",\"Address1\"," +
+                         "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
+                         "\"Birthday\"");
+            Response.ClearContent();
+            Response.AddHeader("content-disposition",
+                "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
+            Response.ContentType = "text/csv";
+
+            var studentIds =
+                (from ev in db.EventAttendants
+                 where (ev.EventId == id)
+                 select ev).ToList();
+
+
+            foreach (var studentId in studentIds)
+            {
+                Guid sId = studentId;
+                var student = db.Students.Find(sId);
+                sw.WriteLine(
+                $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
+                $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
+                $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\"");
+           }
+
+            Response.Write(sw.ToString());
+            Response.End();
         }
     }
 }

@@ -4,6 +4,10 @@ namespace CollegeConnected.Models
 {
     public class EventAttendance
     {
+        public EventAttendance()
+        {
+
+        }
         public EventAttendance(Guid id, Guid studentId, Guid eventId)
         {
             Id = id;
@@ -14,5 +18,11 @@ namespace CollegeConnected.Models
         public Guid Id { get; set; }
         public Guid StudentId { get; set; }
         public Guid EventId { get; set; }
+
+        public static implicit operator Guid(EventAttendance v)
+        {
+            Guid id = v.StudentId;
+            return id;
+        }
     }
 }
