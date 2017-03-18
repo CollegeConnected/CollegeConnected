@@ -137,7 +137,7 @@ namespace CollegeConnected.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Verify(Guid? id, DateTime BirthDate, string returnUrl)
+        public ActionResult Verify(Guid? id, DateTime BirthDate)
         {
             var student = db.Students.Find(id);
             var bday = student.BirthDate;
