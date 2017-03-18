@@ -335,7 +335,7 @@ namespace CollegeConnected.Controllers
                 AttendEvent(student.StudentId, id);
                 ccEvent.Attendance++;
                 db.SaveChanges();
-                return RedirectToAction("SignIn", new { id = id, message = thankYou });
+                return RedirectToAction("SignIn", new { id, message = thankYou });
             }
             return View();
         }
@@ -372,8 +372,7 @@ namespace CollegeConnected.Controllers
 
             foreach (var attendee in attendees)
             {
-                Guid sId = attendee.StudentId;
-                var student = db.Students.Find(sId);
+                var student = db.Students.Find(attendee.StudentId);
                 sw.WriteLine(
                 $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
                 $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
