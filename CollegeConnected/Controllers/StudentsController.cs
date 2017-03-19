@@ -14,14 +14,6 @@ namespace CollegeConnected.Controllers
     {
         private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
 
-        public ActionResult Register()
-        {
-            if (isAuthenticated())
-                return View();
-            return RedirectToAction("Index", "Home");
-        }
-
-        // GET: Students
         public ActionResult Index()
         {
             if (isAuthenticated())
@@ -33,9 +25,15 @@ namespace CollegeConnected.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Students/Details/5
         public ActionResult Details()
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (isAuthenticated())
             {
                 var studentList = (from student in db.Students
@@ -44,8 +42,6 @@ namespace CollegeConnected.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
-        // GET: Students/Create
         public ActionResult Create()
         {
             if (isAuthenticated())
@@ -53,9 +49,6 @@ namespace CollegeConnected.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: Students/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
@@ -64,6 +57,13 @@ namespace CollegeConnected.Controllers
                      "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (student.StudentNumber == null)
             {
                 student.StudentId = Guid.NewGuid();
@@ -90,10 +90,15 @@ namespace CollegeConnected.Controllers
                 "This student number already exists in the system. Search for the person from the Home page.");
             return View(student);
         }
-
-        // GET: Students/Edit/5
         public ActionResult Edit(Guid? id)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (isAuthenticated())
             {
                 if (id == null)
@@ -105,10 +110,7 @@ namespace CollegeConnected.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
-        // POST: Students/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
@@ -117,6 +119,13 @@ namespace CollegeConnected.Controllers
                      "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (ModelState.IsValid)
             {
                 student.UpdateTimeStamp = DateTime.Now;
@@ -126,8 +135,7 @@ namespace CollegeConnected.Controllers
             }
             return View(student);
         }
-
-        // GET: Students/Delete/5
+        
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -137,8 +145,6 @@ namespace CollegeConnected.Controllers
                 return HttpNotFound();
             return View(student);
         }
-
-        // POST: Students/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -152,13 +158,6 @@ namespace CollegeConnected.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index", "Home");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                db.Dispose();
-            base.Dispose(disposing);
         }
 
         public void ExportToCsv()
@@ -184,7 +183,6 @@ namespace CollegeConnected.Controllers
             Response.Write(sw.ToString());
             Response.End();
         }
-
         private bool isAuthenticated()
         {
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];

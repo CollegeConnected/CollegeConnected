@@ -3,22 +3,7 @@
 @{
     ViewBag.Title = "Edit";
 }
-<script type="text/javascript">
-    $(document)
-        .ready(function() {
-            $('#BirthDate')
-                .datepicker({
-                    dateFormat: "dd/mm/yy",
-                    showStatus: true,
-                    showWeeks: true,
-                    currentText: 'Now',
-                    autoSize: true,
-                    gotoCurrent: true,
-                    showAnim: 'blind',
-                    highlightWeek: true
-                });
-        });
-</script>
+
 <h2>Edit Constituent</h2>
 
 @using (Html.BeginForm())
@@ -105,13 +90,12 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.State, "State*", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.State, "State*", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.State, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.State, "", new {@class = "text-danger"})
+                @Html.EnumDropDownListFor(model => model.State, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
             </div>
         </div>
-
 
         <div class="form-group">
             @Html.LabelFor(model => model.ZipCode, "Zip Code*", new {@class = "control-label col-md-2"})
@@ -122,24 +106,24 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.FirstGraduationYear, "First Graduation Year", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.FirstGraduationYear, "First Graduation Year*", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstGraduationYear, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.FirstGraduationYear, "", new {@class = "text-danger"})
+                @Html.DropDownListFor(model => model.FirstGraduationYear, (IEnumerable<SelectListItem>)ViewBag.Years, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FirstGraduationYear, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.SecondGraduationYear, "Second Graduation Year", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.SecondGraduationYear, "Second Graduation Year", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SecondGraduationYear, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.SecondGraduationYear, "", new {@class = "text-danger"})
+                @Html.DropDownListFor(model => model.SecondGraduationYear, (IEnumerable<SelectListItem>)ViewBag.Years, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SecondGraduationYear, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.ThirdGraduationYear, "Third Graduation Year", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.ThirdGraduationYear, "Third Graduation Year", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ThirdGraduationYear, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.ThirdGraduationYear, "", new {@class = "text-danger"})
+                @Html.DropDownListFor(model => model.ThirdGraduationYear, (IEnumerable<SelectListItem>)ViewBag.Years, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ThirdGraduationYear, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -152,18 +136,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ConstituentType, "Constituent Type*", new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.ConstituentType, "Constituent Type*", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ConstituentType, new SelectList(
-                    new List<object>
-                    {
-                        new {value = "Alumni", text = "Alumni"},
-                        new {value = "Spouse", text = "Spouse"},
-                        new {value = "Spouse", text = "Faculty/Staff"},
-                        new {value = "Patron", text = "Patron"}
-                    },
-                    "value", "text", Model.ConstituentType), new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.ConstituentType, "", new {@class = "text-danger"})
+                @Html.EnumDropDownListFor(model => model.ConstituentType, " ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ConstituentType, "", new { @class = "text-danger" })
             </div>
         </div>
 

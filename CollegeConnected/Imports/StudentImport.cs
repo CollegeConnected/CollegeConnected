@@ -436,6 +436,8 @@ namespace CollegeConnected.Imports
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var constituentType = GetConstituentType(package.Workbook.Worksheets[1], rowIndex);
+                            State stateValue = (State)Enum.Parse(typeof(State), state);
+                            ConstuentType typeValue = (ConstuentType)Enum.Parse(typeof(ConstuentType), constituentType);
 
                             var convertedStudent = new Student
                             {
@@ -447,14 +449,14 @@ namespace CollegeConnected.Imports
                                 Address2 = address2,
                                 ZipCode = zipCode,
                                 City = city,
-                                State = state,
+                                State = stateValue,
                                 PhoneNumber = phoneNunber,
                                 Email = email,
                                 FirstGraduationYear = firstGradYear,
                                 SecondGraduationYear = secondGradYear,
                                 ThirdGraduationYear = thirdGradYear,
                                 BirthDate = birthday,
-                                ConstituentType = constituentType,
+                                ConstituentType = typeValue,
                                 AllowCommunication = false
                             };
 

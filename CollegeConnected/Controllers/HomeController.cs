@@ -158,6 +158,14 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Register()
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+               new SelectListItem()
+               {
+                   Text = x.ToString(),
+                   Value = x.ToString()
+               }), "Value", "Text");
+
             return View();
         }
 
@@ -172,6 +180,13 @@ namespace CollegeConnected.Controllers
                      "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Student student)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (ModelState.IsValid)
                 if (student.StudentNumber == null)
                 {

@@ -174,6 +174,13 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Confirm(Guid? id, Guid? eventId)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (isAuthenticated())
             {
                 var student = db.Students.Single(x => x.StudentId == id);
@@ -198,6 +205,13 @@ namespace CollegeConnected.Controllers
              )] Student student,
             Guid id)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             string thankYou = "Thank you for signing in.";
 
             var ccEvent = db.Events.Find(id);
@@ -307,6 +321,13 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Register(Guid id)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             if (isAuthenticated())
                 return View();
             return RedirectToAction("Index", "Home");
@@ -321,6 +342,13 @@ namespace CollegeConnected.Controllers
              )] Student student,
             Guid id)
         {
+            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
+
+   new SelectListItem()
+   {
+       Text = x.ToString(),
+       Value = x.ToString()
+   }), "Value", "Text");
             string thankYou = "Thank you for registering and signing in!";
 
             if (ModelState.IsValid)
@@ -329,7 +357,6 @@ namespace CollegeConnected.Controllers
                 student.StudentId = Guid.NewGuid();
                 student.HasAttendedEvent = true;
                 student.EventsAttended = 1;
-                student.ConstituentType = "Alumni";
                 student.UpdateTimeStamp = DateTime.Now;
                 db.Students.Add(student);
                 AttendEvent(student.StudentId, id);
