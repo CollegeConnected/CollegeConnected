@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <div class="jumbotron">
     <table align="center">
         @using (Html.BeginForm())
@@ -46,7 +48,16 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.ValidationMessage("Error")
 </div>
-
+<script>
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf('safari') != -1) {
+        if (ua.indexOf('chrome') > -1) {
+           // alert("1") // Chrome
+        } else {
+            alert("This is an unsupported browser. Please use Chrome, Firefox, or Edge.") // Safari
+        }
+    }
+</script>>
 <h2>Results</h2>
 @Html.Grid(Model).Columns(columns =>
 {
