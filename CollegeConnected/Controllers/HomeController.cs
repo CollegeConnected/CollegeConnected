@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
+using CollegeConnected.DataLayer;
 using CollegeConnected.Models;
 
 namespace CollegeConnected.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
+        private readonly SharedControllerOperations sharedOperations = new SharedControllerOperations();
+        private readonly UnitOfWork db = new UnitOfWork();
 
         public ActionResult Admin()
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
-                var count = db.Students.Count();
                 var today = DateTime.Now;
                 var yearAgo = today.AddDays(-365);
+
+                var count = db.StudentRepository.Get().Count();
                 var sinceCount =
-                (from row in db.Students
-                    where (row.UpdateTimeStamp >= yearAgo) && (row.UpdateTimeStamp <= today)
-                    select row).Count();
+                    db.StudentRepository.Get(
+                        student => student.UpdateTimeStamp >= yearAgo && student.UpdateTimeStamp <= today).Count();
                 ViewBag.Count = count;
                 ViewBag.sinceCount = sinceCount;
 
@@ -35,12 +36,7 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Index()
         {
-            var searchString = "";
-            var studentList = (from student in db.Students
-                where student.StudentNumber == searchString
-                select student
-            ).ToList();
-            return View(studentList);
+            return View(db.StudentRepository.Get(student => student.StudentNumber == "").ToList());
         }
 
         [HttpPost]
@@ -48,11 +44,8 @@ namespace CollegeConnected.Controllers
         {
             if (string.IsNullOrEmpty(studentLastName))
             {
-                var studentList = (from student in db.Students
-                    where student.StudentNumber == studentNumber
-                    select student
-                ).ToList();
-                if (studentList.Count() == 0)
+                var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
+                if (!studentList.Any())
                 {
                     ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
                 }
@@ -60,11 +53,8 @@ namespace CollegeConnected.Controllers
             }
             if (string.IsNullOrEmpty(studentNumber))
             {
-                var studentList = (from student in db.Students
-                    where student.LastName == studentLastName
-                    select student
-                ).ToList();
-                if(studentList.Count() == 0)
+                var studentList = db.StudentRepository.Get(student => student.LastName == studentLastName).ToList();
+                if (!studentList.Any())
                 {
                     ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
                 }
@@ -72,171 +62,128 @@ namespace CollegeConnected.Controllers
             }
             else
             {
-                var studentList = (from student in db.Students
-                    where student.StudentNumber == studentNumber
-                    select student
-                ).ToList();
+                var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
+                if (!studentList.Any())
+                {
+                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
+                }
                 return View(studentList);
             }
         }
-
-        // GET: Students/Edit/5
+        
         public ActionResult Confirm(Guid? id)
         {
-            if (isAuthenticated())
-            {
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                var student = db.Students.Find(id);
-                if (student == null)
+            var student = db.StudentRepository.GetById(id);
+            if (student == null)
                     return HttpNotFound();
-                return View(student);
-            }
-            return RedirectToAction("Index", "Home");
+            return View(student);
         }
-
-        // POST: Students/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication"
-             )] Student student)
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                     "AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Constituent student)
         {
             if (ModelState.IsValid)
             {
                 student.UpdateTimeStamp = DateTime.Now;
-                db.Entry(student).State = EntityState.Modified;
-                db.SaveChanges();
+                db.StudentRepository.Update(student);
+                db.Save();
                 return RedirectToAction("Index");
             }
             return View(student);
-        }
-
-        /*  public ActionResult Report()
-        {
-            ReportViewer rptViewer = new ReportViewer();
-
-            // ProcessingMode will be Either Remote or Local  
-            rptViewer.ProcessingMode = ProcessingMode.Remote;
-            rptViewer.SizeToReportContent = true;
-            rptViewer.ZoomMode = ZoomMode.PageWidth;
-            rptViewer.Width = Unit.Percentage(99);
-            rptViewer.Height = Unit.Pixel(1000);
-            rptViewer.AsyncRendering = true;
-            rptViewer.ServerReport.ReportServerUrl = new Uri("http://localhost/ReportServer/");
-
-            rptViewer.ServerReport.ReportPath
-
-            ViewBag.ReportViewer = rptViewer;
-            return View();
-        }*/
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult Verify(Guid? id, DateTime BirthDate)
-        {
-            var student = db.Students.Find(id);
-            var bday = student.BirthDate;
-
-            if (bday == BirthDate)
-                return RedirectToAction("Confirm", new {id = student.StudentId});
-            ModelState.AddModelError("", "Birthday incorrect");
-            return View();
         }
 
         public ActionResult Verify(Guid? id)
         {
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                var student = db.Students.Find(id);
-                return View(student);
+            var student = db.StudentRepository.GetById(id);
+            return View(student);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Verify(Guid? id, DateTime birthDate)
+        {
+            var student = db.StudentRepository.GetById(id);
+            var bday = student.BirthDate;
+
+            if (bday == birthDate)
+                return RedirectToAction("Confirm", new { id });
+            ModelState.AddModelError("", "Birthday incorrect");
+            return View();
         }
 
         public ActionResult Register()
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-               new SelectListItem()
-               {
-                   Text = x.ToString(),
-                   Value = x.ToString()
-               }), "Value", "Text");
-
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
             return View();
         }
-
-        // POST: Students/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Register(
-            [Bind(
+        [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Student student)
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                     "AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Constituent student)
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-   new SelectListItem()
-   {
-       Text = x.ToString(),
-       Value = x.ToString()
-   }), "Value", "Text");
-            if (ModelState.IsValid)
-                if (student.StudentNumber == null)
+             ViewBag.Years = sharedOperations.GenerateGradYearList();
+            var rowExists = db.StudentRepository.dbSet.Any(s => s.StudentNumber.Equals(student.StudentNumber));
+            try
+            {
+                if (ModelState.IsValid)
                 {
-                    student.StudentId = Guid.NewGuid();
-                    student.UpdateTimeStamp = DateTime.Now;
-                    student.HasAttendedEvent = false;
-                    student.EventsAttended = 0;
-                    db.Students.Add(student);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    var rowExists = db.Students.Any(s => s.StudentNumber.Equals(student.StudentNumber));
-
-                    if (ModelState.IsValid && !rowExists)
+                    if (student.StudentNumber == null)
                     {
                         student.StudentId = Guid.NewGuid();
                         student.UpdateTimeStamp = DateTime.Now;
                         student.HasAttendedEvent = false;
                         student.EventsAttended = 0;
-                        db.Students.Add(student);
-                        db.SaveChanges();
+                        db.StudentRepository.Insert(student);
+                        db.Save();
+                        return RedirectToAction("Index");
+                    }
+                    if (!rowExists)
+                    {
+                        student.StudentId = Guid.NewGuid();
+                        student.UpdateTimeStamp = DateTime.Now;
+                        student.HasAttendedEvent = false;
+                        student.EventsAttended = 0;
+                        db.StudentRepository.Insert(student);
+                        db.Save();
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("Error",
                         "This student number already exists in the system. Search for the person from the Home page.");
+                    return View(student);
                 }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("Error",
+                    "An error occurred saving this constituent. If the problem persits, contact your system administrator." +
+                    $"Exception: {e}");
+            }
             return View(student);
         }
 
         public ActionResult PurgeData()
         {
-            db.Database.ExecuteSqlCommand("DELETE FROM EventAttendances");
-            db.Database.ExecuteSqlCommand("DELETE FROM Students");
-            db.Database.ExecuteSqlCommand("DELETE FROM Events");
+            db.EventAttendanceRepository.db.Database.ExecuteSqlCommand("DELETE FROM EventAttendances");
+            db.StudentRepository.db.Database.ExecuteSqlCommand("DELETE FROM Students");
+            db.EventRepository.db.Database.ExecuteSqlCommand("DELETE FROM Events");
             return RedirectToAction("Admin");
-        }
-
-        private bool isAuthenticated()
-        {
-            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-            if (authCookie != null)
-            {
-                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
-
-                if (ticket != null)
-                    return true;
-            }
-            return false;
         }
     }
 }

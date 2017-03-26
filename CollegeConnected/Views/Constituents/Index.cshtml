@@ -1,5 +1,5 @@
 ﻿@using GridMvc.Html
-@model IEnumerable<CollegeConnected.Models.Student>
+@model IEnumerable<CollegeConnected.Models.Constituent>
 
 @{
     ViewBag.Title = "Index";
@@ -19,6 +19,6 @@
     columns.Add(model => model.State).Titled("State").Filterable(true).Sortable(true).SetWidth(110);
     columns.Add(model => model.FirstGraduationYear).Titled("Graduation Year").Filterable(true).Sortable(true).SetWidth(100);
     columns.Add(model => model.AllowCommunication).Titled("Allow Communication").Filterable(true).Sortable(true).SetWidth(30);
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Students", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Edit", "Edit", "Constituents", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("Delete", "Delete", "Constituents", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
 }).WithPaging(15)

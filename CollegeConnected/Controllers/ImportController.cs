@@ -68,7 +68,7 @@ namespace CollegeConnected.Controllers
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             using (var db = new CollegeConnectedDbContext())
             {
-                var rejectBytes = db.ImportResults.Where(m => m.Id == id).Single().RejectFile;
+                var rejectBytes = db.ImportResults.Single(m => m.Id == id).RejectFile;
                 Response.BinaryWrite(rejectBytes);
             }
 
@@ -130,7 +130,7 @@ namespace CollegeConnected.Controllers
 
         public ActionResult UploadError(string uploadError, string returnAction)
         {
-            ViewBag.ErrorString = string.Format("There was an error uploading the file: {0}", uploadError);
+            ViewBag.ErrorString = $"There was an error uploading the file: {uploadError}";
             ViewBag.ActionName = returnAction;
 
             return View();

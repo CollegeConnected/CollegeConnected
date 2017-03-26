@@ -6,8 +6,9 @@ using System.Web.Mvc;
 
 namespace CollegeConnected.Models
 {
-    public class Student
+    public class Constituent
     {
+        [Key]
         public Guid StudentId { get; set; }
         public string StudentNumber { get; set; }
         [Required]

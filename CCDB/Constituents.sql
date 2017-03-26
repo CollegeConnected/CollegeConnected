@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Students]
+﻿CREATE TABLE [dbo].[Constituents]
 (
 	[StudentId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
     [StudentNumber] VARCHAR(50) NULL, 

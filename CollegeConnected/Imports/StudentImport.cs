@@ -383,7 +383,7 @@ namespace CollegeConnected.Imports
 
         public override IEnumerable<object> ConvertData()
         {
-            var convertedStudents = new List<Student>();
+            var convertedStudents = new List<Constituent>();
             var extension = Path.GetExtension(Options.File.FileName);
             if ((extension == ".xls") || (extension == ".xlsx"))
             {
@@ -439,7 +439,7 @@ namespace CollegeConnected.Imports
                             State stateValue = (State)Enum.Parse(typeof(State), state);
                             ConstuentType typeValue = (ConstuentType)Enum.Parse(typeof(ConstuentType), constituentType);
 
-                            var convertedStudent = new Student
+                            var convertedStudent = new Constituent
                             {
                                 StudentNumber = studentNumber,
                                 FirstName = firstName,
@@ -479,7 +479,7 @@ namespace CollegeConnected.Imports
 
         public override void ImportData(IEnumerable<object> convertedData)
         {
-            var convertedStudents = convertedData.Cast<Student>().ToList();
+            var convertedStudents = convertedData.Cast<Constituent>().ToList();
             using (var db = new CollegeConnectedDbContext())
             {
                 var importedStudents = ImportStudents(db, convertedStudents);
@@ -590,10 +590,10 @@ namespace CollegeConnected.Imports
         }
 
 
-        private List<Student> ImportStudents(CollegeConnectedDbContext db, IEnumerable<Student> convertedData)
+        private List<Constituent> ImportStudents(CollegeConnectedDbContext db, IEnumerable<Constituent> convertedData)
         {
-            var newStudents = new List<Student>();
-            var errorStudents = new List<Student>();
+            var newStudents = new List<Constituent>();
+            var errorStudents = new List<Constituent>();
             var convertedStudents = convertedData.ToList();
             var addCount = 0;
 
@@ -608,7 +608,7 @@ namespace CollegeConnected.Imports
 
                         if (StudentQuery.Count() == 0)
                         {
-                            var importedStudent = new Student();
+                            var importedStudent = new Constituent();
                             var similarStudentQuery =
                                 StudentList.Where(m => m.StudentNumber == convertedStudent.StudentNumber);
                             if (similarStudentQuery.Count() > 0)
@@ -678,12 +678,12 @@ namespace CollegeConnected.Imports
             {
                 var message = GetFormattedValidationErrorMessages(dbException);
                 AddImportError(message);
-                return new List<Student>();
+                return new List<Constituent>();
             }
             catch (Exception ex)
             {
                 AddProgressItem(ImportProgressTypeEnum.ImportError, ex);
-                return new List<Student>();
+                return new List<Constituent>();
             }
             finally
             {

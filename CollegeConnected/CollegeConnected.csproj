@@ -231,7 +231,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
-    <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SharedControllerOperations.cs" />
+    <Compile Include="Controllers\ConstituentsController.cs" />
+    <Compile Include="DataLayer\GenericRepository.cs" />
+    <Compile Include="DataLayer\UnitOfWork.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -240,20 +244,20 @@
     <Compile Include="Imports\StudentImport.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CollegeConnectedDbContext.cs" />
-    <Compile Include="Models\ConstituentType.cs" />
     <Compile Include="Models\CustomHtmlHelper.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventAttendance.cs" />
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\CompleteEventViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
-    <Compile Include="Models\HtmlLists.cs" />
     <Compile Include="Models\ImportModels.cs" />
     <Compile Include="Models\ImportResult.cs" />
     <Compile Include="Models\ReportInfo.cs" />
-    <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Constituent.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ReportViewerWebForm.aspx.cs">
       <DependentUpon>ReportViewerWebForm.aspx</DependentUpon>
@@ -467,11 +471,11 @@
     <Content Include="Views\Import\StudentColumnOptions.cshtml" />
     <Content Include="Views\Import\UploadError.cshtml" />
     <Content Include="Views\Import\ViewImportFiles.cshtml" />
-    <Content Include="Views\Students\Create.cshtml" />
-    <Content Include="Views\Students\Delete.cshtml" />
-    <Content Include="Views\Students\Details.cshtml" />
-    <Content Include="Views\Students\Edit.cshtml" />
-    <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Constituents\Create.cshtml" />
+    <Content Include="Views\Constituents\Delete.cshtml" />
+    <Content Include="Views\Constituents\Details.cshtml" />
+    <Content Include="Views\Constituents\Edit.cshtml" />
+    <Content Include="Views\Constituents\Index.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
@@ -483,7 +487,6 @@
     <Content Include="Views\Home\Report.cshtml" />
     <Content Include="Views\Shared\Date.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
-    <Content Include="Views\Home\SearchResults.cshtml" />
     <Content Include="Views\Home\Confirm.cshtml" />
     <Content Include="Views\Events\SignIn.cshtml" />
     <Content Include="Views\Events\Confirm.cshtml" />
@@ -493,6 +496,8 @@
     <Content Include="Views\Events\VerifyCompleteEvent.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Events\Register.cshtml" />
+    <Content Include="Views\Shared\ConfirmStudentPartial.cshtml" />
+    <Content Include="Views\Settings\Configuration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

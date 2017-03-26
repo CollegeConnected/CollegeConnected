@@ -2,13 +2,13 @@
 {
     public class EventViewModel
     {
-        public EventViewModel(Student student, Event ccEvent)
+        public EventViewModel(Constituent constituent, Event ccEvent)
         {
-            Student = student;
+            Constituent = constituent;
             Event = ccEvent;
         }
 
-        public Student Student { get; set; }
+        public Constituent Constituent { get; set; }
         public Event Event { get; set; }
     }
 }

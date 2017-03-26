@@ -1,44 +1,48 @@
 ﻿using System;
-using System.Data.Entity;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
+using CollegeConnected.DataLayer;
 using CollegeConnected.Models;
-using System.IO;
+using CollegeConnected.Services;
 
 namespace CollegeConnected.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly CollegeConnectedDbContext db = new CollegeConnectedDbContext();
+        private readonly UnitOfWork db = new UnitOfWork();
+        private readonly SharedControllerOperations sharedOperations = new SharedControllerOperations();
 
         public ActionResult Index()
         {
-            if (isAuthenticated())
-                return View(db.Events.ToList());
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
+                return View(db.EventRepository.Get());
             return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Details(Guid? id)
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                var @event = db.Events.Find(id);
-                if (@event == null)
+                var ccEvent = db.EventRepository.GetById(id);
+                if (ccEvent == null)
                     return HttpNotFound();
-                return View(@event);
+                return View(ccEvent);
             }
             return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Create()
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
                 return View();
             return RedirectToAction("Index", "Home");
         }
@@ -46,32 +50,33 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")] Event e)
+            [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")] Event
+                ccEvent)
         {
             if (ModelState.IsValid)
             {
-                e.EventID = Guid.NewGuid();
-                e.Attendance = 0;
-                e.EventStatus = "In Progress";
-                e.CreatedBy = "Administrator ";
-                db.Events.Add(e);
-                db.SaveChanges();
+                ccEvent.EventID = Guid.NewGuid();
+                ccEvent.Attendance = 0;
+                ccEvent.EventStatus = "In Progress";
+                ccEvent.CreatedBy = "Administrator ";
+                db.EventRepository.Insert(ccEvent);
+                db.Save();
                 return RedirectToAction("Index");
             }
 
-            return View(e);
+            return View(ccEvent);
         }
 
         public ActionResult Edit(Guid? id)
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                var @event = db.Events.Find(id);
-                if (@event == null)
+                var ccEvent = db.EventRepository.GetById(id);
+                if (ccEvent == null)
                     return HttpNotFound();
-                return View(@event);
+                return View(ccEvent);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -79,55 +84,45 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")
-            ] Event @event)
+            [Bind(
+                 Include =
+                     "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime,Attendance"
+             )
+            ] Event ccEvent)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(@event).State = EntityState.Modified;
-                db.SaveChanges();
+                db.Save();
                 return RedirectToAction("Index");
             }
-            return View(@event);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                db.Dispose();
-            base.Dispose(disposing);
+            return View(ccEvent);
         }
 
         public ActionResult CompleteEvent(Guid id)
         {
-            var @event = db.Events.Find(id);
-            @event.EventStatus = "Completed";
-            db.SaveChanges();
+            var ccEvent = db.EventRepository.GetById(id);
+            ccEvent.EventStatus = "Completed";
+            db.Save();
             return RedirectToAction("Index");
         }
 
         public ActionResult ReactivateEvent(Guid id)
         {
-            var @event = db.Events.Find(id);
-            @event.EventStatus = "In Progress";
-            db.SaveChanges();
+            var ccEvent = db.EventRepository.GetById(id);
+            ccEvent.EventStatus = "In Progress";
+            db.Save();
             return RedirectToAction("Index");
         }
 
         public ActionResult SignIn(Guid id, string message)
         {
             ViewBag.Message = message;
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
-                var ccEvent = db.Events.Find(id);
+                var ccEvent = db.EventRepository.GetById(id);
                 var eventTitle = ccEvent.EventName;
                 ViewBag.Title = eventTitle;
-                var searchString = "";
-                var studentList = (from student in db.Students
-                    where student.StudentNumber == searchString
-                    select student
-                ).ToList();
-                return View(studentList);
+                return View(db.StudentRepository.Get(student => student.StudentNumber == "").ToList());
             }
             return RedirectToAction("Index", "Home");
         }
@@ -135,62 +130,46 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         public ActionResult SignIn(string studentNumber, string studentLastName, Guid id)
         {
-            var ccEvent = db.Events.Find(id);
+            var ccEvent = db.EventRepository.GetById(id);
             var eventTitle = ccEvent.EventName;
             ViewBag.Title = eventTitle;
             if (string.IsNullOrEmpty(studentLastName))
             {
-                var studentList = (from student in db.Students
-                    where student.StudentNumber == studentNumber
-                    select student
-                ).ToList();
-                if (studentList.Count() == 0)
-                {
-                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
-                }
+                var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
+                if (!studentList.Any())
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
             if (string.IsNullOrEmpty(studentNumber))
             {
-                var studentList = (from student in db.Students
-                    where student.LastName == studentLastName
-                    select student
-                ).ToList();
-                if (studentList.Count() == 0)
-                {
-                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
-                }
+                var studentList = db.StudentRepository.Get(student => student.LastName == studentLastName).ToList();
+                if (!studentList.Any())
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
             else
             {
-                var studentList = (from student in db.Students
-                    where student.StudentNumber == studentNumber
-                    select student
-                ).ToList();
+                var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
+                if (!studentList.Any())
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
         }
 
         public ActionResult Confirm(Guid? id, Guid? eventId)
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-   new SelectListItem()
-   {
-       Text = x.ToString(),
-       Value = x.ToString()
-   }), "Value", "Text");
-            if (isAuthenticated())
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
-                var student = db.Students.Single(x => x.StudentId == id);
-                var ccEvent = db.Events.Single(x => x.EventID == eventId);
+                ViewBag.EventID = eventId;
+                var student = db.StudentRepository.dbSet.Single(s => s.StudentId == id);
+                var ccEvent = db.EventRepository.dbSet.Single(e => e.EventID == eventId);
                 var eventViewModel = new EventViewModel(student, ccEvent);
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                if (eventViewModel == null)
-                    return HttpNotFound();
-                
                 return View(eventViewModel);
             }
             return RedirectToAction("Index", "Home");
@@ -201,38 +180,30 @@ namespace CollegeConnected.Controllers
         public ActionResult Confirm(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Student student,
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                     "AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Constituent constituent,
             Guid id)
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-   new SelectListItem()
-   {
-       Text = x.ToString(),
-       Value = x.ToString()
-   }), "Value", "Text");
-            string thankYou = "Thank you for signing in.";
-
-            var ccEvent = db.Events.Find(id);
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
+            var ccEvent = db.EventRepository.GetById(id);
             if (ModelState.IsValid)
             {
-                var a = AttendEvent(student.StudentId, id);
+                var a = AttendEvent(constituent.StudentId, id);
                 if (a == -1)
                 {
                     ModelState.AddModelError("Error", "You have already signed into this event.");
-                    // ViewBag.Error = "You have already signed into this event";
                 }
                 else
                 {
-                    if (!student.HasAttendedEvent)
-                        student.HasAttendedEvent = true;
-                    student.EventsAttended++;
+                    if (!constituent.HasAttendedEvent)
+                        constituent.HasAttendedEvent = true;
+                    constituent.EventsAttended++;
                     ccEvent.Attendance++;
-                    student.UpdateTimeStamp = DateTime.Now;
-                    db.Entry(student).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("SignIn", new {id = id, message = thankYou});
+                    constituent.UpdateTimeStamp = DateTime.Now;
+                    db.Save();
+                    return RedirectToAction("SignIn", new {id, message = "Thank you for signing in."});
                 }
             }
             return View();
@@ -240,47 +211,42 @@ namespace CollegeConnected.Controllers
 
         public int AttendEvent(Guid studentId, Guid eventId)
         {
-            var rowExists = db.EventAttendants.Any(ev => ev.StudentId.Equals(studentId) && ev.EventId.Equals(eventId));
-
+            var rowExists =
+                db.EventAttendanceRepository.dbSet.Any(
+                    ev => ev.StudentId.Equals(studentId) && ev.EventId.Equals(eventId));
             if (rowExists)
-            {
                 return -1;
-            }
             var eventAttendant = new EventAttendance(Guid.NewGuid(), studentId, eventId);
-            db.EventAttendants.Add(eventAttendant);
-            db.SaveChanges();
+            db.EventAttendanceRepository.Insert(eventAttendant);
+            db.Save();
             return 0;
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Verify(Guid studentId, Guid eventId, DateTime BirthDate)
+        public ActionResult Verify(Guid studentId, Guid eventId, DateTime birthDate)
         {
-            var student = db.Students.Find(studentId);
+            var student = db.StudentRepository.GetById(studentId);
             var bday = student.BirthDate;
-            var evID = eventId;
             ViewBag.EventID = eventId;
-            if (bday == BirthDate)
+            if (bday == birthDate)
                 return RedirectToAction("Confirm", "Events", new {id = studentId, eventId});
             ModelState.AddModelError("", "Birthday incorrect");
-            var ccStudent = db.Students.Single(x => x.StudentId == studentId);
-            var ccEvent = db.Events.Single(x => x.EventID == eventId);
+            var ccEvent = db.EventRepository.GetById(eventId);
             var eventViewModel = new EventViewModel(student, ccEvent);
             return View(eventViewModel);
         }
 
         public ActionResult Verify(Guid? id, Guid eventId)
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
                 ViewBag.EventID = eventId;
-                var student = db.Students.Single(x => x.StudentId == id);
-                var ccEvent = db.Events.Single(x => x.EventID == eventId);
+                var student = db.StudentRepository.GetById(id);
+                var ccEvent = db.EventRepository.GetById(eventId);
                 var eventViewModel = new EventViewModel(student, ccEvent);
                 if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                if (eventViewModel == null)
-                    return HttpNotFound();
                 return View(eventViewModel);
             }
             return RedirectToAction("Index", "Home");
@@ -289,10 +255,10 @@ namespace CollegeConnected.Controllers
         [AllowAnonymous]
         public ActionResult VerifyCompleteEvent(Guid id)
         {
-            if (isAuthenticated())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
-                var ccEvent = db.Events.Single(x => x.EventID == id);
-                var user = db.Users.Find("admin@unf.edu");
+                var ccEvent = db.EventRepository.GetById(id);
+                var user = db.UserRepository.GetUser();
                 var password = user.Password;
                 var viewModel = new CompleteEventViewModel(ccEvent, password);
                 return View(viewModel);
@@ -305,7 +271,7 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         public ActionResult VerifyCompleteEvent(Guid id, string password)
         {
-            var user = db.Users.Find("admin@unf.edu");
+            var user = db.UserRepository.GetUser();
             var bytes = Encoding.UTF8.GetBytes(password);
 
             var sha = new SHA256Managed();
@@ -321,14 +287,8 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Register(Guid id)
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-   new SelectListItem()
-   {
-       Text = x.ToString(),
-       Value = x.ToString()
-   }), "Value", "Text");
-            if (isAuthenticated())
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
                 return View();
             return RedirectToAction("Index", "Home");
         }
@@ -338,47 +298,29 @@ namespace CollegeConnected.Controllers
         public ActionResult Register(
             [Bind(
                  Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber,Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType,AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Student student,
+                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                     "AllowCommunication,HasAttendedEvent,EventsAttended"
+             )] Constituent constituent,
             Guid id)
         {
-            ViewBag.Years = new SelectList(Enumerable.Range(1940, 100).Select(x =>
-
-   new SelectListItem()
-   {
-       Text = x.ToString(),
-       Value = x.ToString()
-   }), "Value", "Text");
-            string thankYou = "Thank you for registering and signing in!";
-
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
             if (ModelState.IsValid)
             {
-                var ccEvent = db.Events.Find(id);
-                student.StudentId = Guid.NewGuid();
-                student.HasAttendedEvent = true;
-                student.EventsAttended = 1;
-                student.UpdateTimeStamp = DateTime.Now;
-                db.Students.Add(student);
-                AttendEvent(student.StudentId, id);
+                var ccEvent = db.EventRepository.GetById(id);
+                constituent.StudentId = Guid.NewGuid();
+                constituent.HasAttendedEvent = true;
+                constituent.EventsAttended = 1;
+                constituent.UpdateTimeStamp = DateTime.Now;
+                db.StudentRepository.Insert(constituent);
+                AttendEvent(constituent.StudentId, id);
                 ccEvent.Attendance++;
-                db.SaveChanges();
-                return RedirectToAction("SignIn", new { id, message = thankYou });
+                db.Save();
+                return RedirectToAction("SignIn", new {id, message = "Thank you for registering and signing in!"});
             }
             return View();
         }
 
-        private bool isAuthenticated()
-        {
-            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-            if (authCookie != null)
-            {
-                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
-
-                if (ticket != null)
-                    return true;
-            }
-            return false;
-        }
         public void ExportEvent(Guid id)
         {
             var sw = new StringWriter();
@@ -391,23 +333,52 @@ namespace CollegeConnected.Controllers
                 "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
             Response.ContentType = "text/csv";
 
-            var attendees =
-                (from ev in db.EventAttendants
-                 where (ev.EventId == id)
-                 select ev).ToList();
-
-
+            var attendees = db.EventAttendanceRepository.Get(ev => ev.EventId == id).ToList();
             foreach (var attendee in attendees)
             {
-                var student = db.Students.Find(attendee.StudentId);
+                var student = db.StudentRepository.GetById(attendee.StudentId);
                 sw.WriteLine(
-                $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
-                $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
-                $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\"");
-           }
+                    $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
+                    $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
+                    $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\"");
+            }
 
             Response.Write(sw.ToString());
             Response.End();
+        }
+
+        public ActionResult SendEmail(Guid id)
+        {
+            var attendees = db.EventAttendanceRepository.Get(ev => ev.EventId == id).ToList();
+            var messageBody = string.Empty;
+            string subject = $"Thank you for attending {db.EventRepository.GetById(id).EventName}";
+            var recipients = new Dictionary<string, string>();
+            foreach (var attendee in attendees)
+            {
+                var student = db.StudentRepository.GetById(attendee.StudentId);
+                if (student.AllowCommunication)
+                {
+                    recipients.Add(student.Email, student.FirstName);
+                }
+                try
+                {
+                    var emailService = new EmailService();
+                    foreach (var recipient in recipients)
+                    {
+                        messageBody =
+                            $"Hello {recipient.Value},<br/><br/>{db.SettingsRepository.GetUser().EventEmailMessageBody}<br/><br/>Sincerely,<br/>The UNF Alumni Association";
+                        //Task.Run(async () => { await emailService.SendEmailAsync(recipient, messageBody, subject); }).Wait();
+                        emailService.SendEmailAsync(recipient.Key, messageBody, subject);
+                    }
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("Error",
+                        "An error occurred emailing the event attendees. If the problem persits, contact your system administrator." +
+                        $"Exception: {e}");
+                }
+            }
+            return RedirectToAction("Index", "Events");
         }
     }
 }
