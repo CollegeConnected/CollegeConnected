@@ -599,7 +599,7 @@ namespace CollegeConnected.Imports
 
             try
             {
-                var StudentList = db.Students.ToList();
+                var StudentList = db.Constituents.ToList();
                 foreach (var convertedStudent in convertedStudents)
                     try
                     {
@@ -671,7 +671,7 @@ namespace CollegeConnected.Imports
                     }
 
                 addCount += db.SaveChanges();
-                db.Students.AddRange(newStudents);
+                db.Constituents.AddRange(newStudents);
                 addCount += db.SaveChanges();
             }
             catch (DbEntityValidationException dbException)

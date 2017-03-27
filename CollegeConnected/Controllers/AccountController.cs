@@ -25,7 +25,7 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(User model, string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             if (!ModelState.IsValid)

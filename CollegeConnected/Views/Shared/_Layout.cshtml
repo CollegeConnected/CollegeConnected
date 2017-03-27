@@ -23,6 +23,11 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ui.ufd.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jQueryPlugins.js")"></script>
+    <script type="text/javascript" src="/scripts/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="/scripts/moment.js"></script>
+    <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/scripts/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />
 
     <script type="text/javascript">
         var appInsights = window.appInsights ||
@@ -52,6 +57,15 @@
 
         window.appInsights = appInsights;
         appInsights.trackPageView();
+    </script>
+    
+    <script>
+jQuery(document).ready(function () {
+
+    jQuery('.datepicker').datetimepicker({ format: 'DD/MM/YYYY' });
+    jQuery('.datetimepicker').datetimepicker();
+
+});
     </script>
 </head>
 <body>

@@ -11,7 +11,7 @@
 
 <h3>Verify your information to sign in</h3>
 
-    @using (Html.BeginForm("Confirm", "Events", new { id = Model.Event.EventID }, FormMethod.Post, new { @class = "form-horizontal", role = "form"}))
+    @using (Html.BeginForm("Confirm", "Events", new { id = Model.Event.EventID }))
     {
     @Html.AntiForgeryToken()
 

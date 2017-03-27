@@ -206,7 +206,7 @@ namespace CollegeConnected.Controllers
                     return RedirectToAction("SignIn", new {id, message = "Thank you for signing in."});
                 }
             }
-            return View();
+            return View(new EventViewModel(constituent, ccEvent));
         }
 
         public int AttendEvent(Guid studentId, Guid eventId)
