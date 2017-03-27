@@ -94,7 +94,7 @@ WV,
  WY
     }
 
-    public enum ConstuentType
+    public enum ConstituentType
     {
         Alumni,
         FalcultyStaff,

@@ -73,7 +73,8 @@ namespace CollegeConnected.Controllers
         
         public ActionResult Confirm(Guid? id)
         {
-                if (id == null)
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
+            if (id == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var student = db.StudentRepository.GetById(id);
             if (student == null)
@@ -91,6 +92,7 @@ namespace CollegeConnected.Controllers
                      "AllowCommunication,HasAttendedEvent,EventsAttended"
              )] Constituent student)
         {
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
             if (ModelState.IsValid)
             {
                 student.UpdateTimeStamp = DateTime.Now;

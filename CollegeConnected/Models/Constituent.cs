@@ -44,7 +44,8 @@ namespace CollegeConnected.Models
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public DateTime UpdateTimeStamp { get; set; }
-        public ConstuentType ConstituentType { get; set; }
+        [Required]
+        public ConstituentType ConstituentType { get; set; }
         [Required]
         public bool AllowCommunication { get; set; }
         public bool HasAttendedEvent { get; set; }

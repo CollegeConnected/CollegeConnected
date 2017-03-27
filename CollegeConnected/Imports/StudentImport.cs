@@ -206,7 +206,7 @@ namespace CollegeConnected.Imports
             return zipCode;
         }
 
-        private string GetState(ExcelWorksheet worksheet, int rowIndex)
+        private State GetState(ExcelWorksheet worksheet, int rowIndex)
         {
             var state = string.Empty;
             var columnCount = ColumnConfiguration.Configuration.Count();
@@ -217,12 +217,12 @@ namespace CollegeConnected.Imports
                 if ((ColumnConfiguration.Configuration[ii].Type == "State")
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
-                    state = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    state = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;                
                     break;
                 }
             }
-
-            return state;
+            State stateValue = (State)Enum.Parse(typeof(State), state);
+            return stateValue;
         }
 
         private string GetCity(ExcelWorksheet worksheet, int rowIndex)
@@ -246,7 +246,7 @@ namespace CollegeConnected.Imports
 
         private string GetPhoneNumber(ExcelWorksheet worksheet, int rowIndex)
         {
-            var phoneNumber = string.Empty;
+            string phoneNumber = null;
             var columnCount = ColumnConfiguration.Configuration.Count();
             var excelColumnIndex = 0;
             for (var ii = 0; ii < columnCount; ii++)
@@ -361,7 +361,7 @@ namespace CollegeConnected.Imports
             return birthday;
         }
 
-        private string GetConstituentType(ExcelWorksheet worksheet, int rowIndex)
+        private ConstituentType GetConstituentType(ExcelWorksheet worksheet, int rowIndex)
         {
             var type = string.Empty;
             var columnCount = ColumnConfiguration.Configuration.Count();
@@ -376,8 +376,10 @@ namespace CollegeConnected.Imports
                     break;
                 }
             }
-
-            return type;
+            if (String.IsNullOrEmpty(type))
+                type = "Alumni";
+            ConstituentType typeValue = (ConstituentType)Enum.Parse(typeof(ConstituentType), type);
+            return typeValue;
         }
 
 
@@ -436,8 +438,6 @@ namespace CollegeConnected.Imports
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var constituentType = GetConstituentType(package.Workbook.Worksheets[1], rowIndex);
-                            State stateValue = (State)Enum.Parse(typeof(State), state);
-                            ConstuentType typeValue = (ConstuentType)Enum.Parse(typeof(ConstuentType), constituentType);
 
                             var convertedStudent = new Constituent
                             {
@@ -449,14 +449,14 @@ namespace CollegeConnected.Imports
                                 Address2 = address2,
                                 ZipCode = zipCode,
                                 City = city,
-                                State = stateValue,
+                                State = state,
                                 PhoneNumber = phoneNunber,
                                 Email = email,
                                 FirstGraduationYear = firstGradYear,
                                 SecondGraduationYear = secondGradYear,
                                 ThirdGraduationYear = thirdGradYear,
                                 BirthDate = birthday,
-                                ConstituentType = typeValue,
+                                ConstituentType = constituentType,
                                 AllowCommunication = false
                             };
 
