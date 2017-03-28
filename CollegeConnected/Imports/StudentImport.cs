@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CollegeConnected.Models;
 using OfficeOpenXml;
+using System.Text.RegularExpressions;
 
 namespace CollegeConnected.Imports
 {
@@ -259,8 +260,8 @@ namespace CollegeConnected.Imports
                     break;
                 }
             }
-
-            return phoneNumber;
+            string resultString = string.Join(string.Empty, Regex.Matches(phoneNumber, @"\d+").OfType<Match>().Select(m => m.Value));
+            return resultString;
         }
 
         private string GetEmail(ExcelWorksheet worksheet, int rowIndex)
@@ -296,10 +297,6 @@ namespace CollegeConnected.Imports
                     gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
-            }
-            if(gradYear == null)
-            {
-                gradYear = "9999";
             }
             return gradYear;
         }
