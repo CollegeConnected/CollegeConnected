@@ -378,6 +378,8 @@ namespace CollegeConnected.Imports
             }
             if (String.IsNullOrEmpty(type))
                 type = "Alumni";
+            else if (type == "Faculty/Staff")
+                type = "FacultyStaff";
             ConstituentType typeValue = (ConstituentType)Enum.Parse(typeof(ConstituentType), type);
             return typeValue;
         }
