@@ -97,7 +97,7 @@ WV,
     public enum ConstituentType
     {
         Alumni,
-        FalcultyStaff,
+        FacultyStaff,
         Spouse,
         Other
     }
