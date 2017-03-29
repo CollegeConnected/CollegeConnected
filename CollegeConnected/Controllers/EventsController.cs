@@ -92,6 +92,7 @@ namespace CollegeConnected.Controllers
         {
             if (ModelState.IsValid)
             {
+                db.EventRepository.Update(ccEvent);
                 db.Save();
                 return RedirectToAction("Index");
             }
