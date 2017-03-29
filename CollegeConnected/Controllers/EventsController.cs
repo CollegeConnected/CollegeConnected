@@ -187,13 +187,15 @@ namespace CollegeConnected.Controllers
             Guid id)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
+            ViewBag.EventID = id;
             var ccEvent = db.EventRepository.GetById(id);
             if (ModelState.IsValid)
             {
                 var a = AttendEvent(constituent.StudentId, id);
                 if (a == -1)
                 {
-                    ModelState.AddModelError("Error", "You have already signed into this event.");
+                    ModelState.AddModelError("Error", "You have already signed into this event. Click the Back to Sign In link.");
+                    return View(new EventViewModel(constituent, ccEvent));
                 }
                 else
                 {
