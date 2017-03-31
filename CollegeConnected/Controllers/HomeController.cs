@@ -10,8 +10,8 @@ namespace CollegeConnected.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SharedControllerOperations sharedOperations = new SharedControllerOperations();
         private readonly UnitOfWork db = new UnitOfWork();
+        private readonly BaseController sharedOperations = new BaseController();
 
         public ActionResult Admin()
         {
@@ -46,51 +46,48 @@ namespace CollegeConnected.Controllers
             {
                 var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
                 if (!studentList.Any())
-                {
-                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
-                }
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
             if (string.IsNullOrEmpty(studentNumber))
             {
                 var studentList = db.StudentRepository.Get(student => student.LastName == studentLastName).ToList();
                 if (!studentList.Any())
-                {
-                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
-                }
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
             else
             {
                 var studentList = db.StudentRepository.Get(student => student.StudentNumber == studentNumber).ToList();
                 if (!studentList.Any())
-                {
-                    ModelState.AddModelError("Error", "No results found. Click the Register button to sign up for collegeConnected.");
-                }
+                    ModelState.AddModelError("Error",
+                        "No results found. Click the Register button to sign up for collegeConnected.");
                 return View(studentList);
             }
         }
-        
+
         public ActionResult Confirm(Guid? id)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
             if (id == null)
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var student = db.StudentRepository.GetById(id);
             if (student == null)
-                    return HttpNotFound();
+                return HttpNotFound();
             return View(student);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(
-            [Bind(
-                 Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
-                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
-                     "AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Constituent student)
+        [Bind(
+            Include =
+                "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                "AllowCommunication,HasAttendedEvent,EventsAttended"
+        )] Constituent student)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
             if (ModelState.IsValid)
@@ -105,8 +102,8 @@ namespace CollegeConnected.Controllers
 
         public ActionResult Verify(Guid? id)
         {
-                if (id == null)
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var student = db.StudentRepository.GetById(id);
             return View(student);
         }
@@ -119,7 +116,7 @@ namespace CollegeConnected.Controllers
             var bday = student.BirthDate;
 
             if (bday == birthDate)
-                return RedirectToAction("Confirm", new { id });
+                return RedirectToAction("Confirm", new {id});
             ModelState.AddModelError("", "Birthday incorrect");
             return View();
         }
@@ -129,18 +126,18 @@ namespace CollegeConnected.Controllers
             ViewBag.Years = sharedOperations.GenerateGradYearList();
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Register(
         [Bind(
-                 Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
-                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
-                     "AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Constituent student)
+            Include =
+                "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                "AllowCommunication,HasAttendedEvent,EventsAttended"
+        )] Constituent student)
         {
-             ViewBag.Years = sharedOperations.GenerateGradYearList();
+            ViewBag.Years = sharedOperations.GenerateGradYearList();
             var rowExists = db.StudentRepository.dbSet.Any(s => s.StudentNumber.Equals(student.StudentNumber));
             try
             {

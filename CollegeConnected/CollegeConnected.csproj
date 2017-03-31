@@ -233,7 +233,7 @@
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\SharedControllerOperations.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ConstituentsController.cs" />
     <Compile Include="DataLayer\GenericRepository.cs" />
     <Compile Include="DataLayer\UnitOfWork.cs" />

@@ -4,11 +4,11 @@ using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using CollegeConnected.Models;
 using OfficeOpenXml;
-using System.Text.RegularExpressions;
 
 namespace CollegeConnected.Imports
 {
@@ -80,7 +80,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Student Number")
+                if (ColumnConfiguration.Configuration[ii].Type == "Student Number"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     studentNumber = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -99,7 +99,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "First Name")
+                if (ColumnConfiguration.Configuration[ii].Type == "First Name"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     firstName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -118,7 +118,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Middle Name")
+                if (ColumnConfiguration.Configuration[ii].Type == "Middle Name"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     middleName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -137,7 +137,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Last Name")
+                if (ColumnConfiguration.Configuration[ii].Type == "Last Name"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     lastName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -156,7 +156,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Address1")
+                if (ColumnConfiguration.Configuration[ii].Type == "Address1"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     address1 = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -175,7 +175,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Address2")
+                if (ColumnConfiguration.Configuration[ii].Type == "Address2"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     address2 = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -194,15 +194,15 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Zip Code")
+                if (ColumnConfiguration.Configuration[ii].Type == "Zip Code"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     zipCode = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
-            if(zipCode.Contains("-"))
-            { zipCode = zipCode.Substring(0, 4); }
+            if (zipCode.Contains("-"))
+                zipCode = zipCode.Substring(0, 4);
 
             return zipCode;
         }
@@ -215,14 +215,14 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "State")
+                if (ColumnConfiguration.Configuration[ii].Type == "State"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
-                    state = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;                
+                    state = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
-            State stateValue = (State)Enum.Parse(typeof(State), state);
+            var stateValue = (State) Enum.Parse(typeof(State), state);
             return stateValue;
         }
 
@@ -234,7 +234,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "City")
+                if (ColumnConfiguration.Configuration[ii].Type == "City"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     city = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -253,14 +253,15 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Phone Number")
+                if (ColumnConfiguration.Configuration[ii].Type == "Phone Number"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     phoneNumber = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
-            string resultString = string.Join(string.Empty, Regex.Matches(phoneNumber, @"\d+").OfType<Match>().Select(m => m.Value));
+            var resultString = string.Join(string.Empty,
+                Regex.Matches(phoneNumber, @"\d+").OfType<Match>().Select(m => m.Value));
             return resultString;
         }
 
@@ -272,7 +273,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Email")
+                if (ColumnConfiguration.Configuration[ii].Type == "Email"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     email = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -291,7 +292,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "First Graduation Year")
+                if (ColumnConfiguration.Configuration[ii].Type == "First Graduation Year"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -309,7 +310,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Second Graduation Year")
+                if (ColumnConfiguration.Configuration[ii].Type == "Second Graduation Year"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -328,7 +329,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Third Graduation Year")
+                if (ColumnConfiguration.Configuration[ii].Type == "Third Graduation Year"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
@@ -347,7 +348,7 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Birthday")
+                if (ColumnConfiguration.Configuration[ii].Type == "Birthday"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     birthday = Convert.ToDateTime(worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text);
@@ -366,18 +367,18 @@ namespace CollegeConnected.Imports
             for (var ii = 0; ii < columnCount; ii++)
             {
                 excelColumnIndex = ii + 1;
-                if ((ColumnConfiguration.Configuration[ii].Type == "Constituent Type")
+                if (ColumnConfiguration.Configuration[ii].Type == "Constituent Type"
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
                     type = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
-            if (String.IsNullOrEmpty(type))
+            if (string.IsNullOrEmpty(type))
                 type = "Alumni";
             else if (type == "Faculty/Staff")
                 type = "FacultyStaff";
-            ConstituentType typeValue = (ConstituentType)Enum.Parse(typeof(ConstituentType), type);
+            var typeValue = (ConstituentType) Enum.Parse(typeof(ConstituentType), type);
             return typeValue;
         }
 
@@ -386,7 +387,7 @@ namespace CollegeConnected.Imports
         {
             var convertedStudents = new List<Constituent>();
             var extension = Path.GetExtension(Options.File.FileName);
-            if ((extension == ".xls") || (extension == ".xlsx"))
+            if (extension == ".xls" || extension == ".xlsx")
             {
                 var importFileInfo = new FileInfo(UploadPath);
                 using (var package = new ExcelPackage(importFileInfo))
@@ -494,7 +495,7 @@ namespace CollegeConnected.Imports
 
             var extension = Path.GetExtension(Options.File.FileName).ToLower();
 
-            if ((extension != ".csv") && (extension != ".xml") && (extension != ".xls") && (extension != ".xlsx"))
+            if (extension != ".csv" && extension != ".xml" && extension != ".xls" && extension != ".xlsx")
             {
                 ErrorMessage = "Invalid file type";
                 return false;
@@ -535,7 +536,7 @@ namespace CollegeConnected.Imports
         public override void PrepareHeaders()
         {
             var extension = Path.GetExtension(Options.File.FileName);
-            if ((extension == ".xlsx") || (extension == ".xls"))
+            if (extension == ".xlsx" || extension == ".xls")
             {
                 var importFileInfo = new FileInfo(UploadPath);
                 using (var package = new ExcelPackage(importFileInfo))

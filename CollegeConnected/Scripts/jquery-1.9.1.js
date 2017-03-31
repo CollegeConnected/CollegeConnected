@@ -1362,7 +1362,7 @@
         opt = select.appendChild(document.createElement("option"));
         input = div.getElementsByTagName("input")[0];
 
-        a.style.cssText = "top:1px;float:left;opacity:.5";
+        a.style.cssText = "float:left;opacity:.5;top:1px;";
         support = {
             // Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
             getSetAttribute: div.className !== "t",
@@ -1501,7 +1501,7 @@
             }
 
             container = document.createElement("div");
-            container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;margin-top:1px";
+            container.style.cssText = "border:0;height:0;left:-9999px;margin-top:1px;position:absolute;top:0;width:0;";
 
             body.appendChild(container).appendChild(div);
 
@@ -1514,7 +1514,7 @@
             // hidden; don safety goggles and see bug #4512 for more information).
             div.innerHTML = "<table><tr><td></td><td>t</td></tr></table>";
             tds = div.getElementsByTagName("td");
-            tds[0].style.cssText = "padding:0;margin:0;border:0;display:none";
+            tds[0].style.cssText = "border:0;display:none;margin:0;padding:0;";
             isSupported = (tds[0].offsetHeight === 0);
 
             tds[0].style.display = "";
@@ -1528,7 +1528,7 @@
             div.innerHTML = "";
             div.style
                 .cssText =
-                "box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%;";
+                "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;border:1px;box-sizing:border-box;display:block;margin-top:1%;padding:1px;position:absolute;top:1%;width:4px;";
             support.boxSizing = (div.offsetWidth === 4);
             support.doesNotIncludeMarginInBodyOffset = (body.offsetTop !== 1);
 
@@ -7422,13 +7422,13 @@
 
         // use the active box-sizing model to add/subtract irrelevant styles
         return (val +
-                    augmentWidthOrHeight(
-                        elem,
-                        name,
-                        extra || (isBorderBox ? "border" : "content"),
-                        valueIsBorderBox,
-                        styles
-                    )
+                augmentWidthOrHeight(
+                    elem,
+                    name,
+                    extra || (isBorderBox ? "border" : "content"),
+                    valueIsBorderBox,
+                    styles
+                )
             ) +
             "px";
     }
@@ -7445,8 +7445,8 @@
             if (display === "none" || !display) {
                 // Use the already-created iframe if possible
                 iframe = (iframe ||
-                        jQuery("<iframe frameborder='0' width='0' height='0'/>")
-                        .css("cssText", "display:block !important")
+                    jQuery("<iframe frameborder='0' width='0' height='0'/>")
+                    .css("cssText", "display:block !important")
                 ).appendTo(doc.documentElement);
 
                 // Always write a new HTML skeleton so Webkit and Firefox don't choke on reuse
@@ -8743,11 +8743,11 @@
                 responseContainer,
                 jsonProp = s.jsonp !== false &&
                 (rjsonp.test(s.url)
-                        ? "url"
-                        : typeof s.data === "string" &&
-                        !(s.contentType || "").indexOf("application/x-www-form-urlencoded") &&
-                        rjsonp.test(s.data) &&
-                        "data"
+                    ? "url"
+                    : typeof s.data === "string" &&
+                    !(s.contentType || "").indexOf("application/x-www-form-urlencoded") &&
+                    rjsonp.test(s.data) &&
+                    "data"
                 );
 
             // Handle iff the expected data type is "jsonp" or we have a parameter to set

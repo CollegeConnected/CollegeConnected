@@ -69,7 +69,7 @@ namespace CollegeConnected.Imports
             else if (progress == ImportProgressTypeEnum.ConvertError)
             {
                 ProgressStatus.ConvertErrors++;
-                if ((errorParams != null) && (errorParams.Length == 3))
+                if (errorParams != null && errorParams.Length == 3)
                 {
                     var rejectionException = (Exception) errorParams[0];
                     var worksheet = errorParams[1] as ExcelWorksheet;
@@ -84,7 +84,7 @@ namespace CollegeConnected.Imports
             else if (progress == ImportProgressTypeEnum.ImportError)
             {
                 ProgressStatus.ImportErrors++;
-                if ((errorParams != null) && (errorParams.Length == 1))
+                if (errorParams != null && errorParams.Length == 1)
                 {
                     var rejectionException = (Exception) errorParams[0];
                     MvcApplication.CurrentImport.AddRejectEntry(rejectionException);

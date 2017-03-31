@@ -7,7 +7,7 @@
 }
 
 <h2>Constituents</h2>
-<p> @Html.ActionLink("Export Constituent Data", "ExportToCsv", "Students", new {@class = "btn btn-primary btn-sm"})</p>
+<p> @Html.ActionLink("Export Constituent Data", "ExportToCsv", "Base", new {exportType = "student"}, new {@class = "btn btn-primary btn-sm"})</p>
 
 @Html.Grid(Model).Columns(columns =>
 {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
@@ -17,7 +15,7 @@ namespace CollegeConnected.Controllers
     public class EventsController : Controller
     {
         private readonly UnitOfWork db = new UnitOfWork();
-        private readonly SharedControllerOperations sharedOperations = new SharedControllerOperations();
+        private readonly BaseController sharedOperations = new BaseController();
 
         public ActionResult Index()
         {
@@ -84,11 +82,11 @@ namespace CollegeConnected.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(
-                 Include =
-                     "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime,Attendance"
-             )
-            ] Event ccEvent)
+        [Bind(
+                Include =
+                    "EventID,EventName,EventStatus,CreatedBy,EventLocation,EventStartDateTime,EventEndDateTime,Attendance"
+            )
+        ] Event ccEvent)
         {
             if (ModelState.IsValid)
             {
@@ -180,11 +178,11 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(
             [Bind(
-                 Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
-                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
-                     "AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Constituent constituent,
+                Include =
+                    "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                    "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                    "AllowCommunication,HasAttendedEvent,EventsAttended"
+            )] Constituent constituent,
             Guid id)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
@@ -195,19 +193,17 @@ namespace CollegeConnected.Controllers
                 var a = AttendEvent(constituent.StudentId, id);
                 if (a == -1)
                 {
-                    ModelState.AddModelError("Error", "You have already signed into this event. Click the Back to Sign In link.");
+                    ModelState.AddModelError("Error",
+                        "You have already signed into this event. Click the Back to Sign In link.");
                     return View(new EventViewModel(constituent, ccEvent));
                 }
-                else
-                {
-                    if (!constituent.HasAttendedEvent)
-                        constituent.HasAttendedEvent = true;
-                    constituent.EventsAttended++;
-                    ccEvent.Attendance++;
-                    constituent.UpdateTimeStamp = DateTime.Now;
-                    db.Save();
-                    return RedirectToAction("SignIn", new {id, message = "Thank you for signing in."});
-                }
+                if (!constituent.HasAttendedEvent)
+                    constituent.HasAttendedEvent = true;
+                constituent.EventsAttended++;
+                ccEvent.Attendance++;
+                constituent.UpdateTimeStamp = DateTime.Now;
+                db.Save();
+                return RedirectToAction("SignIn", new {id, message = "Thank you for signing in."});
             }
             return View(new EventViewModel(constituent, ccEvent));
         }
@@ -300,11 +296,11 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(
             [Bind(
-                 Include =
-                     "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
-                     "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
-                     "AllowCommunication,HasAttendedEvent,EventsAttended"
-             )] Constituent constituent,
+                Include =
+                    "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
+                    "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
+                    "AllowCommunication,HasAttendedEvent,EventsAttended"
+            )] Constituent constituent,
             Guid id)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
@@ -324,32 +320,6 @@ namespace CollegeConnected.Controllers
             return View();
         }
 
-        public void ExportEvent(Guid id)
-        {
-            var sw = new StringWriter();
-
-            sw.WriteLine("\"Student Number\",\"First Name\",\"Middle Name\",\"Last Name\",\"Address1\"," +
-                         "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
-                         "\"Birthday\"");
-            Response.ClearContent();
-            Response.AddHeader("content-disposition",
-                "attachment;filename=ExportedConstituents_" + DateTime.Now + ".csv");
-            Response.ContentType = "text/csv";
-
-            var attendees = db.EventAttendanceRepository.Get(ev => ev.EventId == id).ToList();
-            foreach (var attendee in attendees)
-            {
-                var student = db.StudentRepository.GetById(attendee.StudentId);
-                sw.WriteLine(
-                    $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
-                    $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
-                    $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\"");
-            }
-
-            Response.Write(sw.ToString());
-            Response.End();
-        }
-
         public ActionResult SendEmail(Guid id)
         {
             var attendees = db.EventAttendanceRepository.Get(ev => ev.EventId == id).ToList();
@@ -360,9 +330,7 @@ namespace CollegeConnected.Controllers
             {
                 var student = db.StudentRepository.GetById(attendee.StudentId);
                 if (student.AllowCommunication)
-                {
                     recipients.Add(student.Email, student.FirstName);
-                }
                 try
                 {
                     var emailService = new EmailService();

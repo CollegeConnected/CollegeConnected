@@ -47,7 +47,7 @@ namespace CollegeConnected.Controllers
 
                     id.SelectionCollection =
                         ((StudentImportColumnConfigurationModel) MvcApplication.CurrentImport.columnConfiguration)
-                            .SelectionCollection;
+                        .SelectionCollection;
 
                     return View(id);
                 }

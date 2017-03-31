@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
 using CollegeConnected.Models;
-using Microsoft.Owin.Security;
 
 namespace CollegeConnected.Controllers
 {
     [Authorize]
     public class AccountController : Controller
-    { 
+    {
         private readonly UnitOfWork unit = new UnitOfWork();
 
         [AllowAnonymous]

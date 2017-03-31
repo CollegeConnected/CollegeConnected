@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using CollegeConnected.Models;
-using Microsoft.Ajax.Utilities;
 
 namespace CollegeConnected.DataLayer
 {
-    public class GenericRepository<TEntity> where TEntity : class 
+    public class GenericRepository<TEntity> where TEntity : class
     {
         internal CollegeConnectedDbContext db;
         internal DbSet<TEntity> dbSet;
@@ -17,7 +15,7 @@ namespace CollegeConnected.DataLayer
         public GenericRepository(CollegeConnectedDbContext db)
         {
             this.db = db;
-            this.dbSet = db.Set<TEntity>();
+            dbSet = db.Set<TEntity>();
         }
 
         public virtual IEnumerable<TEntity> Get(
@@ -27,28 +25,19 @@ namespace CollegeConnected.DataLayer
         {
             IQueryable<TEntity> query = dbSet;
 
-            if(filter != null)
-            {
+            if (filter != null)
                 query = query.Where(filter);
-            }
 
             foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
+                (new[] {','}, StringSplitOptions.RemoveEmptyEntries))
                 query = query.Include(includeProperty);
-            }
 
             if (orderBy != null)
-            {
                 return orderBy(query).ToList();
-            }
-            else
-            {
-                return query.ToList();
-            }
+            return query.ToList();
         }
 
-        public virtual TEntity GetById (Guid? id)
+        public virtual TEntity GetById(Guid? id)
         {
             return dbSet.Find(id);
         }
@@ -65,16 +54,14 @@ namespace CollegeConnected.DataLayer
 
         public virtual void Delete(object id)
         {
-            TEntity entityToDelete = dbSet.Find(id);
+            var entityToDelete = dbSet.Find(id);
             Delete(entityToDelete);
         }
 
         public virtual void Delete(TEntity entityToDelete)
         {
             if (db.Entry(entityToDelete).State == EntityState.Detached)
-            {
                 dbSet.Attach(entityToDelete);
-            }
             dbSet.Remove(entityToDelete);
         }
 
@@ -83,6 +70,5 @@ namespace CollegeConnected.DataLayer
             dbSet.Attach(entityToUpdate);
             db.Entry(entityToUpdate).State = EntityState.Modified;
         }
-
     }
 }

@@ -23,7 +23,7 @@
     <script type="text/javascript" src="/scripts/moment.js"></script>
     <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css"/>
 
     <script type="text/javascript">
         var appInsights = window.appInsights ||
@@ -54,15 +54,7 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-    
-    <script>
-jQuery(document).ready(function () {
 
-    jQuery('.datepicker').datetimepicker({ format: 'DD/MM/YYYY' });
-    jQuery('.datetimepicker').datetimepicker();
-
-});
-    </script>
 </head>
 <body>
 
@@ -97,7 +89,9 @@ jQuery(document).ready(function () {
         {
             <p>@Html.ActionLink("Administrator Login", "Login", "Account")</p>
         }
-        <p><img src="@Url.Content("~/Content/themes/base/images/IMG_2450.JPG")" style="overflow: hidden; position: relative; width:300px; height:150px;" alt="Image" /></p>
+        <p>
+            <img src="@Url.Content("~/Content/themes/base/images/IMG_2450.JPG")" style="height: 150px; overflow: hidden; position: relative; width: 300px;" alt="Image"/>
+        </p>
 
     </footer>
 </div>

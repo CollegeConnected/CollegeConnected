@@ -9,9 +9,9 @@
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf('safari') != -1) {
         if (ua.indexOf('chrome') > -1) {
-           // alert("1") // Chrome
+            // alert("1") // Chrome
         } else {
-            alert("This is an unsupported browser. Please use Chrome, Firefox, or Edge.") // Safari
+            alert("This is an unsupported browser. Please use Chrome, Firefox, or Edge."); // Safari
         }
     }
 </script>
@@ -47,15 +47,14 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    @Html.SubmitButton("Search", new { @class = "btn btn-primary btn-sm" })
-                    @Html.ActionLink("Register", "Register", "Home", new { @class = "btn btn-primary btn-sm" })
+                    @Html.SubmitButton("Search", new {@class = "btn btn-primary btn-sm"})
+                    @Html.ActionLink("Register", "Register", "Home", new {@class = "btn btn-primary btn-sm"})
                 </td>
             </tr>
-
         }
     </table>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.ValidationMessage("Error")
+    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+    @Html.ValidationMessage("Error")
 </div>
 
 <h2>Results</h2>
@@ -65,5 +64,5 @@
     columns.Add(model => model.FirstName).Titled("First Name").SetWidth(150);
     columns.Add(model => model.LastName).Titled("Last Name").SetWidth(110);
     columns.Add(model => model.FirstGraduationYear).Titled("Graduation Year").SetWidth(100);
-    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("This is Me", "Verify", "Home", new { id = model.StudentId }, new { @class = "btn btn-primary btn-sm" }));
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(model => Html.ActionLink("This is Me", "Verify", "Home", new {id = model.StudentId}, new {@class = "btn btn-primary btn-sm"}));
 })

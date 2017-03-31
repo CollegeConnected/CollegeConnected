@@ -8,7 +8,7 @@ namespace CollegeConnected.Services
     {
         public void SendEmailAsync(string emailTo, string mailbody, string subject)
         {
-            UnitOfWork db = new UnitOfWork();
+            var db = new UnitOfWork();
             var settings = db.SettingsRepository.GetUser();
             var from = new MailAddress($"{settings.EmailUsername}");
             var to = new MailAddress(emailTo);
@@ -49,11 +49,10 @@ namespace CollegeConnected.Services
 
                     if (!client.UseDefaultCredentials && !string.IsNullOrEmpty(userName) &&
                         !string.IsNullOrEmpty(password))
-                    {
                         client.Credentials = new NetworkCredential(userName, password);
-                    }
 
-                    /*await*/ client.Send(mail);
+                    /*await*/
+                    client.Send(mail);
                 }
             }
 

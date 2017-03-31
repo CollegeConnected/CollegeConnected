@@ -46,22 +46,22 @@
                 <td colspan="2">
                     @Html.SubmitButton("Search", new {@class = "btn btn-primary btn-sm"})
                     @Html.ActionLink("Register", "Register", "Events", new {id = eventID}, new {@class = "btn btn-primary btn-sm"})
-                    @Html.ActionLink("End Event", "VerifyCompleteEvent", new {id = eventID}, new {@class = "btn btn-primary btn-sm"})                  
+                    @Html.ActionLink("End Event", "VerifyCompleteEvent", new {id = eventID}, new {@class = "btn btn-primary btn-sm"})
                 </td>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        @Html.ValidationSummary(true, "", new { @class = "text-align center" })
-                        @ViewBag.Message
-                    </td>
-                </tr>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.ValidationSummary(true, "", new {@class = "text-align center"})
+                    @ViewBag.Message
+                </td>
+            </tr>
         }
     </table>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger"})
-        @Html.ValidationMessage("Error")
+    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+    @Html.ValidationMessage("Error")
 </div>
 
 <h2>Results</h2>

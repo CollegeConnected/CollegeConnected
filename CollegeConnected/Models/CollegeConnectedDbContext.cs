@@ -8,6 +8,7 @@ namespace CollegeConnected.Models
             : base("DefaultConnection")
         {
         }
+
         public virtual DbSet<ImportResult> ImportResults { get; set; }
         public virtual DbSet<Constituent> Constituents { get; set; }
         public virtual DbSet<User> Users { get; set; }

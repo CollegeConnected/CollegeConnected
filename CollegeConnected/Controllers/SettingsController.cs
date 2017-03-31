@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using CollegeConnected.DataLayer;
 using CollegeConnected.Models;
@@ -11,6 +9,7 @@ namespace CollegeConnected.Controllers
     public class SettingsController : Controller
     {
         private readonly UnitOfWork db = new UnitOfWork();
+
         public ActionResult Configuration()
         {
             if (db.SettingsRepository.dbSet.Any())
@@ -24,9 +23,9 @@ namespace CollegeConnected.Controllers
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Configuration([Bind(
-                 Include =
-                     "Id,EmailUsername,EmailPassword,EmailHostName,EmailPort,EventEmailMessageBody"
-             )] Settings settings)
+            Include =
+                "Id,EmailUsername,EmailPassword,EmailHostName,EmailPort,EventEmailMessageBody"
+        )] Settings settings)
         {
             if (!db.SettingsRepository.dbSet.Any())
             {
