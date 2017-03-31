@@ -424,6 +424,7 @@
     <Content Include="Views\Events\Register.cshtml" />
     <Content Include="Views\Shared\ConfirmStudentPartial.cshtml" />
     <Content Include="Views\Settings\Configuration.cshtml" />
+    <Content Include="Views\Shared\EventFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

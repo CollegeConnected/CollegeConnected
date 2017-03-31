@@ -1,24 +1,21 @@
 ﻿@model CollegeConnected.Models.Constituent
 @{
     ViewBag.Title = "Verify Birthday";
+    var birthday = DateTime.Now;
+    
 }
-
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker({
-            format: 'MM/DD/YYYY',
-            startDate: "2013-02-14 10:00"
-        });
-    });
-
-
+<script>
+    function GetBirthday() {
+        var birthday = document.getElementById("datetimepicker1").value;
+        return birthday;
+    }
 </script>
 
 <h2>Verification</h2>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Verify", "Home", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            @using (Html.BeginForm("Verify", "Home",  FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
             {
                 @Html.AntiForgeryToken()
                 <h4>Enter your birthday.</h4>
@@ -32,7 +29,8 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
-                            @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control"})
+                            @Html.TextBox("Birthday", birthday, new { @onchange = "GetBirthday()" })
+                            @Html.HiddenFor(m => m.BirthDate)
                             @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -53,4 +51,12 @@
 
 @section Scripts {
 @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
+
+<script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+        });
+</script>
 }

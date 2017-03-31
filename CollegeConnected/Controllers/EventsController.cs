@@ -52,6 +52,7 @@ namespace CollegeConnected.Controllers
             [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")] Event
                 ccEvent)
         {
+
             if (ModelState.IsValid)
             {
                 ccEvent.EventID = Guid.NewGuid();

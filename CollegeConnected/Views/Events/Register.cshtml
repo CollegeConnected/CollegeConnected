@@ -110,10 +110,15 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Constituent.BirthDate, "Date of Birth*", new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Constituent.BirthDate, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Constituent.BirthDate, "", new {@class = "text-danger"})
+            <div class='col-md-10'>
+                @Html.LabelFor(m => m.Constituent.BirthDate, "Date of Birth", new { @class = "col-md-2 control-label" })
+                <div class='input-group date' id='datetimepicker1'>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    @Html.TextBoxFor(m => m.Constituent.BirthDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Constituent.BirthDate, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
 
@@ -166,3 +171,16 @@
 <div>
     @Html.ActionLink("Back to Events", "SignIn", new {id = eventID})
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
+    <script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'MM/DD/YYYY'
+        });
+    });
+
+
+    </script>
+}
