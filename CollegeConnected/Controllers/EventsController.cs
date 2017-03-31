@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
@@ -338,8 +339,7 @@ namespace CollegeConnected.Controllers
                     {
                         messageBody =
                             $"Hello {recipient.Value},<br/><br/>{db.SettingsRepository.GetUser().EventEmailMessageBody}<br/><br/>Sincerely,<br/>The UNF Alumni Association";
-                        //Task.Run(async () => { await emailService.SendEmailAsync(recipient, messageBody, subject); }).Wait();
-                        emailService.SendEmailAsync(recipient.Key, messageBody, subject);
+                        Task.Run(async () => { await emailService.SendEmailAsync(recipient.Key, messageBody, subject); }).Wait();
                     }
                 }
                 catch (Exception e)

@@ -36,25 +36,26 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time*", new {@class = "control-label col-md-2"})
-                <div class="input-group date datetimepicker">
+            <div class='col-md-10'>
+                @Html.LabelFor(model => model.EventStartDateTime, "Start Date & Time*", new { @class = "control-label col-md-2" })
+                <div class='input-group date' id='datetimepicker1'>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    @Html.TextBoxFor(model => model.EventStartDateTime, new {@class = "form-control"})
+                    @Html.TextBoxFor(model => model.EventStartDateTime, new { @class = "form-control" })
+
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-10">
-                @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time*", new {@class = "control-label col-md-2"})
-                <div class="input-group date datetimepicker">
+            <div class='col-md-10'>
+                @Html.LabelFor(model => model.EventEndDateTime, "End Date & Time*", new { @class = "control-label col-md-2" })
+                <div class='input-group date' id='datetimepicker2'>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    @Html.TextBoxFor(model => model.EventEndDateTime, new {@class = "form-control datepicker"})
+                    @Html.TextBoxFor(model => model.EventEndDateTime, new { @class = "form-control" })
                 </div>
             </div>
         </div>
@@ -70,3 +71,19 @@
 <div>
     @Html.ActionLink("Back to Events", "Index")
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker1').datetimepicker();
+    });
+</script>
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker2').datetimepicker();
+    });
+</script>
+
+}

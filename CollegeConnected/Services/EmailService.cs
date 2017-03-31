@@ -1,12 +1,14 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using CollegeConnected.DataLayer;
 
 namespace CollegeConnected.Services
 {
     public class EmailService
     {
-        public void SendEmailAsync(string emailTo, string mailbody, string subject)
+        public async Task SendEmailAsync(string emailTo, string mailbody, string subject)
         {
             var db = new UnitOfWork();
             var settings = db.SettingsRepository.GetUser();
@@ -51,12 +53,10 @@ namespace CollegeConnected.Services
                         !string.IsNullOrEmpty(password))
                         client.Credentials = new NetworkCredential(userName, password);
 
-                    /*await*/
-                    client.Send(mail);
+                    
+                    await client.SendMailAsync(mail);
                 }
             }
-
-            //return true;
         }
     }
 }

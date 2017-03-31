@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using CollegeConnected.DataLayer;
 using CollegeConnected.Models;
 
@@ -9,15 +10,20 @@ namespace CollegeConnected.Controllers
     public class SettingsController : Controller
     {
         private readonly UnitOfWork db = new UnitOfWork();
+        private readonly  BaseController sharedOperations = new BaseController();
 
         public ActionResult Configuration()
         {
-            if (db.SettingsRepository.dbSet.Any())
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
             {
-                var settings = db.SettingsRepository.GetUser();
-                return View(settings);
+                if (db.SettingsRepository.dbSet.Any())
+                {
+                    var settings = db.SettingsRepository.GetUser();
+                    return View(settings);
+                }
+                return View();
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [ValidateAntiForgeryToken]
