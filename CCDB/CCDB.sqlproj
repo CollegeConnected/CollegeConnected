@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Constituents.sql" />
-    <Build Include="ImportProgress.sql" />
+    <Build Include="ImportProgresses.sql" />
     <Build Include="ImportResults.sql" />
     <Build Include="Events.sql" />
     <Build Include="EventAttendances.sql" />
