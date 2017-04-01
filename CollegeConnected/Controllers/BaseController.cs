@@ -40,7 +40,7 @@ namespace CollegeConnected.Controllers
             var sw = new StringWriter();
 
             sw.WriteLine("\"Student Number\",\"First Name\",\"Middle Name\",\"Last Name\",\"Address1\"," +
-                         "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\",\"Graduation Year" +
+                         "\"Address2\",\"Zip Code\",\"City\",\"State\",\"Phone Number\",\"Email\"," +
                          "\"Birthday\",\"First Grad Year\",\"Second Grad Year\",\"Third Grad Year\",\"Constiuent Type\",\"Allow Communication\"");
             Response.ClearContent();
             Response.AddHeader("content-disposition",
@@ -56,8 +56,8 @@ namespace CollegeConnected.Controllers
                     sw.WriteLine(
                         $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
                         $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
-                        $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\",\"{student.FirstGraduationYear}\",\"{student.SecondGraduationYear}\",\"{student.ThirdGraduationYear}\"" +
-                        $",\"{student.ConstituentType}\",\"{student.AllowCommunication}\"");
+                        $"\"{student.BirthDate}\",\"{student.FirstGraduationYear}\",\"{student.SecondGraduationYear}\",\"{student.ThirdGraduationYear}\"," +
+                        $"\"{student.ConstituentType}\",\"{student.AllowCommunication}\"");
                 }
                 Response.Write(sw.ToString());
                 Response.End();
@@ -69,8 +69,8 @@ namespace CollegeConnected.Controllers
                     sw.WriteLine(
                         $"\"{student.StudentNumber}\",\"{student.FirstName}\",\"{student.MiddleName}\",\"{student.LastName}\",\"{student.Address1}\"," +
                         $"\"{student.Address2}\",\"{student.ZipCode}\",\"{student.City}\",\"{student.State}\",\"{student.PhoneNumber}\",\"{student.Email}\"," +
-                        $"\"{student.FirstGraduationYear}\",\"{student.BirthDate}\",\"{student.FirstGraduationYear}\",\"{student.SecondGraduationYear}\",\"{student.ThirdGraduationYear}\"" +
-                        $",\"{student.ConstituentType}\",\"{student.AllowCommunication}\"");
+                        $"\"{student.BirthDate}\",\"{student.FirstGraduationYear}\",\"{student.SecondGraduationYear}\",\"{student.ThirdGraduationYear}\"," +
+                        $"\"{student.ConstituentType}\",\"{student.AllowCommunication}\"");
                 Response.Write(sw.ToString());
                 Response.End();
             }
