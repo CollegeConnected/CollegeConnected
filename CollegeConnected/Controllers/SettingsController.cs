@@ -10,7 +10,7 @@ namespace CollegeConnected.Controllers
     public class SettingsController : Controller
     {
         private readonly UnitOfWork db = new UnitOfWork();
-        private readonly  BaseController sharedOperations = new BaseController();
+        private readonly BaseController sharedOperations = new BaseController();
 
         public ActionResult Configuration()
         {

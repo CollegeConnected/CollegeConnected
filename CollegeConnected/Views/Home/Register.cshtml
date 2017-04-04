@@ -124,13 +124,13 @@
 
         <div class="form-group">
             <div class='col-md-10'>
-                @Html.LabelFor(m => m.BirthDate, "Date of Birth", new { @class = "col-md-2 control-label" })
+                @Html.LabelFor(m => m.BirthDate, "Date of Birth", new {@class = "col-md-2 control-label"})
                 <div class='input-group date' id='datetimepicker1'>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.BirthDate, new {@class = "form-control"})
+                    @Html.ValidationMessageFor(m => m.BirthDate, "", new {@class = "text-danger"})
                 </div>
             </div>
         </div>
@@ -165,13 +165,13 @@
 
 @section Scripts {
     @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker({
-            format: 'MM/DD/YYYY'
+    <script type="text/javascript">
+        $(function() {
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
         });
-    });
 
 
-</script>
+    </script>
 }

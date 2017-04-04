@@ -52,7 +52,6 @@ namespace CollegeConnected.Controllers
             [Bind(Include = "EventID,EventName,EventLocation,EventStartDateTime,EventEndDateTime,Attendance")] Event
                 ccEvent)
         {
-
             if (ModelState.IsValid)
             {
                 ccEvent.EventID = Guid.NewGuid();
@@ -136,7 +135,8 @@ namespace CollegeConnected.Controllers
             ViewBag.Title = eventTitle;
             if (string.IsNullOrEmpty(studentLastName))
             {
-                var studentList = db.StudentRepository.Get(student => student.StudentNumber.EndsWith(studentNumber)).ToList();
+                var studentList =
+                    db.StudentRepository.Get(student => student.StudentNumber.EndsWith(studentNumber)).ToList();
                 if (!studentList.Any())
                     ModelState.AddModelError("Error",
                         "No results found. Click the Register button to sign up for collegeConnected.");
@@ -152,7 +152,8 @@ namespace CollegeConnected.Controllers
             }
             else
             {
-                var studentList = db.StudentRepository.Get(student => student.StudentNumber.EndsWith(studentNumber)).ToList();
+                var studentList =
+                    db.StudentRepository.Get(student => student.StudentNumber.EndsWith(studentNumber)).ToList();
                 if (!studentList.Any())
                     ModelState.AddModelError("Error",
                         "No results found. Click the Register button to sign up for collegeConnected.");
@@ -340,7 +341,8 @@ namespace CollegeConnected.Controllers
                     {
                         messageBody =
                             $"Hello {recipient.Value},<br/><br/>{db.SettingsRepository.GetUser().EventEmailMessageBody}<br/><br/>Sincerely,<br/>The UNF Alumni Association";
-                        Task.Run(async () => { await emailService.SendEmailAsync(recipient.Key, messageBody, subject); }).Wait();
+                        Task.Run(async () => { await emailService.SendEmailAsync(recipient.Key, messageBody, subject); })
+                            .Wait();
                     }
                 }
                 catch (Exception e)

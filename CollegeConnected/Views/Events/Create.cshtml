@@ -12,8 +12,8 @@
 
     <div class="form-horizontal">
         <h4>* -Required</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         @Html.Partial("EventFormPartial")
     </div>
 }
@@ -25,14 +25,14 @@
 @section Scripts {
     @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
     <script type="text/javascript">
-    $(function() {
-        $('#startdatetimepicker').datetimepicker();
-    });
+        $(function() {
+            $('#startdatetimepicker').datetimepicker();
+        });
     </script>
     <script type="text/javascript">
-    $(function() {
-        $('#enddatetimepicker').datetimepicker();
-    });
+        $(function() {
+            $('#enddatetimepicker').datetimepicker();
+        });
     </script>
 
 }

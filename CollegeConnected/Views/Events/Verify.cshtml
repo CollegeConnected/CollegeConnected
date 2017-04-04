@@ -10,27 +10,22 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Verify", "Events", new { studentId = Model.Constituent.StudentId, eventId = Model.Event.EventID }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Verify", "Events", new {studentId = Model.Constituent.StudentId, eventId = Model.Event.EventID}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
             {
-                @Html.HiddenFor(m => m.Constituent.StudentId)
-                @Html.HiddenFor(m => m.Event.EventID)
                 @Html.AntiForgeryToken()
                 <h4>Enter your birthday.</h4>
                 <hr/>
                 @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                 <div class="form-group">
                     <div class='col-md-10'>
-                        @Html.LabelFor(m => m.Constituent.BirthDate, "Date of Birth", new { @class = "col-md-2 control-label" })
+                        @Html.LabelFor(m => m.Constituent.BirthDate, "Date of Birth", new {@class = "col-md-2 control-label"})
                         <div class='input-group date' id='datetimepicker1'>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                             @Html.TextBox("Birthday", birthday)
-                            @Html.HiddenFor(m => m.Constituent.BirthDate, new {@Name = "BirthDate"})
-                            @Html.ValidationMessageFor(m => m.Constituent.BirthDate, "", new { @class = "text-danger" })
-                            @{
-                                var bday = ViewBag.Birthday;
-                            }
+                            @Html.HiddenFor(m => m.Constituent.BirthDate, new {Name = "BirthDate"})
+                            @Html.ValidationMessageFor(m => m.Constituent.BirthDate, "", new {@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -54,9 +49,10 @@
     @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
 
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             $('#datetimepicker1').datetimepicker({
-                format: 'MM/DD/YYYY'            });
+                format: 'MM/DD/YYYY'
+            });
         });
     </script>
 }
