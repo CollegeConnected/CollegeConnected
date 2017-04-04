@@ -1,10 +1,8 @@
 ﻿@model CollegeConnected.Models.EventViewModel
 @{
     ViewBag.Title = "Verify Birthday";
-}
-@{
     Layout = "~/Views/Shared/_Layout2.cshtml";
-    var ccEventID = ViewBag.EventID;
+    var ccEventId = ViewBag.EventID;
     var birthday = DateTime.Now;
 }
 
@@ -12,8 +10,10 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Verify", "Events", new {studentId = Model.Constituent.StudentId, eventId = Model.Event.EventID}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            @using (Html.BeginForm("Verify", "Events", new { studentId = Model.Constituent.StudentId, eventId = Model.Event.EventID }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
+                @Html.HiddenFor(m => m.Constituent.StudentId)
+                @Html.HiddenFor(m => m.Event.EventID)
                 @Html.AntiForgeryToken()
                 <h4>Enter your birthday.</h4>
                 <hr/>
@@ -25,9 +25,12 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
-                            @Html.TextBox("Birthday", birthday, new { @onchange = "GetBirthday()" })
-                            @Html.HiddenFor(m => m.Constituent.BirthDate)
+                            @Html.TextBox("Birthday", birthday)
+                            @Html.HiddenFor(m => m.Constituent.BirthDate, new {@Name = "BirthDate"})
                             @Html.ValidationMessageFor(m => m.Constituent.BirthDate, "", new { @class = "text-danger" })
+                            @{
+                                var bday = ViewBag.Birthday;
+                            }
                         </div>
                     </div>
                 </div>
@@ -37,7 +40,7 @@
                     </div>
                 </div>
                 <div>
-                    @Html.ActionLink("Back to Events", "SignIn", new {id = ccEventID})
+                    @Html.ActionLink("Back to Sign In", "SignIn", new {id = ccEventId})
                 </div>
             }
         </section>
@@ -55,7 +58,5 @@
             $('#datetimepicker1').datetimepicker({
                 format: 'MM/DD/YYYY'            });
         });
-
-
     </script>
 }
