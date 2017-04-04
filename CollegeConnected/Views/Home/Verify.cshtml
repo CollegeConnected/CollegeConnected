@@ -24,7 +24,7 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                             @Html.TextBox("Birthday", birthday)
-                            @Html.HiddenFor(m => m.BirthDate, null, "BirthDate", new { @class = "form-control" })
+                            @Html.HiddenFor(m => m.BirthDate)
                             @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger" })
                         </div>
                     </div>
