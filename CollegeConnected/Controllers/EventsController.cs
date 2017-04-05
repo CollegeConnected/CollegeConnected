@@ -310,6 +310,8 @@ namespace CollegeConnected.Controllers
             if (ModelState.IsValid)
             {
                 var ccEvent = db.EventRepository.GetById(id);
+                var sb = new StringBuilder("N");
+                constituent.StudentNumber = sb.Append(constituent.StudentNumber).ToString();
                 constituent.StudentId = Guid.NewGuid();
                 constituent.HasAttendedEvent = true;
                 constituent.EventsAttended = 1;

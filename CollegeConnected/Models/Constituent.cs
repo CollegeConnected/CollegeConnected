@@ -8,6 +8,7 @@ namespace CollegeConnected.Models
         [Key]
         public Guid StudentId { get; set; }
 
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Student Number must contain only numbers")]
         public string StudentNumber { get; set; }
 
         [Required]

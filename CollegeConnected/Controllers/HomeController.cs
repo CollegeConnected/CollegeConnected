@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
@@ -147,22 +148,14 @@ namespace CollegeConnected.Controllers
                 {
                     if (student.StudentNumber == null)
                     {
-                        student.StudentId = Guid.NewGuid();
-                        student.UpdateTimeStamp = DateTime.Now;
-                        student.HasAttendedEvent = false;
-                        student.EventsAttended = 0;
-                        db.StudentRepository.Insert(student);
-                        db.Save();
+                        SetNewConstituentValues(student);
                         return RedirectToAction("Index");
                     }
                     if (!rowExists)
                     {
-                        student.StudentId = Guid.NewGuid();
-                        student.UpdateTimeStamp = DateTime.Now;
-                        student.HasAttendedEvent = false;
-                        student.EventsAttended = 0;
-                        db.StudentRepository.Insert(student);
-                        db.Save();
+                        var sb = new StringBuilder("N");
+                        student.StudentNumber = sb.Append(student.StudentNumber).ToString();
+                        SetNewConstituentValues(student);
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("Error",
@@ -177,6 +170,16 @@ namespace CollegeConnected.Controllers
                     $"Exception: {e}");
             }
             return View(student);
+        }
+
+        private void SetNewConstituentValues(Constituent student)
+        {
+            student.StudentId = Guid.NewGuid();
+            student.UpdateTimeStamp = DateTime.Now;
+            student.HasAttendedEvent = false;
+            student.EventsAttended = 0;
+            db.StudentRepository.Insert(student);
+            db.Save();
         }
 
         public ActionResult PurgeData()
