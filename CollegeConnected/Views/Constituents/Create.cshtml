@@ -5,7 +5,7 @@
 }
 <h2>Enter the follwing information and click Save</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Students", FormMethod.Post, new { autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationMessage("Error")

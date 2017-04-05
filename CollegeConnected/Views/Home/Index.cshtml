@@ -16,7 +16,7 @@
             </tr>
             <tr>
                 <td>
-                    <p>@Html.TextBox("studentNumber")</p>
+                    <p>@Html.TextBox("studentNumber", null, new { autocomplete = "off" })</p>
                 </td>
             </tr>
             <tr>
@@ -31,13 +31,13 @@
             </tr>
             <tr>
                 <td>
-                    <p>@Html.TextBox("studentLastName")</p>
+                    <p>@Html.TextBox("studentLastName", null, new { autocomplete = "off" })</p>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    @Html.SubmitButton("Search", new {@class = "btn btn-primary btn-sm"})
-                    @Html.ActionLink("Register", "Register", "Home", new {@class = "btn btn-primary btn-sm"})
+                    @Html.SubmitButton("Search", new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("Register", "Register", "Home", new { @class = "btn btn-primary btn-sm" })
                 </td>
             </tr>
         }
