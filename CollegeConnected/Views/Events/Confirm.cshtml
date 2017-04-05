@@ -11,7 +11,7 @@
 
 <h3>Verify your information to sign in</h3>
 
-@using (Html.BeginForm("Confirm", "Events", new {id = Model.Event.EventID}, new { autocomplete = "off" }))
+@using (Html.BeginForm("Confirm", "Events", new {id = Model.Event.EventID}, FormMethod.Post, new { autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
 
@@ -30,7 +30,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Constituent.StudentNumber, "N Number", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.Constituent.StudentNumber, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.EditorFor(model => model.Constituent.StudentNumber, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.Constituent.StudentNumber, "", new {@class = "text-danger"})
             </div>
         </div>

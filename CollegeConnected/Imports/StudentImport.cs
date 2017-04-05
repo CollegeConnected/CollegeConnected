@@ -72,139 +72,27 @@ namespace CollegeConnected.Imports
             return true;
         }
 
-        private string GetStudentNumber(ExcelWorksheet worksheet, int rowIndex)
+        private string GetStringFieldsFromImportFile(ExcelWorksheet worksheet, int rowIndex, string field)
         {
-            var studentNumber = string.Empty;
+            var fieldStringToImport = string.Empty;
             var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
             for (var ii = 0; ii < columnCount; ii++)
             {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Student Number"
+                var excelColumnIndex = ii + 1;
+                if (ColumnConfiguration.Configuration[ii].Type == field
                     && ColumnConfiguration.Configuration[ii].Include)
                 {
-                    studentNumber = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
+                    fieldStringToImport = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
                     break;
                 }
             }
-
-            return studentNumber;
-        }
-
-        private string GetFirstName(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var firstName = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
+            if (string.Equals(field, "Phone Number"))
             {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "First Name"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    firstName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
+                var resultString = string.Join(string.Empty,
+                    Regex.Matches(fieldStringToImport, @"\d+").OfType<Match>().Select(m => m.Value));
+                return resultString;
             }
-
-            return firstName;
-        }
-
-        private string GetMiddleName(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var middleName = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Middle Name"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    middleName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return middleName;
-        }
-
-        private string GetLastName(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var lastName = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Last Name"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    lastName = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return lastName;
-        }
-
-        private string GetAddress1(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var address1 = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Address1"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    address1 = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return address1;
-        }
-
-        private string GetAddress2(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var address2 = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Address2"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    address2 = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return address2;
-        }
-
-        private string GetZipCode(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var zipCode = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Zip Code"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    zipCode = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-            if (zipCode.Contains("-"))
-                zipCode = zipCode.Substring(0, 4);
-
-            return zipCode;
+            return fieldStringToImport;
         }
 
         private State GetState(ExcelWorksheet worksheet, int rowIndex)
@@ -224,120 +112,6 @@ namespace CollegeConnected.Imports
             }
             var stateValue = (State) Enum.Parse(typeof(State), state);
             return stateValue;
-        }
-
-        private string GetCity(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var city = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "City"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    city = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return city;
-        }
-
-        private string GetPhoneNumber(ExcelWorksheet worksheet, int rowIndex)
-        {
-            string phoneNumber = null;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Phone Number"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    phoneNumber = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-            var resultString = string.Join(string.Empty,
-                Regex.Matches(phoneNumber, @"\d+").OfType<Match>().Select(m => m.Value));
-            return resultString;
-        }
-
-        private string GetEmail(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var email = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Email"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    email = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return email;
-        }
-
-        private string GetFirstGradYear(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var gradYear = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "First Graduation Year"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-            return gradYear;
-        }
-
-        private string GetSecondGradYear(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var gradYear = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Second Graduation Year"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return gradYear;
-        }
-
-        private string GetThirdGradYear(ExcelWorksheet worksheet, int rowIndex)
-        {
-            var gradYear = string.Empty;
-            var columnCount = ColumnConfiguration.Configuration.Count();
-            var excelColumnIndex = 0;
-            for (var ii = 0; ii < columnCount; ii++)
-            {
-                excelColumnIndex = ii + 1;
-                if (ColumnConfiguration.Configuration[ii].Type == "Third Graduation Year"
-                    && ColumnConfiguration.Configuration[ii].Include)
-                {
-                    gradYear = worksheet.Cells[rowIndex, excelColumnIndex].RichText.Text;
-                    break;
-                }
-            }
-
-            return gradYear;
         }
 
         private DateTime GetBirthday(ExcelWorksheet worksheet, int rowIndex)
@@ -382,7 +156,6 @@ namespace CollegeConnected.Imports
             return typeValue;
         }
 
-
         public override IEnumerable<object> ConvertData()
         {
             var convertedStudents = new List<Constituent>();
@@ -397,9 +170,9 @@ namespace CollegeConnected.Imports
                     for (var rowIndex = 2; rowIndex <= package.Workbook.Worksheets[1].Dimension.End.Row; rowIndex++)
                         try
                         {
-                            var studentNumber = GetStudentNumber(
+                            var studentNumber = GetStringFieldsFromImportFile(
                                 package.Workbook.Worksheets[1],
-                                rowIndex);
+                                rowIndex, "Student Number");
                             if (StudentNumberAlreadyProcessed(processedStudentNumbers, studentNumber))
                             {
                                 AddConversionError(
@@ -408,33 +181,33 @@ namespace CollegeConnected.Imports
                                     rowIndex);
                                 continue;
                             }
-                            var firstName = GetFirstName(
+                            var firstName = GetStringFieldsFromImportFile(
                                 package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var lastName = GetLastName(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var middleName = GetMiddleName(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var address1 = GetAddress1(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var address2 = GetAddress2(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var phoneNunber = GetPhoneNumber(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var city = GetCity(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var zipCode = GetZipCode(package.Workbook.Worksheets[1],
-                                rowIndex);
+                                rowIndex, "First Name");
+                            var lastName = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Last Name");
+                            var middleName = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Middle Name");
+                            var address1 = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Address1");
+                            var address2 = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Address2");
+                            var phoneNunber = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Phone Number");
+                            var city = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "City");
+                            var zipCode = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Zip Code");
                             var state = GetState(package.Workbook.Worksheets[1],
                                 rowIndex);
-                            var email = GetEmail(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var firstGradYear = GetFirstGradYear(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var secondGradYear = GetSecondGradYear(package.Workbook.Worksheets[1],
-                                rowIndex);
-                            var thirdGradYear = GetThirdGradYear(package.Workbook.Worksheets[1],
-                                rowIndex);
+                            var email = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Email");
+                            var firstGradYear = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "First Graduation Year");
+                            var secondGradYear = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Second Graduation Year");
+                            var thirdGradYear = GetStringFieldsFromImportFile(package.Workbook.Worksheets[1],
+                                rowIndex, "Third Graduation Year");
                             var birthday = GetBirthday(package.Workbook.Worksheets[1],
                                 rowIndex);
                             var constituentType = GetConstituentType(package.Workbook.Worksheets[1], rowIndex);
@@ -518,15 +291,15 @@ namespace CollegeConnected.Imports
             itemList.Add(new SelectListItem {Text = "Last Name", Value = "Last Name"});
             itemList.Add(new SelectListItem {Text = "Address1", Value = "Address1"});
             itemList.Add(new SelectListItem {Text = "Address2", Value = "Address2"});
-            itemList.Add(new SelectListItem {Text = "Zip Code", Value = "Zip Code"});
             itemList.Add(new SelectListItem {Text = "City", Value = "City"});
             itemList.Add(new SelectListItem {Text = "State", Value = "State"});
+            itemList.Add(new SelectListItem { Text = "Zip Code", Value = "Zip Code" });
             itemList.Add(new SelectListItem {Text = "Phone Number", Value = "Phone Number"});
             itemList.Add(new SelectListItem {Text = "Email", Value = "Email"});
+            itemList.Add(new SelectListItem { Text = "Birthday", Value = "Birthday" });
             itemList.Add(new SelectListItem {Text = "First Graduation Year", Value = "First Graduation Year"});
             itemList.Add(new SelectListItem {Text = "Second Graduation Year", Value = "Second Graduation Year"});
             itemList.Add(new SelectListItem {Text = "Third Graduation Year", Value = "Third Graduation Year"});
-            itemList.Add(new SelectListItem {Text = "Birthday", Value = "Birthday"});
             itemList.Add(new SelectListItem {Text = "Constituent Type", Value = "Constituent Type"});
 
             ColumnConfiguration.SelectionCollection = itemList;

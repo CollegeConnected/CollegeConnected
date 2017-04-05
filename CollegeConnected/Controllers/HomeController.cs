@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
@@ -153,8 +152,6 @@ namespace CollegeConnected.Controllers
                     }
                     if (!rowExists)
                     {
-                        var sb = new StringBuilder("N");
-                        student.StudentNumber = sb.Append(student.StudentNumber).ToString();
                         SetNewConstituentValues(student);
                         return RedirectToAction("Index");
                     }
@@ -166,8 +163,7 @@ namespace CollegeConnected.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("Error",
-                    "An error occurred saving this constituent. If the problem persits, contact your system administrator." +
-                    $"Exception: {e}");
+                    "An error occurred saving this constituent. If the problem persits, contact your system administrator.");
             }
             return View(student);
         }
