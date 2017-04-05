@@ -1,12 +1,12 @@
 ﻿@model CollegeConnected.Models.Constituent
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>* -Required</h4>
         <hr/>
-        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+        @Html.ValidationSummary(true, "", new {@class = "text-danger", })
         @Html.HiddenFor(model => model.StudentId)
         @Html.HiddenFor(model => model.HasAttendedEvent)
         @Html.HiddenFor(model => model.EventsAttended)

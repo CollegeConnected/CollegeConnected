@@ -6,7 +6,7 @@
 
 <h2>Email Settings</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Configuration", "Settings", FormMethod.Post, new { autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
 
