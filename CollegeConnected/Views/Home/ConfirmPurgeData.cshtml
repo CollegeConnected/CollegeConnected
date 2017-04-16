@@ -1,0 +1,37 @@
+﻿@model CollegeConnected.Models.User
+
+<h2>Are you sure you want to purge all data?</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("ConfirmPurgeData", "Home", FormMethod.Post, new {@class = "form-horizontal", role = "form", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>Enter your credentials to delete all constituent, event, and event attendance data.</h4>
+                <hr/>
+                @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new {@class = "col-md-2 control-label"})
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Login" class="btn btn-primary btn-sm"/>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+
+</div>
+<div>
+    @Html.ActionLink("Back to Dashboard", "Admin")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

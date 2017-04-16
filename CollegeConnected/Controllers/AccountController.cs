@@ -11,7 +11,7 @@ namespace CollegeConnected.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UnitOfWork unit = new UnitOfWork();
+        private readonly UnitOfWork db = new UnitOfWork();
 
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -28,7 +28,7 @@ namespace CollegeConnected.Controllers
             ViewBag.ReturnUrl = returnUrl;
             if (!ModelState.IsValid)
                 return View(model);
-            var user = unit.UserRepository.GetUser();
+            var user = db.UserRepository.GetUser();
             if (user == null)
             {
                 ModelState.AddModelError("", "Username or Password incorrect");

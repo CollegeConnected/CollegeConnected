@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
 using CollegeConnected.DataLayer;
@@ -178,12 +180,42 @@ namespace CollegeConnected.Controllers
             db.Save();
         }
 
-        public ActionResult PurgeData()
+        public void PurgeData()
         {
             db.EventAttendanceRepository.db.Database.ExecuteSqlCommand("DELETE FROM EventAttendances");
-            db.StudentRepository.db.Database.ExecuteSqlCommand("DELETE FROM Students");
+            db.StudentRepository.db.Database.ExecuteSqlCommand("DELETE FROM Constituents");
             db.EventRepository.db.Database.ExecuteSqlCommand("DELETE FROM Events");
-            return RedirectToAction("Admin");
+        }
+        [AllowAnonymous]
+        public ActionResult ConfirmPurgeData()
+        {
+            if (sharedOperations.IsAuthenticated(Request.Cookies[FormsAuthentication.FormsCookieName]))
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult ConfirmPurgeData(string password)
+        {
+            var user = db.UserRepository.GetUser();
+            var bytes = Encoding.UTF8.GetBytes(password);
+
+            var sha = new SHA256Managed();
+            var hashBytes = sha.ComputeHash(bytes);
+
+            var hash = Convert.ToBase64String(hashBytes);
+
+            if (hash == user.Password)
+            {
+                PurgeData();
+                return RedirectToAction("Admin");
+            }
+            ModelState.AddModelError("", "Password incorrect");
+            return View();
         }
     }
 }
