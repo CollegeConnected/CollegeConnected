@@ -85,13 +85,7 @@ namespace CollegeConnected.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Confirm(
-        [Bind(
-            Include =
-                "StudentId,StudentNumber,FirstName,MiddleName,LastName,Address1,Address2,ZipCode,City,State,PhoneNumber," +
-                "Email,FirstGraduationYear,SecondGraduationYear,ThirdGraduationYear,BirthDate,UpdateTimeStamp,ConstituentType," +
-                "AllowCommunication,HasAttendedEvent,EventsAttended"
-        )] Constituent student)
+        public ActionResult Confirm(Constituent student)
         {
             ViewBag.Years = sharedOperations.GenerateGradYearList();
             if (ModelState.IsValid)
